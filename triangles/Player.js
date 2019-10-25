@@ -31,7 +31,13 @@
     }
 
     CheckBounds(screen) {
-        let targetX;
-        let targetY;
+        if (this.player.xPos <= screen.offsetLeft)
+            this.MoveTo(screen.offsetLeft, this.player.yPos);
+        if ((this.player.xPos + this.player.image.width) >= (screen.offsetLeft + screen.clientWidth))
+            this.MoveTo(screen.offsetLeft + screen.clientWidth - this.player.image.width, this.player.yPos);
+        if (this.player.yPos <= screen.offsetTop)
+            this.MoveTo(this.player.xPos, screen.offsetTop);
+        if ((this.player.yPos + this.player.image.height) >= (screen.offsetTop + screen.clientHeight))
+            this.MoveTo(this.player.xPos, screen.offsetTop + screen.clientHeight - this.player.image.height);
     }
 }
