@@ -1,18 +1,48 @@
 ﻿<style>
-    #playerImage{
-        width:32px;
-        height:22px;
-        position:absolute;
+    body{
+        margin: 0;
+        background: #000;
     }
-    #gameCanvas {
+    #areas{
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template: 1fr 50fr 1fr / 3fr 20fr 3fr;
+        grid-template-areas: 
+        ". . ."
+        "L C R"
+        ". . .";
+    }
+    #playerImage{
+        width: 32px;
+        height: 22px;
+        position: absolute;
+    }
+    #gameArea {
         border: 3px solid black;
-        width: 1200px;
-        height: 600px;
+        background: #666;
+        grid-area: C;
+    }
+    #menuAreaLeft{
+        border: 3px solid black;
+        background: #333;
+        grid-area: L;
+    }
+    #menuAreaRight{
+        border: 3px solid black;
+        background: #333;
+        grid-area: R;
     }
 </style>
 
-<img id="playerImage" src="playerImage.png" alt="player"/>
-<canvas id="gameCanvas"/>
+<body>
+    <img id="playerImage" src="playerImage.png" alt="player"/>
+    <div id="areas">
+        <div id="gameArea"></div>
+        <div id="menuAreaLeft"></div>
+        <div id="menuAreaRight"></div>
+    </div>
+</body>
 
 <script src="events.js"></script>
 <script src="MapGenerator.js"></script>
