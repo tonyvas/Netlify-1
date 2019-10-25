@@ -30,14 +30,12 @@
         this.player.image.style.top = this.player.yPos + 'px';
     }
 
-    CheckBounds(screen) {
-        if (this.player.xPos <= screen.offsetLeft)
-            this.MoveTo(screen.offsetLeft, this.player.yPos);
-        if ((this.player.xPos + this.player.image.width) >= (screen.offsetLeft + screen.clientWidth))
-            this.MoveTo(screen.offsetLeft + screen.clientWidth - this.player.image.width, this.player.yPos);
-        if (this.player.yPos <= screen.offsetTop)
-            this.MoveTo(this.player.xPos, screen.offsetTop);
-        if ((this.player.yPos + this.player.image.height) >= (screen.offsetTop + screen.clientHeight))
-            this.MoveTo(this.player.xPos, screen.offsetTop + screen.clientHeight - this.player.image.height);
+    GetPos(){
+        return {
+            X1: this.player.xPos, 
+            Y1: this.player.yPos, 
+            X2: this.player.xPos + this.player.image.width, 
+            Y2: this.player.yPos + this.player.image.height
+        };
     }
 }

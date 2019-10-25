@@ -103,7 +103,7 @@ function CalculateSpeed() {
         playerSpeed.Y = topSpeed;
 }
 
-function Rotate() {
+function RotateImg() {
     let imgXY = { X: playerImg.offsetLeft + playerImg.width / 2, Y: playerImg.offsetTop + playerImg.height / 2 };
     let diffX = imgXY.X - mouseXY.X;
     let diffY = imgXY.Y - mouseXY.Y;
