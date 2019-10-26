@@ -1,5 +1,6 @@
 ﻿class Enemy {
     enemy = {
+        id: null,
         health: null,
         damage: null,
         image: null,
@@ -7,7 +8,8 @@
         yPos: null
     };
 
-    constructor(img, area){
+    constructor(img, area, num){
+        this.id = num;
         this.enemy.health = 100;
         this.enemy.damage = 20;
         this.enemy.image = new Image();
@@ -47,5 +49,9 @@
             X2: this.enemy.xPos + this.enemy.image.width, 
             Y2: this.enemy.yPos + this.enemy.image.height
         };
+    }
+
+    GetId(){
+        return this.id;
     }
 }

@@ -8,10 +8,10 @@ let enemies = [];
 CreateEnemies();
 function CreateEnemies(){
     for(let i = 0; i < ENEMY_AMOUNT; i++)
-        enemies[enemies.length] = new Enemy("imgs/enemyImage.png", gameScreen);
+        enemies[enemies.length] = new Enemy("imgs/enemyImage.png", gameScreen, i);
 }
 let playerSpeed = { top: 10, X: 0, Y: 0 };
-let enemySpeed = {top: 5, X: 0, Y: 0};
+let enemySpeed = {top: 3, X: 0, Y: 0};
 let isPaused = false;
 function PauseGame() { isPaused = !isPaused; }
 
@@ -67,19 +67,42 @@ function MoveEnemyTowardsPlayer(){
     let enemyPos;
 
     enemies.forEach(currEnemy => {
-        enemyPos = currEnemy.GetPos();
+        if (CheckEnemyEnemyCollision(currEnemy) == false) {
+            enemyPos = currEnemy.GetPos();
 
-        if (playerPos.X1 < enemyPos.X1)
-            enemySpeed.X = enemySpeed.top * -1;
-        if (playerPos.X1 > enemyPos.X1)
-            enemySpeed.X = enemySpeed.top;
-        if (playerPos.Y1 < enemyPos.Y1)
-            enemySpeed.Y = enemySpeed.top * -1;
-        if (playerPos.Y1 > enemyPos.Y1)
-            enemySpeed.Y = enemySpeed.top;
+            if (playerPos.X1 < enemyPos.X1)
+                enemySpeed.X = enemySpeed.top * -1;
+            else if (playerPos.X1 > enemyPos.X1)
+                enemySpeed.X = enemySpeed.top;
+            else
+                enemySpeed.X = 0;
+        
+            if (playerPos.Y1 < enemyPos.Y1)
+                enemySpeed.Y = enemySpeed.top * -1;
+            else if (playerPos.Y1 > enemyPos.Y1)
+                enemySpeed.Y = enemySpeed.top;
+            else
+                enemySpeed.Y = 0;
 
-        currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
+            currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
+        }
+        else
+            console.log("reeee");
     });
+}
+
+function CheckEnemyEnemyCollision(enem){
+    let currEnemyPos = enem.GetPos();
+    let isCollide = false;
+
+    enemies.forEach(checkEnemy =>{
+        let checkEnemyPos = checkEnemy.GetPos();
+        if (enem.GetId() != checkEnemy.GetId())
+            if (currEnemyPos.X1 < checkEnemyPos.X2 && currEnemyPos.X2 > checkEnemyPos.X1 && currEnemyPos.Y1 < checkEnemyPos.Y2 && currEnemyPos.Y2 > checkEnemyPos.Y1)
+                isCollide = true;
+    });
+
+    return isCollide;
 }
 
 GameLoop();
