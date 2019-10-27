@@ -13,12 +13,12 @@
         "L C R"
         ". . .";
     }
-    #playerImage{
+    .player{
         width: 32px;
         height: 22px;
         position: absolute;
     }
-    .enemyImage{
+    .enemy{
         width: 30px;
         height: 30px;
         position: absolute;
@@ -44,14 +44,15 @@
     <div id="areas">
         <div id="gameArea"></div>
         <div id="menuAreaLeft"></div>
-        <div id="menuAreaRight"></div>
+        <div id="menuAreaRight">
+            <button onclick="SetupGame()">Start</button>
+            <button onclick="PauseGame()">Pause</button>
+        </div>
     </div>
-    <img id="playerImage" src="imgs/playerImage.png" alt="player"/>
 </body>
 
+<script src="actor.js"></script>
 <script src="events.js"></script>
-<script src="MapGenerator.js"></script>
-<script src="Player.js"></script>
-<script src="Enemy.js"></script>
-<script src="Projectile.js"></script>
+<script src="mapgenerator.js"></script>
+<script src="projectile.js"></script>
 <script src="main.js"></script>

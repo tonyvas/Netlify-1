@@ -1,22 +1,63 @@
 ﻿let gameScreen = document.getElementById('gameArea');
-let playerImg = document.getElementById('playerImage');
 
+const ENEMY_IMG_SRC = "imgs/enemyImage.png";
+const PLAYER_IMG_SRC = "imgs/playerImage.png";
 const ENEMY_AMOUNT = 10;
 let mouseXY = { X: null, Y: null };
-let player = new Player(playerImg, gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
+
+let player;
 let enemies = [];
-CreateEnemies();
-function CreateEnemies(){
-    for(let i = 0; i < ENEMY_AMOUNT; i++)
-        enemies[enemies.length] = new Enemy("imgs/enemyImage.png", gameScreen, i);
-}
+
 let playerSpeed = { top: 10, X: 0, Y: 0 };
 let enemySpeed = {top: 3, X: 0, Y: 0};
 let isPaused = false;
+let isLooping = false;
 function PauseGame() { isPaused = !isPaused; }
 
+function SetupGame(){
+    ResetGame();
+
+    CreatePlayer();
+    CreateEnemies();
+
+    if (isLooping == false)
+        GameLoop();
+}
+
+function ResetGame(){
+    isPaused = false;
+    player = null;
+    enemies = [];
+
+    let actorImgs = document.getElementsByClassName("actor");
+
+    while (actorImgs.length > 0){
+        actorImgs[0].parentNode.removeChild(actorImgs[0]);
+    }
+}
+
+function CreatePlayer(){
+    player = new Actor("p0", PLAYER_IMG_SRC, 100, 20, "player");
+    player.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
+}
+
+function CreateEnemies(){
+    for(let i = 0; i < ENEMY_AMOUNT; i++)
+        enemies[enemies.length] = new Actor("e" + i, ENEMY_IMG_SRC, 100, 20, "enemy");
+
+    enemies.forEach(currEnemy => {
+        let RandX = Math.floor(Math.random() * gameScreen.clientWidth) + gameScreen.offsetLeft;
+        let RandY = Math.floor(Math.random() * gameScreen.clientHeight) + gameScreen.offsetTop;
+        currEnemy.MoveTo(RandX, RandY);
+    });
+}
+
 function GameLoop() {
+    isLooping = true;
+
     if (isPaused == false) {
+        document.activeElement.blur();
+
         RotateImg();
 
         player.MoveBy(playerSpeed.X, playerSpeed.Y);
@@ -69,21 +110,6 @@ function MoveEnemyTowardsPlayer(){
     enemies.forEach(currEnemy => {
         if (CheckEnemyEnemyCollision(currEnemy)) {
             enemyPos = currEnemy.GetPos();
-
-            // if (playerPos.X1 < enemyPos.X1)
-            //     enemySpeed.X = enemySpeed.top * -1;
-            // else if (playerPos.X1 > enemyPos.X1)
-            //     enemySpeed.X = enemySpeed.top;
-            // else
-            //     enemySpeed.X = 0;
-        
-            // if (playerPos.Y1 < enemyPos.Y1)
-            //     enemySpeed.Y = enemySpeed.top * -1;
-            // else if (playerPos.Y1 > enemyPos.Y1)
-            //     enemySpeed.Y = enemySpeed.top;
-            // else
-            //     enemySpeed.Y = 0;
-
             let distX = enemyPos.X1 - playerPos.X1;
             let distY = enemyPos.Y1 - playerPos.Y1;
             let angle = Math.atan2(distY, distX);
@@ -114,5 +140,3 @@ function CheckEnemyEnemyCollision(enem){
     else
         return false;
 }
-
-GameLoop();

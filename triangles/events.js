@@ -11,7 +11,7 @@ let keyStates = {
     isA: false,
     isS: false,
     isD: false,
-    isSp: false
+    isSh: false
 }
 
 function MouseMoved(e) {
@@ -50,8 +50,8 @@ function KeyDown(e) {
     else if (e.key.toUpperCase() == "D") {
         keyStates.isD = true;
     }
-    else if (e.key.toUpperCase() == " ") {
-        keyStates.isSp = true;
+    else if (e.key.toUpperCase() == "SHIFT") {
+        keyStates.isSh = true;
     }
     else if (e.key.toUpperCase() == "ESCAPE") {
         PauseGame();
@@ -73,17 +73,17 @@ function KeyUp(e) {
     else if (e.key.toUpperCase() == "D") {
         keyStates.isD = false;
     }
-    else if (e.key.toUpperCase() == " ") {
-        keyStates.isSp = false;
+    else if (e.key.toUpperCase() == "SHIFT") {
+        keyStates.isSh = false;
     }
-
+    
     CalculateSpeed();
 }
 
 function CalculateSpeed() {
     let topSpeed;
 
-    if (keyStates.isSp)
+    if (keyStates.isSh)
         topSpeed = playerSpeed.top * 2;
     else
         topSpeed = playerSpeed.top;
@@ -104,20 +104,20 @@ function CalculateSpeed() {
 }
 
 function RotateImg() {
-    let imgXY = { X: playerImg.offsetLeft + playerImg.width / 2, Y: playerImg.offsetTop + playerImg.height / 2 };
-    let diffX = imgXY.X - mouseXY.X;
-    let diffY = imgXY.Y - mouseXY.Y;
-    let tan = diffY / diffX;
+    let playerImg = document.getElementsByClassName('player')[0];
 
-    let atan = Math.atan(tan) * 180 / Math.PI;;
-    if (diffY >= 0 && diffX >= 0) {
+    if (playerImg != null){
+        let imgXY = { X: playerImg.offsetLeft + playerImg.width / 2, Y: playerImg.offsetTop + playerImg.height / 2 };
+        let diffX = imgXY.X - mouseXY.X;
+        let diffY = imgXY.Y - mouseXY.Y;
+        let tan = diffY / diffX;
+        let atan = Math.atan(tan) * 180 / Math.PI;;
+        
+        if (diffY >= 0 && diffX >= 0)
+            atan += 180;
+        else if (diffY <= 0 && diffX >= 0)
+            atan -= 180;
 
-        atan += 180;
+        playerImg.style.transform = 'rotate(' + atan + 'deg)';
     }
-    else if (diffY <= 0 && diffX >= 0) {
-
-        atan -= 180;
-    }
-
-    playerImg.style.transform = 'rotate(' + atan + 'deg)';
 }
