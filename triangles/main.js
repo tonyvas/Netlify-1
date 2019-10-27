@@ -67,7 +67,7 @@ function MoveEnemyTowardsPlayer(){
     let enemyPos;
 
     enemies.forEach(currEnemy => {
-        if (CheckEnemyEnemyCollision(currEnemy) == false) {
+        if (CheckEnemyEnemyCollision(currEnemy)) {
             enemyPos = currEnemy.GetPos();
 
             if (playerPos.X1 < enemyPos.X1)
@@ -86,23 +86,26 @@ function MoveEnemyTowardsPlayer(){
 
             currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
         }
-        else
-            console.log("reeee");
     });
 }
 
 function CheckEnemyEnemyCollision(enem){
     let currEnemyPos = enem.GetPos();
-    let isCollide = false;
+    let playerPos = player.GetPos();
+    let closestEnemy = enem;
 
     enemies.forEach(checkEnemy =>{
         let checkEnemyPos = checkEnemy.GetPos();
         if (enem.GetId() != checkEnemy.GetId())
             if (currEnemyPos.X1 < checkEnemyPos.X2 && currEnemyPos.X2 > checkEnemyPos.X1 && currEnemyPos.Y1 < checkEnemyPos.Y2 && currEnemyPos.Y2 > checkEnemyPos.Y1)
-                isCollide = true;
+                if ((Math.abs(currEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(currEnemyPos.Y1 - playerPos.Y1) ^ 2) > (Math.abs(checkEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(checkEnemyPos.Y1 - playerPos.Y1) ^ 2))
+                    closestEnemy = checkEnemy;
     });
 
-    return isCollide;
+    if (closestEnemy == enem)
+        return true;
+    else
+        return false;
 }
 
 GameLoop();
