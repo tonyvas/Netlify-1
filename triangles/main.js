@@ -70,19 +70,26 @@ function MoveEnemyTowardsPlayer(){
         if (CheckEnemyEnemyCollision(currEnemy)) {
             enemyPos = currEnemy.GetPos();
 
-            if (playerPos.X1 < enemyPos.X1)
-                enemySpeed.X = enemySpeed.top * -1;
-            else if (playerPos.X1 > enemyPos.X1)
-                enemySpeed.X = enemySpeed.top;
-            else
-                enemySpeed.X = 0;
+            // if (playerPos.X1 < enemyPos.X1)
+            //     enemySpeed.X = enemySpeed.top * -1;
+            // else if (playerPos.X1 > enemyPos.X1)
+            //     enemySpeed.X = enemySpeed.top;
+            // else
+            //     enemySpeed.X = 0;
         
-            if (playerPos.Y1 < enemyPos.Y1)
-                enemySpeed.Y = enemySpeed.top * -1;
-            else if (playerPos.Y1 > enemyPos.Y1)
-                enemySpeed.Y = enemySpeed.top;
-            else
-                enemySpeed.Y = 0;
+            // if (playerPos.Y1 < enemyPos.Y1)
+            //     enemySpeed.Y = enemySpeed.top * -1;
+            // else if (playerPos.Y1 > enemyPos.Y1)
+            //     enemySpeed.Y = enemySpeed.top;
+            // else
+            //     enemySpeed.Y = 0;
+
+            let distX = enemyPos.X1 - playerPos.X1;
+            let distY = enemyPos.Y1 - playerPos.Y1;
+            let angle = Math.atan2(distY, distX);
+
+            enemySpeed.X = enemySpeed.top * Math.cos(angle) * - 1;
+            enemySpeed.Y = enemySpeed.top * Math.sin(angle) * - 1;
 
             currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
         }
