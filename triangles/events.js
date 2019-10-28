@@ -11,7 +11,7 @@ let keyStates = {
     isA: false,
     isS: false,
     isD: false,
-    isSh: false
+    isSp: false
 }
 
 function MouseMoved(e) {
@@ -50,8 +50,8 @@ function KeyDown(e) {
     else if (e.key.toUpperCase() == "D") {
         keyStates.isD = true;
     }
-    else if (e.key.toUpperCase() == "SHIFT") {
-        keyStates.isSh = true;
+    else if (e.key.toUpperCase() == " ") {
+        keyStates.isSp = true;
     }
     else if (e.key.toUpperCase() == "ESCAPE") {
         PauseGame();
@@ -73,8 +73,8 @@ function KeyUp(e) {
     else if (e.key.toUpperCase() == "D") {
         keyStates.isD = false;
     }
-    else if (e.key.toUpperCase() == "SHIFT") {
-        keyStates.isSh = false;
+    else if (e.key.toUpperCase() == " ") {
+        keyStates.isSp = false;
     }
     
     CalculateSpeed();
@@ -83,7 +83,7 @@ function KeyUp(e) {
 function CalculateSpeed() {
     let topSpeed;
 
-    if (keyStates.isSh)
+    if (keyStates.isSp)
         topSpeed = playerSpeed.top * 2;
     else
         topSpeed = playerSpeed.top;

@@ -1,7 +1,15 @@
 ﻿let gameScreen = document.getElementById('gameArea');
 
-const ENEMY_IMG_SRC = "imgs/enemyImage.png";
-const PLAYER_IMG_SRC = "imgs/playerImage.png";
+const IMAGES = {
+    player: "imgs/playerImg.png",
+    bullet: "imgs/bulletImg.png",
+    enemyM: "imgs/enemyMeleeImg.png",
+    enemyR: "imgs/enemyRangedImg.png",
+    enemyB: "imgs/enemyBombImg.png",
+    powerA: "imgs/powerupAmmoIng.png",
+    powerG: "imgs/powerupGunImg.png",
+    powerH: "imgs/powerupHealImg.png"
+};
 const ENEMY_AMOUNT = 10;
 let mouseXY = { X: null, Y: null };
 
@@ -37,13 +45,24 @@ function ResetGame(){
 }
 
 function CreatePlayer(){
-    player = new Actor("p0", PLAYER_IMG_SRC, 100, 20, "player");
+    player = new Actor("p0", IMAGES.player, 100, 20, "player");
     player.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
 }
 
 function CreateEnemies(){
-    for(let i = 0; i < ENEMY_AMOUNT; i++)
-        enemies[enemies.length] = new Actor("e" + i, ENEMY_IMG_SRC, 100, 20, "enemy");
+    for(let i = 0; i < ENEMY_AMOUNT; i++){
+        let randType = Math.random() * 3;
+        let typeImg;
+
+        if (randType <= 1)
+            typeImg = IMAGES.enemyB;
+        else if (randType <= 2)
+            typeImg = IMAGES.enemyM;
+        else if (randType <= 3)
+            typeImg = IMAGES.enemyR;
+
+        enemies[enemies.length] = new Actor("e" + i, typeImg, 100, 20, "enemy");
+    }
 
     enemies.forEach(currEnemy => {
         let RandX = Math.floor(Math.random() * gameScreen.clientWidth) + gameScreen.offsetLeft;
