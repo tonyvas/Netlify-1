@@ -60,7 +60,6 @@ function CreateEnemies(){
             typeImg = IMAGES.enemyM;
         else if (randType <= 3)
             typeImg = IMAGES.enemyR;
-        else
 
         enemies[enemies.length] = new Actor("e" + i, typeImg, 100, 20, "enemy");
     }
