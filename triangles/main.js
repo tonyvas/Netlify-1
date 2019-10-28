@@ -10,7 +10,7 @@ const IMAGES = {
     powerG: "imgs/powerupGunImg.png",
     powerH: "imgs/powerupHealImg.png"
 };
-const ENEMY_AMOUNT = 20;
+let ENEMY_AMOUNT = 20;
 let mouseXY = { X: null, Y: null };
 
 let player;
