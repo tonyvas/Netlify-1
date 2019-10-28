@@ -10,7 +10,7 @@ const IMAGES = {
     powerG: "imgs/powerupGunImg.png",
     powerH: "imgs/powerupHealImg.png"
 };
-const ENEMY_AMOUNT = 10;
+const ENEMY_AMOUNT = 20;
 let mouseXY = { X: null, Y: null };
 
 let player;
@@ -60,6 +60,7 @@ function CreateEnemies(){
             typeImg = IMAGES.enemyM;
         else if (randType <= 3)
             typeImg = IMAGES.enemyR;
+        else
 
         enemies[enemies.length] = new Actor("e" + i, typeImg, 100, 20, "enemy");
     }
