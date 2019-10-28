@@ -14,6 +14,7 @@ class Actor{
         this.actor.type = tp;
         this.actor.image = new Image();
         this.actor.image.src = img;
+        this.actor.image.setAttribute("draggable", false);
         this.actor.image.classList.add(this.actor.type);
         this.actor.image.classList.add("actor");
         document.body.appendChild(this.actor.image);
