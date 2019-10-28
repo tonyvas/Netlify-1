@@ -15,7 +15,7 @@ let mouseXY = { X: null, Y: null };
 
 let player;
 let enemies = [];
-
+ 
 let playerSpeed = { top: 10, X: 0, Y: 0 };
 let enemySpeed = {top: 3, X: 0, Y: 0};
 let isPaused = false;
