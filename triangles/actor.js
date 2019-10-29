@@ -2,14 +2,14 @@ class Actor{
     actor = {
         id: null,
         health: null,
-        damage: null,
+        weapon: null,
         image: null,
         xPos: null,
         yPos: null,
         type: null
     };
 
-    constructor(idNum, img, hp, dmg, tp){
+    constructor(idNum, img, hp, weap, tp){
         this.actor.id = idNum;
         this.actor.type = tp;
         this.actor.image = new Image();
@@ -17,9 +17,9 @@ class Actor{
         this.actor.image.setAttribute("draggable", false);
         this.actor.image.classList.add(this.actor.type);
         this.actor.image.classList.add("actor");
-        document.body.appendChild(this.actor.image);
+        document.getElementById('gameArea').appendChild(this.actor.image);
         this.actor.health = hp;
-        this.actor.damage = dmg;
+        this.actor.weapon = weap;
     }
 
     MoveBy(x, y){

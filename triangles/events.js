@@ -9,7 +9,7 @@ let keyBinds = {
     right: "D",
     up: "W",
     down: "S",
-    teleport: "SHIFT",
+    teleport: "2",
     sprint: " ",
     pause: "ESCAPE",
     shoot: "0"
@@ -20,8 +20,10 @@ let keyStates = {
     isRight: false,
     isUp: false,
     isDown: false,
+    isTeleport: false,
+    isSprint: false,
     isShoot: false,
-    isSprint: false
+    isPause: false,
 }
 
 function MouseMoved(e) {
@@ -32,6 +34,9 @@ function MouseMoved(e) {
 function MouseDown(e) {
     if (e.button == keyBinds.shoot) {
         keyStates.isShoot = true;
+    }
+    else if (e.button == keyBinds.teleport){
+        keyStates.isTeleport = true;
     }
 }
 
@@ -54,17 +59,15 @@ function KeyDown(e) {
     else if (e.key.toUpperCase() == keyBinds.right) {
         keyStates.isRight = true;
     }
-    else if (e.key.toUpperCase() == keyBinds.teleport) {
-        TeleportToMouse();
-    }
+    // else if (e.key.toUpperCase() == keyBinds.teleport) {
+    //     keyStates.isTeleport = true;
+    // }
     else if (e.key.toUpperCase() == keyBinds.sprint) {
         keyStates.isSprint = true;
     }
     else if (e.key.toUpperCase() == keyBinds.pause) {
-        PauseGame();
+        keyStates.isPause = true;
     }
-
-    CalculateSpeed();
 }
 
 function KeyUp(e) {
@@ -83,6 +86,4 @@ function KeyUp(e) {
     else if (e.key.toUpperCase() == keyBinds.sprint) {
         keyStates.isSprint = false;
     }
-    
-    CalculateSpeed();
 }

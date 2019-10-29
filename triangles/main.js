@@ -15,6 +15,13 @@ let mouseXY = { X: null, Y: null };
 
 let player;
 let enemies = [];
+let weapons = {
+    melee: new Weapon("melee", 20, 10, 10),
+    bomb: new Weapon("bomb", 100, 1, 50),
+    pistol: new Weapon("pistol", 20, 10, 100),
+    smg: new Weapon("smg", 30, 30, 100),
+    rifle: new Weapon("rifle", 50, 20, 300)
+};
 
 let playerSpeed = { top: 10, X: 0, Y: 0 };
 let enemySpeed = {top: 3, X: 0, Y: 0};
@@ -26,8 +33,6 @@ let coolDowns = {
     teleportCurr: 0,
     teleportMax: 100
 };
-
-function PauseGame() { isPaused = !isPaused; }
 
 function SetupGame(){
     ResetGame();
@@ -51,23 +56,20 @@ function SetupGame(){
     }
 
     function CreatePlayer(){
-        player = new Actor("p0", IMAGES.player, 100, 20, "player");
+        player = new Actor("p0", IMAGES.player, 100, weapons.pistol, "player");
         player.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
     }
     
     function CreateEnemies(){
         for(let i = 0; i < ENEMY_AMOUNT; i++){
             let randType = Math.random() * 3;
-            let typeImg;
     
             if (randType <= 1)
-                typeImg = IMAGES.enemyB;
+                enemies[enemies.length] = new Actor("e" + i, IMAGES.enemyB, 100, weapons.bomb, "enemy");
             else if (randType <= 2)
-                typeImg = IMAGES.enemyM;
+                enemies[enemies.length] = new Actor("e" + i, IMAGES.enemyM, 100, weapons.melee, "enemy");
             else if (randType <= 3)
-                typeImg = IMAGES.enemyR;
-    
-            enemies[enemies.length] = new Actor("e" + i, typeImg, 100, 20, "enemy");
+                enemies[enemies.length] = new Actor("e" + i, IMAGES.enemyR, 100, weapons.pistol, "enemy");
         }
     
         enemies.forEach(currEnemy => {
@@ -83,93 +85,126 @@ function GameLoop() {
     document.activeElement.blur();
 
     if (isPaused == false) {
-        RotatePlayer();
-
-        player.MoveBy(playerSpeed.X, playerSpeed.Y);
+        if (keyStates.isPause){
+            keyStates.isPause = false;
+            isPaused = !isPaused;
+        }
         
-        CheckPlayerBounds();
+        DoPlayerMovement();
+        DoPlayerCombat();
 
-        CheckPlayerEnemyCollision();
+        DoEnemyMovement();
+        DoEnemyCombat();
 
-        MoveEnemyTowardsPlayer();
-
+        DoCollisionCheck();
         DoCoolDown();
     }
 
     requestAnimationFrame(GameLoop);
 
-    function CheckPlayerBounds(){
-        let playerPos = player.GetPos();
-        let targetPos = {X: playerPos.X1, Y: playerPos.Y1};
-    
-        if (playerPos.X1 <= gameScreen.offsetLeft)
-            targetPos.X = gameScreen.offsetLeft;
-            
-        if (playerPos.X2 >= (gameScreen.offsetLeft + gameScreen.clientWidth))
-            targetPos.X = gameScreen.offsetLeft + gameScreen.clientWidth - (playerPos.X2 - playerPos.X1);
-    
-        if (playerPos.Y1 <= gameScreen.offsetTop)
-            targetPos.Y = gameScreen.offsetTop;
-    
-        if (playerPos.Y2 >= (gameScreen.offsetTop + gameScreen.clientHeight))
-            targetPos.Y = gameScreen.offsetTop + gameScreen.clientHeight - (playerPos.Y2 - playerPos.Y1);
-    
-        player.MoveTo(targetPos.X, targetPos.Y);
+    function DoPlayerMovement(){
+        if (keyStates.isLeft || keyStates.isRight || keyStates.isUp || keyStates.isDown){
+            CalculateSpeed();
+            player.MoveBy(playerSpeed.X, playerSpeed.Y);
+        }
+        if (keyStates.isTeleport){
+            keyStates.isTeleport = false;
+            TeleportToMouse();
+        }
+        RotatePlayer();
     }
-    
-    function CheckPlayerEnemyCollision(){
-        let playerPos = player.GetPos();
-        let enemyPos;
-    
-        enemies.forEach(currEnemy => {
-            enemyPos = currEnemy.GetPos();
-    
-            if (playerPos.X1 < enemyPos.X2 && playerPos.X2 > enemyPos.X1 && playerPos.Y1 < enemyPos.Y2 && playerPos.Y2 > enemyPos.Y1)
-                console.log("Collision");
-        });
-    }
-    
-    function MoveEnemyTowardsPlayer(){
-        let playerPos = player.GetPos();
-        let enemyPos;
-    
-        enemies.forEach(currEnemy => {
-            if (CheckEnemyEnemyCollision(currEnemy)) {
-                enemyPos = currEnemy.GetPos();
-                let distX = enemyPos.X1 - playerPos.X1;
-                let distY = enemyPos.Y1 - playerPos.Y1;
-                let angle = Math.atan2(distY, distX);
-    
-                enemySpeed.X = enemySpeed.top * Math.cos(angle) * - 1;
-                enemySpeed.Y = enemySpeed.top * Math.sin(angle) * - 1;
-    
-                currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
-            }
-        });
 
-        function CheckEnemyEnemyCollision(enem){
-            let currEnemyPos = enem.GetPos();
-            let playerPos = player.GetPos();
-            let closestEnemy = enem;
-        
-            enemies.forEach(checkEnemy =>{
-                let checkEnemyPos = checkEnemy.GetPos();
-                if (enem.GetId() != checkEnemy.GetId())
-                    if (currEnemyPos.X1 < checkEnemyPos.X2 && currEnemyPos.X2 > checkEnemyPos.X1 && currEnemyPos.Y1 < checkEnemyPos.Y2 && currEnemyPos.Y2 > checkEnemyPos.Y1)
-                        if ((Math.abs(currEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(currEnemyPos.Y1 - playerPos.Y1) ^ 2) > (Math.abs(checkEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(checkEnemyPos.Y1 - playerPos.Y1) ^ 2))
-                            closestEnemy = checkEnemy;
-            });
-        
-            if (closestEnemy == enem)
-                return true;
-            else
-                return false;
+    function DoPlayerCombat(){
+        if (keyStates.isShoot){
+            console.log("Shooting!");
         }
     }
 
-    function DoCoolDown(){
-        coolDowns.teleportCurr--;
+    function DoEnemyMovement(){
+        MoveEnemyTowardsPlayer();
     }
+
+    function DoEnemyCombat(){
+
+    }
+
+    function DoCollisionCheck(){
+        CheckPlayerBounds();
+        CheckPlayerEnemyCollision();
+    }
+}
+
+function CheckPlayerBounds(){
+    let playerPos = player.GetPos();
+    let targetPos = {X: playerPos.X1, Y: playerPos.Y1};
+
+    if (playerPos.X1 <= gameScreen.offsetLeft)
+        targetPos.X = gameScreen.offsetLeft;
+        
+    if (playerPos.X2 >= (gameScreen.offsetLeft + gameScreen.clientWidth))
+        targetPos.X = gameScreen.offsetLeft + gameScreen.clientWidth - (playerPos.X2 - playerPos.X1);
+
+    if (playerPos.Y1 <= gameScreen.offsetTop)
+        targetPos.Y = gameScreen.offsetTop;
+
+    if (playerPos.Y2 >= (gameScreen.offsetTop + gameScreen.clientHeight))
+        targetPos.Y = gameScreen.offsetTop + gameScreen.clientHeight - (playerPos.Y2 - playerPos.Y1);
+
+    player.MoveTo(targetPos.X, targetPos.Y);
+}
+
+function CheckPlayerEnemyCollision(){
+    let playerPos = player.GetPos();
+    let enemyPos;
+
+    enemies.forEach(currEnemy => {
+        enemyPos = currEnemy.GetPos();
+
+        if (playerPos.X1 < enemyPos.X2 && playerPos.X2 > enemyPos.X1 && playerPos.Y1 < enemyPos.Y2 && playerPos.Y2 > enemyPos.Y1)
+            console.log("Collision");
+    });
+}
+
+function MoveEnemyTowardsPlayer(){
+    let playerPos = player.GetPos();
+    let enemyPos;
+
+    enemies.forEach(currEnemy => {
+        if (CheckEnemyEnemyCollision(currEnemy)) {
+            enemyPos = currEnemy.GetPos();
+            let distX = enemyPos.X1 - playerPos.X1;
+            let distY = enemyPos.Y1 - playerPos.Y1;
+            let angle = Math.atan2(distY, distX);
+
+            enemySpeed.X = enemySpeed.top * Math.cos(angle) * - 1;
+            enemySpeed.Y = enemySpeed.top * Math.sin(angle) * - 1;
+
+            currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
+        }
+    });
+
+    function CheckEnemyEnemyCollision(enem){
+        let currEnemyPos = enem.GetPos();
+        let playerPos = player.GetPos();
+        let closestEnemy = enem;
+    
+        enemies.forEach(checkEnemy =>{
+            let checkEnemyPos = checkEnemy.GetPos();
+            if (enem.GetId() != checkEnemy.GetId())
+                if (currEnemyPos.X1 < checkEnemyPos.X2 && currEnemyPos.X2 > checkEnemyPos.X1 && currEnemyPos.Y1 < checkEnemyPos.Y2 && currEnemyPos.Y2 > checkEnemyPos.Y1)
+                    if ((Math.abs(currEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(currEnemyPos.Y1 - playerPos.Y1) ^ 2) > (Math.abs(checkEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(checkEnemyPos.Y1 - playerPos.Y1) ^ 2))
+                        closestEnemy = checkEnemy;
+        });
+    
+        if (closestEnemy == enem)
+            return true;
+        else
+            return false;
+    }
+}
+
+function DoCoolDown(){
+    coolDowns.teleportCurr--;
 }
 
 function RotatePlayer() {
