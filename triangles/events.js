@@ -4,14 +4,24 @@ document.addEventListener("mouseup", MouseUp);
 document.addEventListener("keydown", KeyDown);
 document.addEventListener("keyup", KeyUp);
 
+let keyBinds = {
+    left: "A",
+    right: "D",
+    up: "W",
+    down: "S",
+    teleport: "SHIFT",
+    sprint: " ",
+    pause: "ESCAPE",
+    shoot: "0"
+}
+
 let keyStates = {
-    isL: false,
-    isR: false,
-    isW: false,
-    isA: false,
-    isS: false,
-    isD: false,
-    isSp: false
+    isLeft: false,
+    isRight: false,
+    isUp: false,
+    isDown: false,
+    isShoot: false,
+    isSprint: false
 }
 
 function MouseMoved(e) {
@@ -20,40 +30,37 @@ function MouseMoved(e) {
 }
 
 function MouseDown(e) {
-    if (e.button == "0") { //Left
-        keyStates.isL = true;
-    }
-    else if (e.button == "2") { //Right
-        keyStates.isR = true;
+    if (e.button == keyBinds.shoot) {
+        keyStates.isShoot = true;
     }
 }
 
 function MouseUp(e) {
-    if (e.button == "0") { //Left
-        keyStates.isL = false;
-    }
-    else if (e.button == "2") { //Right
-        keyStates.isR  = false;
+    if (e.button == keyBinds.shoot) {
+        keyStates.isShoot = false;
     }
 }
 
 function KeyDown(e) {
-    if (e.key.toUpperCase() == "W") {
-        keyStates.isW = true;
+    if (e.key.toUpperCase() == keyBinds.up) {
+        keyStates.isUp = true;
     }
-    else if (e.key.toUpperCase() == "A") {
-        keyStates.isA = true;
+    else if (e.key.toUpperCase() == keyBinds.down) {
+        keyStates.isDown = true;
     }
-    else if (e.key.toUpperCase() == "S") {
-        keyStates.isS = true;
+    else if (e.key.toUpperCase() == keyBinds.left) {
+        keyStates.isLeft = true;
     }
-    else if (e.key.toUpperCase() == "D") {
-        keyStates.isD = true;
+    else if (e.key.toUpperCase() == keyBinds.right) {
+        keyStates.isRight = true;
     }
-    else if (e.key.toUpperCase() == " ") {
-        keyStates.isSp = true;
+    else if (e.key.toUpperCase() == keyBinds.teleport) {
+        TeleportToMouse();
     }
-    else if (e.key.toUpperCase() == "ESCAPE") {
+    else if (e.key.toUpperCase() == keyBinds.sprint) {
+        keyStates.isSprint = true;
+    }
+    else if (e.key.toUpperCase() == keyBinds.pause) {
         PauseGame();
     }
 
@@ -61,63 +68,21 @@ function KeyDown(e) {
 }
 
 function KeyUp(e) {
-    if (e.key.toUpperCase() == "W") {
-        keyStates.isW = false;
+    if (e.key.toUpperCase() == keyBinds.up) {
+        keyStates.isUp = false;
     }
-    else if (e.key.toUpperCase() == "A") {
-        keyStates.isA = false;
+    else if (e.key.toUpperCase() == keyBinds.down) {
+        keyStates.isDown = false;
     }
-    else if (e.key.toUpperCase() == "S") {
-        keyStates.isS = false;
+    else if (e.key.toUpperCase() == keyBinds.left) {
+        keyStates.isLeft = false;
     }
-    else if (e.key.toUpperCase() == "D") {
-        keyStates.isD = false;
+    else if (e.key.toUpperCase() == keyBinds.right) {
+        keyStates.isRight = false;
     }
-    else if (e.key.toUpperCase() == " ") {
-        keyStates.isSp = false;
+    else if (e.key.toUpperCase() == keyBinds.sprint) {
+        keyStates.isSprint = false;
     }
     
     CalculateSpeed();
-}
-
-function CalculateSpeed() {
-    let topSpeed;
-
-    if (keyStates.isSp)
-        topSpeed = playerSpeed.top * 2;
-    else
-        topSpeed = playerSpeed.top;
-
-    if (keyStates.isA == keyStates.isD)
-        playerSpeed.X = 0;
-    else if (keyStates.isA)
-        playerSpeed.X = topSpeed * -1;
-    else if (keyStates.isD)
-        playerSpeed.X = topSpeed;
-
-    if (keyStates.isW == keyStates.isS)
-        playerSpeed.Y = 0;
-    else if (keyStates.isW)
-        playerSpeed.Y = topSpeed * -1;
-    else if (keyStates.isS)
-        playerSpeed.Y = topSpeed;
-}
-
-function RotateImg() {
-    let playerImg = document.getElementsByClassName('player')[0];
-
-    if (playerImg != null){
-        let imgXY = { X: playerImg.offsetLeft + playerImg.width / 2, Y: playerImg.offsetTop + playerImg.height / 2 };
-        let diffX = imgXY.X - mouseXY.X;
-        let diffY = imgXY.Y - mouseXY.Y;
-        let tan = diffY / diffX;
-        let atan = Math.atan(tan) * 180 / Math.PI;;
-        
-        if (diffY >= 0 && diffX >= 0)
-            atan += 180;
-        else if (diffY <= 0 && diffX >= 0)
-            atan -= 180;
-
-        playerImg.style.transform = 'rotate(' + atan + 'deg)';
-    }
 }
