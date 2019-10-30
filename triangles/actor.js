@@ -17,6 +17,7 @@ class Actor{
         this.actor.image.setAttribute("draggable", false);
         this.actor.image.classList.add(this.actor.type);
         this.actor.image.classList.add("actor");
+        this.actor.image.id = idNum;
         document.getElementById('gameArea').appendChild(this.actor.image);
         this.actor.health = hp;
         this.actor.weapon = weap;
@@ -48,5 +49,13 @@ class Actor{
 
     GetId(){
         return this.actor.id;
+    }
+
+    GetType(){
+        return this.actor.type;
+    }
+
+    GetWeaponType(){
+        return this.actor.weapon;
     }
 }

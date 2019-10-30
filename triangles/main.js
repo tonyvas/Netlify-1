@@ -16,22 +16,25 @@ let mouseXY = { X: null, Y: null };
 let player;
 let enemies = [];
 let weapons = {
-    melee: new Weapon("melee", 20, 10, 10),
-    bomb: new Weapon("bomb", 100, 1, 50),
-    pistol: new Weapon("pistol", 20, 10, 100),
-    smg: new Weapon("smg", 30, 30, 100),
-    rifle: new Weapon("rifle", 50, 20, 300)
+    melee: new Weapon("melee", 20, 10, 10, 100),
+    bomb: new Weapon("bomb", 100, 1, 50, 100),
+    pistol: new Weapon("pistol", 20, 400, 100, 90),
+    smg: new Weapon("smg", 30, 950, 100, 85),
+    rifle: new Weapon("rifle", 50, 600, 300, 95)
 };
+let bullets = [];
 
 let playerSpeed = { top: 10, X: 0, Y: 0 };
 let enemySpeed = {top: 3, X: 0, Y: 0};
+let bulletSpeed = {top: 20, X: 0, Y: 0};
 
 let isPaused = false;
 let isLooping = false;
 
 let coolDowns = {
     teleportCurr: 0,
-    teleportMax: 100
+    teleportMax: 100,
+    playerShootCurr: 0
 };
 
 function SetupGame(){
@@ -96,6 +99,8 @@ function GameLoop() {
         DoEnemyMovement();
         DoEnemyCombat();
 
+        DoBulletMovement();
+
         DoCollisionCheck();
         DoCoolDown();
     }
@@ -115,9 +120,40 @@ function GameLoop() {
     }
 
     function DoPlayerCombat(){
-        if (keyStates.isShoot){
-            console.log("Shooting!");
+        if (keyStates.isShoot && coolDowns.playerShootCurr <= 0){
+            Shoot(player, true);
+            coolDowns.playerShootCurr = player.GetWeaponType().GetBulletInterval();
         }
+    }
+
+    function Shoot(shooter, isFriendly){
+        let currWeapon = shooter.GetWeaponType();
+        let index = bullets.length;
+        let startXY = {X: (shooter.GetPos().X1 + shooter.GetPos().X2) / 2, Y: (shooter.GetPos().Y1 + shooter.GetPos().Y2) / 2};
+
+        if (isFriendly)
+            targetXY = {X: mouseXY.X, Y: mouseXY.Y};
+        else
+            targetXY = {X: (player.GetPos().X1 + player.GetPos().X2) / 2, Y: (player.GetPos().Y1 + player.GetPos().Y2) / 2};
+        
+        let distX = startXY.X - targetXY.X;
+        let distY = startXY.Y - targetXY.Y;
+        let angle = Math.atan2(distY, distX);
+
+        if (Math.random() <= 0.5)
+            angle += (Math.random() * (100 - currWeapon.GetAccuracyValue())) / 100;
+        else
+            angle -= (Math.random() * (100 - currWeapon.GetAccuracyValue())) / 100;
+
+        bullets[index] = {
+            actor: new Actor('b' + index, IMAGES.bullet, null, null, "bullet"),
+            damage: currWeapon.GetDamageValue(),
+            xVector: bulletSpeed.top * Math.cos(angle) * - 1,
+            yVector: bulletSpeed.top * Math.sin(angle) * -1,
+            isFriend: isFriendly
+        };
+
+        bullets[index].actor.MoveTo(startXY.X, startXY.Y);
     }
 
     function DoEnemyMovement(){
@@ -125,7 +161,25 @@ function GameLoop() {
     }
 
     function DoEnemyCombat(){
+        enemies.forEach(enem => {
+            
+        });
+    }
 
+    function DoBulletMovement(){
+        bullets.forEach(bullet => {
+            if (bullet != null){
+                bullet.actor.MoveBy(bullet.xVector, bullet.yVector);
+                let bulletXY = bullet.actor.GetPos();
+                let index = bullet.actor.GetId().slice(1);
+
+                if (bulletXY.X1 <= gameScreen.offsetLeft || bulletXY.X2 >= gameScreen.offsetLeft + gameScreen.clientWidth || bulletXY.Y1 <= gameScreen.offsetTop || bulletXY.Y2 >= gameScreen.offsetTop + gameScreen.clientHeight){
+                    let img = document.getElementById('b' + index);
+                    img.parentNode.removeChild(img);
+                    bullets[index] = null;
+                }
+            }
+        });
     }
 
     function DoCollisionCheck(){
@@ -205,6 +259,7 @@ function MoveEnemyTowardsPlayer(){
 
 function DoCoolDown(){
     coolDowns.teleportCurr--;
+    coolDowns.playerShootCurr--;
 }
 
 function RotatePlayer() {
