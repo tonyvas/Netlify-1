@@ -26,4 +26,8 @@ class Weapon{
     GetBulletInterval(){
         return 3600 / this.weapon.rateOfFire;
     }
+
+    GetRangeValue(){
+        return this.weapon.range;
+    }
 }

@@ -14,13 +14,13 @@ let ENEMY_AMOUNT = 20;
 let mouseXY = { X: null, Y: null };
 
 let player;
-let enemies = [];
+let enemies;
 let weapons = {
     melee: new Weapon("melee", 20, 10, 10, 100),
     bomb: new Weapon("bomb", 100, 1, 50, 100),
-    pistol: new Weapon("pistol", 20, 400, 100, 90),
-    smg: new Weapon("smg", 30, 950, 100, 85),
-    rifle: new Weapon("rifle", 50, 600, 300, 95)
+    pistol: new Weapon("pistol", 20, 400, 300, 90),
+    smg: new Weapon("smg", 30, 950, 400, 85),
+    rifle: new Weapon("rifle", 50, 600, 800, 95)
 };
 let bullets = [];
 
@@ -30,12 +30,6 @@ let bulletSpeed = {top: 20, X: 0, Y: 0};
 
 let isPaused = false;
 let isLooping = false;
-
-let coolDowns = {
-    teleportCurr: 0,
-    teleportMax: 100,
-    playerShootCurr: 0
-};
 
 function SetupGame(){
     ResetGame();
@@ -48,9 +42,9 @@ function SetupGame(){
 
     function ResetGame(){
         isPaused = false;
-        player = null;
+        player = {actor: null, teleportCD: 0, teleportMax: 100, shootCD: 0};
         enemies = [];
-      
+
         let actorImgs = document.getElementsByClassName("actor");
       
         while (actorImgs.length > 0){
@@ -59,28 +53,34 @@ function SetupGame(){
     }
 
     function CreatePlayer(){
-        player = new Actor("p0", IMAGES.player, 100, weapons.pistol, "player");
-        player.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
+        player.actor = new Actor("p0", IMAGES.player, 100, weapons.pistol, "player");
+        player.actor.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
     }
     
     function CreateEnemies(){
         for(let i = 0; i < ENEMY_AMOUNT; i++){
+            enemies[i] = {actor: null, shootCD: 0};
+
             let randType = Math.random() * 3;
     
             if (randType <= 1)
-                enemies[enemies.length] = new Actor("e" + i, IMAGES.enemyB, 100, weapons.bomb, "enemy");
+                enemies[i].actor = new Actor("e" + i, IMAGES.enemyB, 100, weapons.bomb, "enemyBomb");
             else if (randType <= 2)
-                enemies[enemies.length] = new Actor("e" + i, IMAGES.enemyM, 100, weapons.melee, "enemy");
+                enemies[i].actor = new Actor("e" + i, IMAGES.enemyM, 100, weapons.melee, "enemyMelee");
             else if (randType <= 3)
-                enemies[enemies.length] = new Actor("e" + i, IMAGES.enemyR, 100, weapons.pistol, "enemy");
+                enemies[i].actor = new Actor("e" + i, IMAGES.enemyR, 100, weapons.pistol, "enemyRanged");
         }
     
         enemies.forEach(currEnemy => {
             let RandX = Math.floor(Math.random() * gameScreen.clientWidth) + gameScreen.offsetLeft;
             let RandY = Math.floor(Math.random() * gameScreen.clientHeight) + gameScreen.offsetTop;
-            currEnemy.MoveTo(RandX, RandY);
+            currEnemy.actor.MoveTo(RandX, RandY);
         });
     }
+}
+
+function PauseGame(){
+    isPaused = !isPaused;
 }
 
 function GameLoop() {
@@ -90,14 +90,13 @@ function GameLoop() {
     if (isPaused == false) {
         if (keyStates.isPause){
             keyStates.isPause = false;
-            isPaused = !isPaused;
+            PauseGame();
         }
         
         DoPlayerMovement();
         DoPlayerCombat();
 
         DoEnemyMovement();
-        DoEnemyCombat();
 
         DoBulletMovement();
 
@@ -110,7 +109,7 @@ function GameLoop() {
     function DoPlayerMovement(){
         if (keyStates.isLeft || keyStates.isRight || keyStates.isUp || keyStates.isDown){
             CalculateSpeed();
-            player.MoveBy(playerSpeed.X, playerSpeed.Y);
+            player.actor.MoveBy(playerSpeed.X, playerSpeed.Y);
         }
         if (keyStates.isTeleport){
             keyStates.isTeleport = false;
@@ -120,21 +119,21 @@ function GameLoop() {
     }
 
     function DoPlayerCombat(){
-        if (keyStates.isShoot && coolDowns.playerShootCurr <= 0){
+        if (keyStates.isShoot && player.shootCD <= 0){
             Shoot(player, true);
-            coolDowns.playerShootCurr = player.GetWeaponType().GetBulletInterval();
+            player.shootCD = player.actor.GetWeaponType().GetBulletInterval();
         }
     }
 
     function Shoot(shooter, isFriendly){
-        let currWeapon = shooter.GetWeaponType();
+        let currWeapon = shooter.actor.GetWeaponType();
         let index = bullets.length;
-        let startXY = {X: (shooter.GetPos().X1 + shooter.GetPos().X2) / 2, Y: (shooter.GetPos().Y1 + shooter.GetPos().Y2) / 2};
+        let startXY = {X: (shooter.actor.GetPos().X1 + shooter.actor.GetPos().X2) / 2, Y: (shooter.actor.GetPos().Y1 + shooter.actor.GetPos().Y2) / 2};
 
         if (isFriendly)
             targetXY = {X: mouseXY.X, Y: mouseXY.Y};
         else
-            targetXY = {X: (player.GetPos().X1 + player.GetPos().X2) / 2, Y: (player.GetPos().Y1 + player.GetPos().Y2) / 2};
+            targetXY = {X: (player.actor.GetPos().X1 + player.actor.GetPos().X2) / 2, Y: (player.actor.GetPos().Y1 + player.actor.GetPos().Y2) / 2};
         
         let distX = startXY.X - targetXY.X;
         let distY = startXY.Y - targetXY.Y;
@@ -157,13 +156,34 @@ function GameLoop() {
     }
 
     function DoEnemyMovement(){
-        MoveEnemyTowardsPlayer();
+        enemies.forEach(enem => {
+            enemXY = {X: enem.actor.GetPos().X1, Y:enem.actor.GetPos().Y1};
+            playerXY = {X: player.actor.GetPos().X1, Y: player.actor.GetPos().Y1}
+
+            if (enem.actor.GetType() == "enemyMelee"){
+                MoveEnemyTowardsPlayer(enem);
+            }
+            else if (enem.actor.GetType() == "enemyRanged"){
+                let enemRange = enem.actor.GetWeaponType().GetRangeValue();
+
+                if ((enemXY.X - playerXY.X) ** 2 + (enemXY.Y - playerXY.Y) ** 2 < enemRange ** 2){
+                    DoEnemyCombat(enem, false);
+                }
+                else{
+                    MoveEnemyTowardsPlayer(enem);
+                }
+            }
+            else if (enem.actor.GetType() == "enemyBomb"){
+
+            }
+        });
     }
 
-    function DoEnemyCombat(){
-        enemies.forEach(enem => {
-            
-        });
+    function DoEnemyCombat(enem){
+        if (enem.shootCD <= 0){
+            Shoot(enem, false);
+            enem.shootCD = enem.actor.GetWeaponType().GetBulletInterval();
+        }
     }
 
     function DoBulletMovement(){
@@ -174,8 +194,9 @@ function GameLoop() {
                 let index = bullet.actor.GetId().slice(1);
 
                 if (bulletXY.X1 <= gameScreen.offsetLeft || bulletXY.X2 >= gameScreen.offsetLeft + gameScreen.clientWidth || bulletXY.Y1 <= gameScreen.offsetTop || bulletXY.Y2 >= gameScreen.offsetTop + gameScreen.clientHeight){
-                    let img = document.getElementById('b' + index);
-                    img.parentNode.removeChild(img);
+                    let img = document.getElementById('b' + index);                
+                    if (img != null)
+                        img.parentNode.removeChild(img);
                     bullets[index] = null;
                 }
             }
@@ -189,7 +210,7 @@ function GameLoop() {
 }
 
 function CheckPlayerBounds(){
-    let playerPos = player.GetPos();
+    let playerPos = player.actor.GetPos();
     let targetPos = {X: playerPos.X1, Y: playerPos.Y1};
 
     if (playerPos.X1 <= gameScreen.offsetLeft)
@@ -204,50 +225,50 @@ function CheckPlayerBounds(){
     if (playerPos.Y2 >= (gameScreen.offsetTop + gameScreen.clientHeight))
         targetPos.Y = gameScreen.offsetTop + gameScreen.clientHeight - (playerPos.Y2 - playerPos.Y1);
 
-    player.MoveTo(targetPos.X, targetPos.Y);
+    player.actor.MoveTo(targetPos.X, targetPos.Y);
 }
 
 function CheckPlayerEnemyCollision(){
-    let playerPos = player.GetPos();
+    let playerPos = player.actor.GetPos();
     let enemyPos;
 
     enemies.forEach(currEnemy => {
-        enemyPos = currEnemy.GetPos();
+        enemyPos = currEnemy.actor.GetPos();
 
         if (playerPos.X1 < enemyPos.X2 && playerPos.X2 > enemyPos.X1 && playerPos.Y1 < enemyPos.Y2 && playerPos.Y2 > enemyPos.Y1)
             console.log("Collision");
     });
 }
 
-function MoveEnemyTowardsPlayer(){
-    let playerPos = player.GetPos();
-    let enemyPos;
+function MoveEnemyTowardsPlayer(enemy){
+    let playerPos = player.actor.GetPos();
+    let enemyPos = enemy.actor.GetPos();
 
-    enemies.forEach(currEnemy => {
-        if (CheckEnemyEnemyCollision(currEnemy)) {
-            enemyPos = currEnemy.GetPos();
-            let distX = enemyPos.X1 - playerPos.X1;
-            let distY = enemyPos.Y1 - playerPos.Y1;
-            let angle = Math.atan2(distY, distX);
+    if (CheckEnemyEnemyCollision(enemy)) {
+        let distX = enemyPos.X1 - playerPos.X1;
+        let distY = enemyPos.Y1 - playerPos.Y1;
+        let angle = Math.atan2(distY, distX);
 
-            enemySpeed.X = enemySpeed.top * Math.cos(angle) * - 1;
-            enemySpeed.Y = enemySpeed.top * Math.sin(angle) * - 1;
+        enemySpeed.X = enemySpeed.top * Math.cos(angle) * - 1;
+        enemySpeed.Y = enemySpeed.top * Math.sin(angle) * - 1;
 
-            currEnemy.MoveBy(enemySpeed.X, enemySpeed.Y);
-        }
-    });
+        enemy.actor.MoveBy(enemySpeed.X, enemySpeed.Y);
+    }
 
     function CheckEnemyEnemyCollision(enem){
-        let currEnemyPos = enem.GetPos();
-        let playerPos = player.GetPos();
+        let currEnemyPos = enem.actor.GetPos();
+        let playerPos = player.actor.GetPos();
         let closestEnemy = enem;
     
         enemies.forEach(checkEnemy =>{
-            let checkEnemyPos = checkEnemy.GetPos();
-            if (enem.GetId() != checkEnemy.GetId())
-                if (currEnemyPos.X1 < checkEnemyPos.X2 && currEnemyPos.X2 > checkEnemyPos.X1 && currEnemyPos.Y1 < checkEnemyPos.Y2 && currEnemyPos.Y2 > checkEnemyPos.Y1)
-                    if ((Math.abs(currEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(currEnemyPos.Y1 - playerPos.Y1) ^ 2) > (Math.abs(checkEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(checkEnemyPos.Y1 - playerPos.Y1) ^ 2))
-                        closestEnemy = checkEnemy;
+            if (checkEnemy.actor.GetType() != "enemyBomb")
+                if (enem.actor.GetType() == checkEnemy.actor.GetType()){
+                    let checkEnemyPos = checkEnemy.actor.GetPos();
+                    if (enem.actor.GetId() != checkEnemy.actor.GetId())
+                        if (currEnemyPos.X1 < checkEnemyPos.X2 && currEnemyPos.X2 > checkEnemyPos.X1 && currEnemyPos.Y1 < checkEnemyPos.Y2 && currEnemyPos.Y2 > checkEnemyPos.Y1)
+                            if ((Math.abs(currEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(currEnemyPos.Y1 - playerPos.Y1) ^ 2) > (Math.abs(checkEnemyPos.X1 - playerPos.X1) ^ 2) + (Math.abs(checkEnemyPos.Y1 - playerPos.Y1) ^ 2))
+                                closestEnemy = checkEnemy;
+                }
         });
     
         if (closestEnemy == enem)
@@ -258,8 +279,11 @@ function MoveEnemyTowardsPlayer(){
 }
 
 function DoCoolDown(){
-    coolDowns.teleportCurr--;
-    coolDowns.playerShootCurr--;
+    player.shootCD--;
+    player.teleportCD--;
+    enemies.forEach(enem => {
+        enem.shootCD--;
+    });
 }
 
 function RotatePlayer() {
@@ -305,9 +329,9 @@ function CalculateSpeed() {
 }
 
 function TeleportToMouse(){
-    if (coolDowns.teleportCurr <= 0){
-        player.MoveTo(mouseXY.X, mouseXY.Y);
-        coolDowns.teleportCurr = coolDowns.teleportMax;
+    if (player.teleportCD <= 0){
+        player.actor.MoveTo(mouseXY.X, mouseXY.Y);
+        player.teleportCD = player.teleportMax;
     }
 }
 
