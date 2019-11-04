@@ -10,17 +10,17 @@ const IMAGES = {
     powerG: "imgs/powerupGunImg.png",
     powerH: "imgs/powerupHealImg.png"
 };
-let ENEMY_AMOUNT = 20;
+let ENEMY_AMOUNT = 5;
 let mouseXY = { X: null, Y: null };
 
 let player;
 let enemies;
-let weapons = {
+const weapons = {
     melee: new Weapon("melee", 20, 10, 10, 100),
     bomb: new Weapon("bomb", 100, 1, 50, 100),
-    pistol: new Weapon("pistol", 20, 400, 300, 90),
-    smg: new Weapon("smg", 30, 950, 400, 85),
-    rifle: new Weapon("rifle", 50, 600, 800, 95)
+    pistol: new Weapon("pistol", 20, 400, 800, 90),
+    smg: new Weapon("smg", 30, 950, 1000, 85),
+    rifle: new Weapon("rifle", 50, 600, 2000, 95)
 };
 let bullets = [];
 
@@ -51,32 +51,32 @@ function SetupGame(){
             actorImgs[0].parentNode.removeChild(actorImgs[0]);
         }
     }
+}
 
-    function CreatePlayer(){
-        player.actor = new Actor("p0", IMAGES.player, 100, weapons.pistol, "player");
-        player.actor.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
-    }
-    
-    function CreateEnemies(){
-        for(let i = 0; i < ENEMY_AMOUNT; i++){
-            enemies[i] = {actor: null, shootCD: 0};
+function CreatePlayer(){
+    player.actor = new Actor("p0", IMAGES.player, 100, weapons.pistol, "player");
+    player.actor.MoveTo(gameScreen.clientWidth / 2 + gameScreen.offsetLeft, gameScreen.clientHeight / 2 + gameScreen.offsetTop);
+}
 
-            let randType = Math.random() * 3;
-    
-            if (randType <= 1)
-                enemies[i].actor = new Actor("e" + i, IMAGES.enemyB, 100, weapons.bomb, "enemyBomb");
-            else if (randType <= 2)
-                enemies[i].actor = new Actor("e" + i, IMAGES.enemyM, 100, weapons.melee, "enemyMelee");
-            else if (randType <= 3)
-                enemies[i].actor = new Actor("e" + i, IMAGES.enemyR, 100, weapons.pistol, "enemyRanged");
-        }
-    
-        enemies.forEach(currEnemy => {
-            let RandX = Math.floor(Math.random() * gameScreen.clientWidth) + gameScreen.offsetLeft;
-            let RandY = Math.floor(Math.random() * gameScreen.clientHeight) + gameScreen.offsetTop;
-            currEnemy.actor.MoveTo(RandX, RandY);
-        });
+function CreateEnemies(){
+    for(let i = 0; i < ENEMY_AMOUNT; i++){
+        enemies[i] = {actor: null, shootCD: 0};
+
+        let randType = Math.random() * 3;
+
+        if (randType <= 1)
+            enemies[i].actor = new Actor("e" + i, IMAGES.enemyB, 100, weapons.bomb, "enemyBomb");
+        else if (randType <= 2)
+            enemies[i].actor = new Actor("e" + i, IMAGES.enemyM, 100, weapons.melee, "enemyMelee");
+        else if (randType <= 3)
+            enemies[i].actor = new Actor("e" + i, IMAGES.enemyR, 100, weapons.pistol, "enemyRanged");
     }
+
+    enemies.forEach(currEnemy => {
+        let RandX = Math.floor(Math.random() * gameScreen.clientWidth) + gameScreen.offsetLeft;
+        let RandY = Math.floor(Math.random() * gameScreen.clientHeight) + gameScreen.offsetTop;
+        currEnemy.actor.MoveTo(RandX, RandY);
+    });
 }
 
 function PauseGame(){
@@ -93,6 +93,9 @@ function GameLoop() {
             PauseGame();
         }
         
+        if (CalculateEnemiesLeft() < ENEMY_AMOUNT)
+            CreateEnemies();
+
         DoPlayerMovement();
         DoPlayerCombat();
 
@@ -105,6 +108,16 @@ function GameLoop() {
     }
 
     requestAnimationFrame(GameLoop);
+
+    function CalculateEnemiesLeft(){
+        let count = 0;
+        enemies.forEach(enem => {
+            if (enem != null)
+                count++;
+        });
+        console.log(count);
+        return count;
+    }
 
     function DoPlayerMovement(){
         if (keyStates.isLeft || keyStates.isRight || keyStates.isUp || keyStates.isDown){
