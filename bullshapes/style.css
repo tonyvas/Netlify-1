@@ -1,0 +1,30 @@
+html{
+  overflow-y: hidden;
+  overflow-x: hidden;
+  user-select: none;
+}
+body{
+  background: #333;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  grid-template: 1fr 50fr 1fr / 3fr 20fr 3fr;
+  grid-template-areas: 
+  ". . ."
+  "L C R"
+  ". . .";
+}
+#centerScreen {
+  grid-area: C;
+  background: #666;
+}
+#leftScreen{
+  grid-area: L;
+}
+#rightScreen{
+  grid-area: R;
+}
+.screen{
+  border: 3px solid black;
+}
