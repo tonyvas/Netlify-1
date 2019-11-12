@@ -1,0 +1,64 @@
+﻿<style>
+    body{
+        margin: 0;
+        background: #000;
+        overflow-y: hidden;
+        user-select: none;
+    }
+    #areas{
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template: 1fr 50fr 1fr / 3fr 20fr 3fr;
+        grid-template-areas: 
+        ". . ."
+        "L C R"
+        ". . .";
+    }
+    .player{
+        width: 50px;
+        height: 30px;
+        position: absolute;
+    }
+    .enemyBomb, .enemyMelee, .enemyRanged{
+        width: 50px;
+        height: 50px;
+        position: absolute;
+    }
+    .bullet{
+        width: 10;
+        height: 10;
+        position: absolute;
+    }
+    #gameArea {
+        border: 3px solid black;
+        background: #666;
+        grid-area: C;
+    }
+    #menuAreaLeft{
+        border: 3px solid black;
+        background: #333;
+        grid-area: L;
+    }
+    #menuAreaRight{
+        border: 3px solid black;
+        background: #333;
+        grid-area: R;
+    }
+</style>
+
+<body>
+    <div id="areas">
+        <div id="gameArea" oncontextmenu="return false;"></div>
+        <div id="menuAreaLeft"></div>
+        <div id="menuAreaRight">
+            <button onclick="SetupGame()">Start</button>
+            <button onclick="PauseGame()">Pause</button>
+        </div>
+    </div>
+</body>
+
+<script src="actor.js"></script>
+<script src="weapons.js"></script>
+<script src="events.js"></script>
+<script src="main.js"></script>
