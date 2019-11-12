@@ -1,9 +1,33 @@
 html{
     background: #000;
+    margin: 0;
+    padding: 0;
 }
 body{
     margin: 0;
+    padding: 0;
     background: #333;
     overflow-y: hidden;
     user-select: none;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template: 1fr 50fr 1fr / 3fr 20fr 3fr;
+    grid-template-areas: 
+    ". . ."
+    "L C R"
+    ". . .";
+}
+#leftMenu{
+    grid-area: L;
+    border: 2px solid black;
+}
+#gameScreen{
+    grid-area: C;
+    border: 2px solid black;
+    background: #666;
+}
+#rightMenu{
+    grid-area: R;
+    border: 2px solid black;
 }
