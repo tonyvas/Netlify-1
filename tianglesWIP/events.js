@@ -9,7 +9,6 @@ let keyBinds = {
     right: "D",
     up: "W",
     down: "S",
-    teleport: "2",
     sprint: " ",
     pause: "ESCAPE",
     shoot: "0"
@@ -20,7 +19,6 @@ let keyStates = {
     isRight: false,
     isUp: false,
     isDown: false,
-    isTeleport: false,
     isSprint: false,
     isShoot: false,
     isPause: false,
@@ -34,9 +32,6 @@ function MouseMoved(e) {
 function MouseDown(e) {
     if (e.button == keyBinds.shoot) {
         keyStates.isShoot = true;
-    }
-    else if (e.button == keyBinds.teleport){
-        keyStates.isTeleport = true;
     }
 }
 
@@ -59,9 +54,6 @@ function KeyDown(e) {
     else if (e.key.toUpperCase() == keyBinds.right) {
         keyStates.isRight = true;
     }
-    // else if (e.key.toUpperCase() == keyBinds.teleport) {
-    //     keyStates.isTeleport = true;
-    // }
     else if (e.key.toUpperCase() == keyBinds.sprint) {
         keyStates.isSprint = true;
     }

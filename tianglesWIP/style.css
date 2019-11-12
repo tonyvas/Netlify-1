@@ -1,0 +1,9 @@
+html{
+    background: #000;
+}
+body{
+    margin: 0;
+    background: #333;
+    overflow-y: hidden;
+    user-select: none;
+}
