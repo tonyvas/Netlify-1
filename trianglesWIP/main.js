@@ -23,24 +23,27 @@ function main(){
         let bullets;
         let test = {
             center:{x:100,y:100},
-            hitbox:{w:75,h:45},
+            hitbox:{w:200,h:100},
             points:[
-                {x:-30,y:-22.5},
-                {x:15,y:-22.5},
-                {x:30,y:-15},
-                {x:15,y:-7.5},
-                {x:45,y:0},
-                {x:15,y:7.5},
-                {x:30,y:15},
-                {x:15,y:22.5},
-                {x:-30,y:22.5},
-                {x:-15,y:15},
-                {x:-20,y:3},
-                {x:-20,y:-3},
-                {x:-15,y:-15}
+                {x:100,y:0},
+                {x:-20,y:50},
+                {x:-70,y:40},
+                {x:-65,y:45},
+                {x:-70,y:50},
+                {x:-85,y:50},
+                {x:-100,y:30},
+                {x:-95,y:25},
+                {x:-95,y:-25},
+                {x:-100,y:-30},
+                {x:-85,y:-50},
+                {x:-70,y:-50},
+                {x:-65,y:-45},
+                {x:-70,y:-40},
+                {x:-20,y:-50}
             ]
         };
         let testdeg = 0;
+        let testscale = 0.5
         let testcol = "red";
 
         setInterval(() => {
@@ -72,7 +75,7 @@ function main(){
 
         function drawStuff(){
             context.clearRect(0, 0, canvas.width, canvas.height);
-            drawShape(test, testdeg, testcol, true);
+            drawShape(test, testdeg, testcol, testscale, true);
         }
 
         function moveStuff(){
@@ -89,14 +92,14 @@ function main(){
                 test.center.y = mouseXY.Y - canvas.offsetTop;
             }
 
-            if (test.center.x - test.hitbox.w / 2 <= 0)
-                test.center.x = test.hitbox.w / 2;
-            else if (test.center.x + test.hitbox.w / 2 >= canvas.width)
-                test.center.x = canvas.width - test.hitbox.w / 2;
-            if (test.center.y - test.hitbox.h / 2 <= 0)
-                test.center.y = test.hitbox.h / 2;
-            else if (test.center.y + test.hitbox.h / 2 >= canvas.height)
-                test.center.y = canvas.height - test.hitbox.h / 2;
+            if (test.center.x - test.hitbox.w / 2 * testscale <= 0)
+                test.center.x = test.hitbox.w / 2 * testscale;
+            else if (test.center.x + test.hitbox.w / 2 * testscale >= canvas.width)
+                test.center.x = canvas.width - test.hitbox.w / 2 * testscale;
+            if (test.center.y - test.hitbox.h / 2 * testscale <= 0)
+                test.center.y = test.hitbox.h / 2 * testscale;
+            else if (test.center.y + test.hitbox.h / 2 * testscale >= canvas.height)
+                test.center.y = canvas.height - test.hitbox.h / 2 * testscale;
 
             let diffX = test.center.x - mouseXY.X + canvas.offsetLeft;
             let diffY = test.center.y - mouseXY.Y + canvas.offsetTop;
@@ -109,7 +112,7 @@ function main(){
                 testdeg -= 180;
         }
 
-        function drawShape(coords, deg, color, isFill){
+        function drawShape(coords, deg, color, scale, isFill){
             context.save();
             context.translate(coords.center.x, coords.center.y);
             context.rotate(Math.PI / 180 * deg);
@@ -119,9 +122,9 @@ function main(){
             context.beginPath();
             for (let i = 0; i < coords.points.length; i++) {
                 if (i == 0)
-                    context.moveTo(coords.center.x + coords.points[i].x, coords.center.y + coords.points[i].y);
+                    context.moveTo(coords.center.x + coords.points[i].x * scale, coords.center.y + coords.points[i].y * scale);
                 else
-                    context.lineTo(coords.center.x + coords.points[i].x, coords.center.y + coords.points[i].y);
+                    context.lineTo(coords.center.x + coords.points[i].x * scale, coords.center.y + coords.points[i].y * scale);
             }
             context.closePath();
 
