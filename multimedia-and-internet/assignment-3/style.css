@@ -1,0 +1,91 @@
+html::-webkit-scrollbar {width: 0 !important}
+html{
+    color: #fff;
+    text-align: center;
+    background: #000;
+    background-image: url("imgs/definitely_didnt_yeet_this_from_somewhere.jpg");
+    background-repeat: repeat;
+    background-size: contain;
+}
+body{
+    display: grid;
+    grid-column-gap: 20px;
+}
+.section_1, .section_2, .section_3{
+    display: flex;
+    flex-direction: column;
+    padding-top: 25%;
+}
+.background_div, h1{
+    background: rgba(0, 0, 0, 1);
+    padding: 20px;
+}
+h1{
+    grid-area: h1;
+}
+.section_1{
+    grid-area: sec1;
+}
+.section_2{
+    grid-area: sec2;
+}
+.section_3{
+    grid-area: sec3;
+}
+.section_results{
+    grid-area: secR;
+}
+#btnReturn{
+    margin-top: 10px;
+    width: 100%;
+    height: 5%;
+}
+table{
+    width: 100%;
+    max-height: 80%;
+}
+th, td{
+    color: white;
+    border: 3px solid lime;
+    text-align: center;
+    width: 25%;
+    padding: 10px;
+}
+th{
+    background: #333;
+}
+td{
+    background: #666;
+}
+
+@media (max-width: 768px){
+    body{
+        grid-template: 1fr 30vh 30vh 30vh 100vh / 1fr;
+        grid-template-areas: 
+        "h1"
+        "sec1"
+        "sec2"
+        "sec3"
+        "secR";
+        grid-gap: 10;
+    }
+}
+@media (min-width: 768px){
+    body{
+        grid-template: 1fr 44vh 44vh 100vh / 1fr 1fr;
+        grid-template-areas: 
+        "h1 h1"
+        "sec1 sec2"
+        "sec3 sec3"
+        "secR secR";
+    }
+}
+@media (min-width: 1152px){
+    body{
+        grid-template: 1fr 88vh 100vh / 1fr 1fr 1fr;
+        grid-template-areas: 
+        "h1 h1 h1"
+        "sec1 sec2 sec3"
+        "secR secR secR";
+    }
+}

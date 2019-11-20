@@ -1,0 +1,49 @@
+<html lang="en">
+    <head>
+        <title>Multimedia Assignment 3</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <main role="main" class="this_is_to_make_axe_shut_up_putting_stuff_in_main_breaks_everything_and_i_dont_know_why"></main>
+
+        <h1>SPACE-X API THING</h1>
+
+        <section class="section_1">
+            <div class="background_div">
+                <h2>SECTION 1</h2>
+                <p>Click the button below to view the info on the next launch</p>
+                <input type="submit" value="See Next Launch Info" onclick="goFetch(NEXT_PATH, FETCH_TYPE.next);" id="btn1-1" class="btn">
+            </div>
+        </section>
+
+        <section class="section_2">
+            <div class="background_div">
+                <h2>SECTION 2</h2>
+                <p>Choose how many past launches you wish to learn more on</p>
+                <input type="text" id="txtInp" class="input" aria-label="result amount label">
+                <input type="submit" value="Submit" onclick="goFetch(PAST_PATH, FETCH_TYPE.past)" id="btn2-1" class="btn">
+            </div>
+        </section>
+
+        <section class="section_3">
+            <div class="background_div">
+                <h2>SECTION 3</h2>
+                <p>Click one of the buttons below to view info on that rocket</p>
+                <input type="submit" value="Falcon 1" onclick="goFetch(ROCKET_ID_PATH + rocket_Ids.f1, FETCH_TYPE.byId);" id="btn3-1" class="btn">
+                <input type="submit" value="Falcon 9" onclick="goFetch(ROCKET_ID_PATH + rocket_Ids.f9, FETCH_TYPE.byId);" id="btn3-2" class="btn">
+                <input type="submit" value="Falcon Heavy" onclick="goFetch(ROCKET_ID_PATH + rocket_Ids.fh, FETCH_TYPE.byId);" id="btn3-3" class="btn">
+                <input type="submit" value="Starship" onclick="goFetch(ROCKET_ID_PATH + rocket_Ids.ss, FETCH_TYPE.byId)" id="btn3-4" class="btn">
+            </div>
+        </section>
+
+        <section class="section_results">
+            <div id="table_container" class="background_div">
+                <input type="submit" value="Return To Top" onclick="window.scrollTo(0, 0);" id="btnReturn" class="btn">
+                <h2>RESULTS</h2>
+                
+            </div>
+        </section>
+
+        <script src="main.js"></script>
+    </body>
+</html>

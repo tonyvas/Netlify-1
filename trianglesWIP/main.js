@@ -18,45 +18,23 @@ function main(){
         let keyBinds = {left: "A",right: "D",up: "W",down: "S",sprint: " ",pause: "ESCAPE",shoot: "0"};
         let keyStates = {isLeft: false,isRight: false,isUp: false,isDown: false,isSprint: false,isShoot: false,isPause: false};
 
+        let ENEMY_AMOUNT = 10;
         let player;
-        let enemies;
-        let bullets;
-        let test = {
-            center:{x:100,y:100},
-            hitbox:{w:200,h:100},
-            points:[
-                {x:100,y:0},
-                {x:-20,y:50},
-                {x:-70,y:40},
-                {x:-65,y:45},
-                {x:-70,y:50},
-                {x:-85,y:50},
-                {x:-100,y:30},
-                {x:-95,y:25},
-                {x:-95,y:-25},
-                {x:-100,y:-30},
-                {x:-85,y:-50},
-                {x:-70,y:-50},
-                {x:-65,y:-45},
-                {x:-70,y:-40},
-                {x:-20,y:-50}
-            ]
-        };
-        let testdeg = 0;
-        let testscale = 0.5
-        let testcol = "red";
-
-        setInterval(() => {
-            testcol = 
-                "rgb(" + Math.floor(Math.random() * 255) + 
-                "," + Math.floor(Math.random() * 255) + 
-                "," + Math.floor(Math.random() * 255) + 
-                ")";
-        }, 200);
+        let enemies = [];
+        let weapons = [];
+        let bullets = [];
 
         setupGame();
         function setupGame(){
+            createShips();
             gameLoop();
+        }
+
+        function createShips(){
+            ships[0] = {ship: null};
+            for (let i = 1; i <= ENEMY_AMOUNT; i++) {
+                
+            }
         }
 
         function gameLoop(){
@@ -75,41 +53,40 @@ function main(){
 
         function drawStuff(){
             context.clearRect(0, 0, canvas.width, canvas.height);
-            drawShape(test, testdeg, testcol, testscale, true);
         }
 
         function moveStuff(){
-            if (keyStates.isLeft)
-                test.center.x -= 15;
-            if (keyStates.isRight)
-                test.center.x += 15;
-            if (keyStates.isUp)
-                test.center.y -= 15;
-            if (keyStates.isDown)
-                test.center.y += 15;
-            if (keyStates.isShoot){
-                test.center.x = mouseXY.X - canvas.offsetLeft;
-                test.center.y = mouseXY.Y - canvas.offsetTop;
-            }
+            // if (keyStates.isLeft)
+            //     test.center.x -= 15;
+            // if (keyStates.isRight)
+            //     test.center.x += 15;
+            // if (keyStates.isUp)
+            //     test.center.y -= 15;
+            // if (keyStates.isDown)
+            //     test.center.y += 15;
+            // if (keyStates.isShoot){
+            //     test.center.x = mouseXY.X - canvas.offsetLeft;
+            //     test.center.y = mouseXY.Y - canvas.offsetTop;
+            // }
 
-            if (test.center.x - test.hitbox.w / 2 * testscale <= 0)
-                test.center.x = test.hitbox.w / 2 * testscale;
-            else if (test.center.x + test.hitbox.w / 2 * testscale >= canvas.width)
-                test.center.x = canvas.width - test.hitbox.w / 2 * testscale;
-            if (test.center.y - test.hitbox.h / 2 * testscale <= 0)
-                test.center.y = test.hitbox.h / 2 * testscale;
-            else if (test.center.y + test.hitbox.h / 2 * testscale >= canvas.height)
-                test.center.y = canvas.height - test.hitbox.h / 2 * testscale;
+            // if (test.center.x - test.hitbox.w / 2 * testscale <= 0)
+            //     test.center.x = test.hitbox.w / 2 * testscale;
+            // else if (test.center.x + test.hitbox.w / 2 * testscale >= canvas.width)
+            //     test.center.x = canvas.width - test.hitbox.w / 2 * testscale;
+            // if (test.center.y - test.hitbox.h / 2 * testscale <= 0)
+            //     test.center.y = test.hitbox.h / 2 * testscale;
+            // else if (test.center.y + test.hitbox.h / 2 * testscale >= canvas.height)
+            //     test.center.y = canvas.height - test.hitbox.h / 2 * testscale;
 
-            let diffX = test.center.x - mouseXY.X + canvas.offsetLeft;
-            let diffY = test.center.y - mouseXY.Y + canvas.offsetTop;
-            let tan = diffY / diffX;
-            testdeg = Math.atan(tan) * 180 / Math.PI;
+            // let diffX = test.center.x - mouseXY.X + canvas.offsetLeft;
+            // let diffY = test.center.y - mouseXY.Y + canvas.offsetTop;
+            // let tan = diffY / diffX;
+            // testdeg = Math.atan(tan) * 180 / Math.PI;
             
-            if (diffY >= 0 && diffX >= 0)
-                testdeg += 180;
-            else if (diffY <= 0 && diffX >= 0)
-                testdeg -= 180;
+            // if (diffY >= 0 && diffX >= 0)
+            //     testdeg += 180;
+            // else if (diffY <= 0 && diffX >= 0)
+            //     testdeg -= 180;
         }
 
         function drawShape(coords, deg, color, scale, isFill){
@@ -199,9 +176,6 @@ function main(){
                 keyStates.isSprint = false;
             }
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                              ---//-START OF CLASS STUFF-//---                                              //
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     } catch (error) {
         alert("error: \n" + error)
     }

@@ -1,27 +1,25 @@
 class Actor{
     actor = {
         id: null,
-        x: null,
-        y: null,
-        w: null,
-        h: null,
-        hp: null
+        type: null,
+        health: null,
+        weapon: null,
+        draw: {center: null, points: null, size: null, color: null, isFilled: null}
     };
 
-    constructor(ID, centerX, centerY, width, height, health) {
-        this.actor.id = ID;
-        this.actor.x = centerX;
-        this.actor.y = centerY;
-        this.actor.w = width;
-        this.actor.h = height;
-        this.actor.hp = health;
+    constructor(i, tp, hp, wpn, shape) {
+        this.actor.id = i;
+        this.actor.type = tp;
+        this.actor.health = hp;
+        this.actor.weapon = wp;
+        this.actor.draw = shape;
 
-        this.moveTo(centerX, centerY);
+        this.moveTo(this.actor.draw.center.x, this.actor.draw.center.y);
     }
 
     moveTo(x, y){
-        this.actor.x = x;
-        this.actor.y = y;
+        this.actor.center.draw.x = x;
+        this.actor.center.draw.y = y;
     }
 
     moveBy(x, y){
@@ -32,12 +30,19 @@ class Actor{
         return this.actor.id;
     }
 
-    getPos(){
+    getCenter(){
         return {
-            x1: this.actor.x - this.actor.w / 2, 
-            y1: this.actor.y - this.actor.h / 2, 
-            x2: this.actor.x + this.actor.w / 2, 
-            y2: this.actor.y + this.actor.h / 2
+            x: this.actor.center.draw.x,
+            y: this.actor.center.draw.y
+        };
+    }
+
+    getHitbox(){
+        return{
+            x1: this.actor.draw.center.x - this.actor.draw.size.w / 2,
+            y1: this.actor.draw.center.y - this.actor.draw.size.h / 2,
+            x2: this.actor.draw.center.x + this.actor.draw.size.w / 2,
+            y2: this.actor.draw.center.y + this.actor.draw.size.h / 2
         };
     }
 
