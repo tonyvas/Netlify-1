@@ -4,11 +4,17 @@
     </head>
     <!-- <body onload="main();"> -->
     <body></body>
-        <div id="leftMenu" onclick="main();"></div>
-        <div id="gameScreen"><canvas id="canv"></canvas></div>
-        <div id="rightMenu"></div>
+        <div id="leftMenu">
+            <input id="btn_start" class="btn" type="button" value="Start" onclick="main();">
+            <input id="btn_debug" class="btn" type="button" value="Toggle Debug" onclick="isDebug = !isDebug;" disabled>
+        </div>
+        <div id="gameScreen" oncontextmenu="return false;"><canvas id="canv"></canvas></div>
+        <div id="rightMenu">
+            <table id="game_debug_info_table"></table>
+        </div>
+
+
+        <script src="main.js"></script>
+        <script src="classes.js"></script>
     </body>
 </html>
-
-<script src="main.js"></script>
-<script src="classes.js"></script>

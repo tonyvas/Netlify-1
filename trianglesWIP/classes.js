@@ -3,59 +3,90 @@ class Actor{
         id: null,
         type: null,
         health: null,
-        weapon: null,
-        draw: {center: null, points: null, size: null, color: null, isFilled: null}
+        position: null,
+        image: null,
+        weapon: null
     };
 
-    constructor(i, tp, hp, wpn, shape) {
+    constructor(i, tp, hp, pos, img, wpn) {
         this.actor.id = i;
         this.actor.type = tp;
         this.actor.health = hp;
-        this.actor.weapon = wp;
-        this.actor.draw = shape;
+        this.actor.position = pos;
+        this.actor.image = img;
+        this.actor.weapon = wpn;
 
-        this.moveTo(this.actor.draw.center.x, this.actor.draw.center.y);
+        this.moveTo(this.actor.position.x, this.actor.position.y);
     }
 
     moveTo(x, y){
-        this.actor.center.draw.x = x;
-        this.actor.center.draw.y = y;
+        this.actor.position.x = x;
+        this.actor.position.y = y;
     }
 
     moveBy(x, y){
-        this.moveTo(x, y);
+        this.moveTo(this.actor.position.x + x, this.actor.position.y + y);
     }
 
-    getID(){
-        return this.actor.id;
+    getImage(){
+        return this.actor.image.img;
     }
 
-    getCenter(){
+    getPos(){
         return {
-            x: this.actor.center.draw.x,
-            y: this.actor.center.draw.y
+            x: this.actor.position.x,
+            y: this.actor.position.y
         };
     }
 
-    getHitbox(){
-        return{
-            x1: this.actor.draw.center.x - this.actor.draw.size.w / 2,
-            y1: this.actor.draw.center.y - this.actor.draw.size.h / 2,
-            x2: this.actor.draw.center.x + this.actor.draw.size.w / 2,
-            y2: this.actor.draw.center.y + this.actor.draw.size.h / 2
+    getSize(){
+        return {
+            w: this.actor.image.w,
+            h: this.actor.image.h
         };
-    }
-
-    getHP(){
-        return this.actor.hp;
-    }
-    addHP(num){
-        this.actor.hp += num;
     }
 }
 
 class Weapon{
     weapon = {
-
+        id: null,
+        type: null,
+        damage: null,
+        range: null,
+        speed: null,
+        accuracy: null
     };
+
+    constructor(i, tp, dmg, rng, spd, acc) {
+        this.weapon.id = i;
+        this.weapon.type = tp;
+        this.weapon.damage = dmg;
+        this.weapon.range = rng;
+        this.weapon.speed = spd;
+        this.weapon.accuracy = acc;
+    }
+
+    getId(){
+        return this.weapon.id;
+    }
+
+    getType(){
+        return this.weapon.type;
+    }
+
+    getDamage(){
+        return this.weapon.damage;
+    }
+
+    getRange(){
+        return this.weapon.range;
+    }
+
+    getSpeed(){
+        return this.weapon.speed;
+    }
+
+    getAccuracy(){
+        return this.weapon.accuracy;
+    }
 }
