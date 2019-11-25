@@ -6,6 +6,7 @@
     <body></body>
         <div id="leftMenu">
             <input id="btn_start" class="btn" type="button" value="Start" onclick="main();">
+            <input id="btn_pause" class="btn" type="button" value="Pause" onclick="isPaused = !isPaused;">
             <input id="btn_debug" class="btn" type="button" value="Toggle Debug" onclick="isDebug = !isDebug;" disabled>
         </div>
         <div id="gameScreen" oncontextmenu="return false;"><canvas id="canv"></canvas></div>

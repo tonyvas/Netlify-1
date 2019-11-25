@@ -28,6 +28,10 @@ class Actor{
         this.moveTo(this.actor.position.x + x, this.actor.position.y + y);
     }
 
+    getId(){
+        return this.actor.id;
+    }
+
     getImage(){
         return this.actor.image.img;
     }
