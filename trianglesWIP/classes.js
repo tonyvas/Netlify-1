@@ -4,17 +4,15 @@ class Actor{
         type: null,
         health: null,
         position: null,
-        image: null,
-        weapon: null
+        image: null
     };
 
-    constructor(i, tp, hp, pos, img, wpn) {
+    constructor(i, tp, hp, pos, img) {
         this.actor.id = i;
         this.actor.type = tp;
         this.actor.health = hp;
         this.actor.position = pos;
         this.actor.image = img;
-        this.actor.weapon = wpn;
 
         this.moveTo(this.actor.position.x, this.actor.position.y);
     }
@@ -30,6 +28,10 @@ class Actor{
 
     getId(){
         return this.actor.id;
+    }
+
+    getType(){
+        return this.actor.type;
     }
 
     getImage(){
