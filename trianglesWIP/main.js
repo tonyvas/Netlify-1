@@ -49,12 +49,12 @@ function main(){
             scale: 0.5,
             speed: 5,
             spinSpeed: 3,
-            startingHP: 100,
+            startingHP: 150,
             type: "player",
             thrusterInfo: {
                 colors: {min: {r:0,g:100,b:200}, max: {r:0,g:100,b:255}},
                 spread: Math.PI / 8,
-                amnt: 25,
+                amnt: 50,
                 speed: 6,
                 time: 2,
                 size: 5
@@ -65,7 +65,7 @@ function main(){
             amount: 3,
             scale: 0.5,
             speed: 4,
-            startingHP: 100,
+            startingHP: 80,
             type: "enemy",
             spawnPerim: 100,
             detectionRange: 150,
@@ -91,6 +91,22 @@ function main(){
             scale: 0.1,
             speed: 10,
             type: "bullet"
+        };
+
+        let playerWeaponStats = {
+            type: "playerWeapon",
+            damage: 30,
+            range: 400,
+            delay: 10,
+            accuracy: 0.9
+        };
+
+        let enemyWeaponStats = {
+            type: "enemyWeapon",
+            damage: 20,
+            range: 300,
+            delay: 10,
+            accuracy: 0.9
         };
 
         let player;
@@ -151,8 +167,22 @@ function main(){
 
         function createWeapons(){
             weapons = {
-                playerWeapon: new Weapon(0, "playerWeapon", 20, 300, 10, 90),
-                enemyWeapon: new Weapon(1, "enemyWeapon", 20, 300, 10, 90)
+                playerWeapon: new Weapon(
+                    0, 
+                    playerWeaponStats.type, 
+                    playerWeaponStats.damage, 
+                    playerWeaponStats.range, 
+                    playerWeaponStats.delay, 
+                    playerWeaponStats.accuracy
+                ),
+                enemyWeapon: new Weapon(
+                    1, 
+                    enemyWeaponStats.type, 
+                    enemyWeaponStats.damage, 
+                    enemyWeaponStats.range, 
+                    enemyWeaponStats.delay, 
+                    enemyWeaponStats.accuracy
+                )
             };
         }
 
@@ -239,8 +269,15 @@ function main(){
             else
                 img = images.enemybullet;
 
-            let rad = getRadToTarget(sXY, tXY)
-            let speed = {x: iniSpeed.x + bulletStats.speed * Math.cos(rad), y: iniSpeed.y + bulletStats.speed * Math.sin(rad)};
+            let accShiftMin = wpn.getAccuracy();
+            let accShiftMax = wpn.getAccuracy() + 2 * (1 - wpn.getAccuracy());
+
+            let rad = getRadToTarget(sXY, tXY);
+            let speed = {
+                x: iniSpeed.x + bulletStats.speed * makeMoreOrLess(Math.cos(rad), accShiftMin, accShiftMax), 
+                y: iniSpeed.y + bulletStats.speed * makeMoreOrLess(Math.sin(rad), accShiftMin, accShiftMax)
+            };
+
             bullets.push({
                 actor: new Actor(gameStats.bulletIndex, bulletStats.type, null, {x:sXY.x,y:sXY.y}, img, null),
                 currSpeed: speed,
@@ -585,7 +622,7 @@ function main(){
         //Get
         
         function getRandomBetween(min, max){
-            return Math.floor(Math.random() * (max - min) + min);
+            return Math.random() * (max - min) + min;
         }
 
         function getDistToPlayer(actor){
@@ -714,6 +751,11 @@ function main(){
                     enem.isInCombat = false;
                 }
             });
+        }
+
+        function makeMoreOrLess(num, min, max){
+            let val = getRandomBetween(min, max);
+            return num * val;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
