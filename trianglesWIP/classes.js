@@ -51,6 +51,14 @@ class Actor{
             h: this.actor.image.h
         };
     }
+
+    getHealth(){
+        return this.actor.health;
+    }
+
+    addHealth(num){
+        this.actor.health += num;
+    }
 }
 
 class Weapon{
@@ -59,16 +67,16 @@ class Weapon{
         type: null,
         damage: null,
         range: null,
-        speed: null,
+        delay: null,
         accuracy: null
     };
 
-    constructor(i, tp, dmg, rng, spd, acc) {
+    constructor(i, tp, dmg, rng, dly, acc) {
         this.weapon.id = i;
         this.weapon.type = tp;
         this.weapon.damage = dmg;
         this.weapon.range = rng;
-        this.weapon.speed = spd;
+        this.weapon.delay = dly;
         this.weapon.accuracy = acc;
     }
 
@@ -88,8 +96,8 @@ class Weapon{
         return this.weapon.range;
     }
 
-    getSpeed(){
-        return this.weapon.speed;
+    getDelay(){
+        return this.weapon.delay;
     }
 
     getAccuracy(){

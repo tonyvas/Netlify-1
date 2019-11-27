@@ -2,6 +2,7 @@
 let context;
 let isDebug = false;
 let isPaused = false;
+let isGameOver = false;
 
 function main(){
     try {
@@ -10,6 +11,7 @@ function main(){
         canvas.height = document.getElementById('gameScreen').clientHeight;
         context = canvas.getContext('2d');
 
+        const INVULNERABILITY_TIME = 0;
         let mouseXY = {x: 0, x: 0};
         let keyBinds = {left: "A", right: "D", up: "W", down: "S", sprint: "SHIFT", pause: "ESCAPE", shoot: "0"};
         let keyStates = {isLeft: false, isRight: false, isUp: false, isDown: false, isSprint: false, isShoot: false, isPause: false};
@@ -39,7 +41,8 @@ function main(){
             playership: createImg("imgs/enemyship.png", 150, 75),
             cargoship: createImg("imgs/cargoship.png", 125, 80),
             enemyship: createImg("imgs/spaceship.png", 100, 100),
-            bullet: createImg("imgs/cargoship.png", 10, 10)
+            playerbullet: createImg("imgs/bluelaser.png", 100, 30),
+            enemybullet: createImg("imgs/redlaser.png", 100, 30)
         };
 
         let playerStats = {
@@ -59,14 +62,14 @@ function main(){
         };
 
         let enemyStats = {
-            amount: 10,
+            amount: 3,
             scale: 0.5,
             speed: 4,
             startingHP: 100,
             type: "enemy",
             spawnPerim: 100,
-            detectionRange: 100,
-            hugDist: 50,
+            detectionRange: 150,
+            hugDist: 200,
             thrusterInfo: {
                 colors: {min: {r:0,g:0,b:0}, max: {r:255,g:0,b:0}},
                 spread: Math.PI / 8,
@@ -85,15 +88,18 @@ function main(){
         };
 
         let bulletStats = {
-            scale: 1,
-            speed: 10
-        }
+            scale: 0.1,
+            speed: 10,
+            type: "bullet"
+        };
 
         let player;
         let weapons;
         let enemies = [];
         let bullets = [];
         let particles = [];
+
+        //Setup
 
         setupGame();
         function setupGame(){
@@ -103,6 +109,36 @@ function main(){
             createWeapons();
             createPlayer();
             gameLoop();
+        }
+
+        //Game
+
+        function gameLoop(){
+            document.activeElement.blur();
+            doStats();
+
+            if (isGameOver == false){
+                if (keyStates.isPause){
+                    keyStates.isPause = false;
+                    isPaused = !isPaused;
+                }
+            
+                if (isPaused == false){
+                    gameStats.main++;
+                    createEnemies();
+                    checkBulletCollision();
+                    drawStuff();
+                    moveStuff();
+                    doCombat();
+                    doCountDown();
+                    checkAliveness();
+                }            
+    
+                gameStats.game++;
+                requestAnimationFrame(gameLoop);
+            }
+            else
+                context.clearRect(0, 0, canvas.width, canvas.height);
         }
 
         //Create
@@ -115,7 +151,8 @@ function main(){
 
         function createWeapons(){
             weapons = {
-                playerWeapon: new Weapon(0, "playerWeapon", 20, 300, 100)
+                playerWeapon: new Weapon(0, "playerWeapon", 20, 300, 10, 90),
+                enemyWeapon: new Weapon(1, "enemyWeapon", 20, 300, 10, 90)
             };
         }
 
@@ -128,8 +165,11 @@ function main(){
                     {x: canvas.width / 2, y: canvas.height / 2}, 
                     images.playership
                 ),
+                currSpeed: {x: 0, y: 0},
                 weapon: weapons.playerWeapon,
-                rad: 0
+                rad: 0,
+                shootDelay: 0,
+                invulTime: 0
             };
             gameStats.playerIndex++;
         }
@@ -145,11 +185,16 @@ function main(){
                             getRandomSpawnPoint(),
                             images.enemyship
                         ),
-                        weapon: null,
+                        currSpeed: {x: 0, y: 0},
+                        weapon: weapons.enemyWeapon,
                         passBy: getRandomPassByPoint(),
                         rad: null,
                         didEnter: false,
-                        isInCombat: false
+                        isInCombat: false,
+                        isInRange: false,
+                        isLeaving: false,
+                        shootDelay: 0,
+                        invulTime: 0
                     }
                     enemies[i].rad = -getRadToTarget(enemies[i].actor.getPos(), enemies[i].passBy);
                     gameStats.enemyIndex++;
@@ -187,10 +232,19 @@ function main(){
             }
         }
 
-        function createBullet(friendly, wpn, sXY, tXY){
+        function createBullet(friendly, wpn, sXY, tXY, iniSpeed = {x: 0, y: 0}){
+            let img;
+            if (friendly)
+                img = images.playerbullet;
+            else
+                img = images.enemybullet;
+
+            let rad = getRadToTarget(sXY, tXY)
+            let speed = {x: iniSpeed.x + bulletStats.speed * Math.cos(rad), y: iniSpeed.y + bulletStats.speed * Math.sin(rad)};
             bullets.push({
-                actor: new Actor(gameStats.bulletIndex, "bullet", null, {x:sXY.x,y:sXY.y}, images.bullet, null),
-                rad: getRadToTarget(sXY, tXY),
+                actor: new Actor(gameStats.bulletIndex, bulletStats.type, null, {x:sXY.x,y:sXY.y}, img, null),
+                currSpeed: speed,
+                rad: rad,
                 isFriend: friendly,
                 time: wpn.getRange(),
                 damage: wpn.getDamage()
@@ -198,38 +252,14 @@ function main(){
             gameStats.bulletIndex++;
         }
 
-        //Game
-
-        function gameLoop(){
-            document.activeElement.blur();
-            doStats();
-
-            if (keyStates.isPause){
-                keyStates.isPause = false;
-                isPaused = !isPaused;
-            }
-        
-            if (isPaused == false){
-                gameStats.main++;
-                createEnemies();
-                drawStuff();
-                moveStuff();
-                doCombat();
-                CheckTimeLeft();
-            }            
-
-            gameStats.game++;
-            requestAnimationFrame(gameLoop);
-        }
-
         //Draw
 
         function drawStuff(){
             context.clearRect(0, 0, canvas.width, canvas.height);
             drawParticles();
+            drawBullets();
             drawPlayer();
             drawEnemies();
-            drawBullets();
         }
 
         function drawPlayer(){
@@ -281,19 +311,18 @@ function main(){
         }
 
         function movePlayer(){
-            let x = 0;
-            let y = 0;
             let playerXY = player.actor.getPos();
             let playerWH = player.actor.getSize();
+            player.currSpeed = {x: 0, y: 0};
 
             if (keyStates.isUp != keyStates.isDown){
                 if (keyStates.isUp){
-                    x = -playerStats.speed * Math.cos(player.rad);
-                    y = -playerStats.speed * Math.sin(player.rad);
+                    player.currSpeed.x = -playerStats.speed * Math.cos(player.rad);
+                    player.currSpeed.y = -playerStats.speed * Math.sin(player.rad);
                 }
                 else if (keyStates.isDown){
-                    x = playerStats.speed * Math.cos(player.rad);
-                    y = playerStats.speed * Math.sin(player.rad);
+                    player.currSpeed.x = playerStats.speed * Math.cos(player.rad);
+                    player.currSpeed.y = playerStats.speed * Math.sin(player.rad);
                 }
             }
 
@@ -306,8 +335,8 @@ function main(){
                 }
             }
 
-            if (x != 0 || y != 0){
-                player.actor.moveBy(x, y);
+            if (player.currSpeed.x != 0 || player.currSpeed.y != 0){
+                player.actor.moveBy(player.currSpeed.x, player.currSpeed.y);
 
                 playerXY = player.actor.getPos();
                 playerWH = player.actor.getSize();
@@ -331,17 +360,21 @@ function main(){
             enemies.forEach(enem => {
                 let enemXY = enem.actor.getPos();
                 let enemWH = enem.actor.getSize();
+                enem.currSpeed = {x: 0, y: 0};
 
                 if (enem.isInCombat)
                     enem.rad = -getRadsToPlayer(enem);
 
                 if (getDistToPlayer(enem) > enemyStats.hugDist && enem.isInCombat || enem.isInCombat == false){
                     if (CheckEnemyMovePriority(enem) && enem.isInCombat || enem.isInCombat == false){
-                        let x = -enemyStats.speed * Math.cos(enem.rad);
-                        let y = -enemyStats.speed * Math.sin(enem.rad);
-                        enem.actor.moveBy(x, y);
+                        enem.currSpeed.x = -enemyStats.speed * Math.cos(enem.rad);
+                        enem.currSpeed.y = -enemyStats.speed * Math.sin(enem.rad);
+                        enem.actor.moveBy(enem.currSpeed.x, enem.currSpeed.y);
                     }
                 }
+
+                if (getDistToPlayer(enem) <= enemyStats.hugDist && enem.isInCombat)
+                    enem.isInRange = true;
                 
                 enemXY = enem.actor.getPos();
                 enemWH = enem.actor.getSize();
@@ -353,9 +386,7 @@ function main(){
 
         function moveBullets(){
             bullets.forEach(blt => {
-                let x = bulletStats.speed * Math.cos(blt.rad);
-                let y = bulletStats.speed * Math.sin(blt.rad);
-                blt.actor.moveBy(x, y);
+                blt.actor.moveBy(blt.currSpeed.x, blt.currSpeed.y);
             });
         }
 
@@ -418,16 +449,22 @@ function main(){
         }
 
         function doCombat(){
-            if (keyStates.isShoot){
+            if (keyStates.isShoot && player.shootDelay <= 0){
                 if (mouseXY.x >= canvas.offsetLeft && mouseXY.x <= canvas.offsetLeft + canvas.width &&
                     mouseXY.y >= canvas.offsetTop && mouseXY.y <= canvas.offsetTop + canvas.height){
-                    createBullet(true, player.weapon, player.actor.getPos(), {x: mouseXY.x - canvas.offsetLeft, y: mouseXY.y - canvas.offsetTop});
+                    createBullet(true, player.weapon, player.actor.getPos(), {x: mouseXY.x - canvas.offsetLeft, y: mouseXY.y - canvas.offsetTop}/*, player.currSpeed*/);
+                    player.shootDelay = player.weapon.getDelay();
                 }
             }
 
             enemies.forEach(enem => {
-                if (getDistToPlayer(enem) <= enemyStats.detectionRange && enem.isInCombat == false){
+                if (getDistToPlayer(enem) <= enemyStats.detectionRange && enem.isInCombat == false && enem.isLeaving == false){
                     enem.isInCombat = true;
+                }
+
+                if (enem.isInCombat && enem.isInRange && getDistToPlayer(enem) <= weapons.enemyWeapon.getRange() && enem.shootDelay <= 0){
+                    createBullet(false, enem.weapon, enem.actor.getPos(), player.actor.getPos()/*, enem.currSpeed*/);
+                    enem.shootDelay = enem.weapon.getDelay();
                 }
             });
         }
@@ -483,6 +520,68 @@ function main(){
             }
         }
 
+        function doBulletImpact(bullet, actor, dmg){
+            if (actor.invulTime <= 0){
+                let i = bullets.indexOf(bullet);
+                if (i != -1)
+                    bullets.splice(i, 1);
+
+                actor.actor.addHealth(-dmg);
+                actor.invulTime = INVULNERABILITY_TIME;
+
+                if (actor.actor.getType() != "player"){
+                    actor.isLeaving = false;
+                    actor.isInCombat = true;
+                }
+            }
+        }
+
+        function doCountDown(){
+            player.shootDelay--;
+            player.invulTime--;
+
+            particles.forEach(particle => {
+                if (particle.time > 0)
+                    particle.time--;
+                else{
+                    let i = particles.indexOf(particle);
+                    if (i != -1)
+                        particles.splice(i, 1);
+                }
+            });
+
+            enemies.forEach(enem => {
+                if (enem.didEnter && enem.isInCombat == false){
+                    let enemXY = enem.actor.getPos();
+                    let enemWH = enem.actor.getSize();
+
+                    if (enemXY.x - enemWH.w / 2 > canvas.width || enemXY.x + enemWH.w / 2 < 0 ||
+                        enemXY.y - enemWH.h / 2 > canvas.height || enemXY.y + enemWH.h / 2 < 0){
+                        let i = enemies.indexOf(enem);
+                        if (i != -1)
+                            enemies.splice(i, 1);
+                    }
+                }
+
+                enem.shootDelay--;
+                enem.invulTime--;
+            });
+
+            bullets.forEach(blt => {
+                let bltXY = blt.actor.getPos();
+                let bltWH = blt.actor.getSize();
+
+                if (bltXY.x - bltWH.w / 2 > canvas.width || bltXY.x + bltWH.w / 2 < 0 ||
+                    bltXY.y - bltWH.h / 2 > canvas.height || bltXY.y + bltWH.h / 2 < 0 || blt.time <= 0){
+                        let i = bullets.indexOf(blt);
+                        if (i != -1)
+                            bullets.splice(i, 1);
+                    }
+                else
+                    blt.time -= bulletStats.speed;
+            });
+        }
+
         //Get
         
         function getRandomBetween(min, max){
@@ -535,47 +634,59 @@ function main(){
                 return false;
         }
 
-        function CheckTimeLeft(){
-            particles.forEach(particle => {
-                if (particle.time > 0)
-                    particle.time--;
-                else{
-                    let i = particles.indexOf(particle);
-                    if (i != -1)
-                        particles.splice(i, 1);
-                }
-            });
-
-            enemies.forEach(enem => {
-                if (enem.didEnter && enem.isInCombat == false){
-                    let enemXY = enem.actor.getPos();
-                    let enemWH = enem.actor.getSize();
-
-                    if (enemXY.x - enemWH.w / 2 > canvas.width || enemXY.x + enemWH.w / 2 < 0 ||
-                        enemXY.y - enemWH.h / 2 > canvas.height || enemXY.y + enemWH.h / 2 < 0){
-                        let i = enemies.indexOf(enem);
-                        if (i != -1)
-                            enemies.splice(i, 1);
-                    }
-                }
-            });
-
+        function checkBulletCollision(){
             bullets.forEach(blt => {
-                let bltXY = blt.actor.getPos();
-                let bltWH = blt.actor.getSize();
+                let bulletXY = blt.actor.getPos();
+                let bulletWH = blt.actor.getSize();
+                if (blt.isFriend){
+                    enemies.forEach(enem => {
+                        let enemXY = enem.actor.getPos();
+                        let enemWH = enem.actor.getSize();
 
-                if (bltXY.x - bltWH.w / 2 > canvas.width || bltXY.x + bltWH.w / 2 < 0 ||
-                    bltXY.y - bltWH.h / 2 > canvas.height || bltXY.y + bltWH.h / 2 < 0 || blt.time <= 0){
-                        let i = bullets.indexOf(blt);
-                        if (i != -1)
-                            bullets.splice(i, 1);
+                        if (bulletXY.x - bulletWH.w / 2 * bulletStats.scale < enemXY.x + enemWH.w / 2 * playerStats.scale &&
+                            bulletXY.x + bulletWH.w / 2 * bulletStats.scale > enemXY.x - enemWH.w / 2 * playerStats.scale &&
+                            bulletXY.y - bulletWH.h / 2 * bulletStats.scale < enemXY.y + enemWH.h / 2 * playerStats.scale &&
+                            bulletXY.y + bulletWH.h / 2 * bulletStats.scale > enemXY.y - enemWH.h / 2 * playerStats.scale){
+                            doBulletImpact(blt, enem, enem.weapon.getDamage());
+                        }
+                    });
+                }
+                else{
+                    let playerXY = player.actor.getPos();
+                    let playerWH = player.actor.getSize();
+
+                    if (bulletXY.x - bulletWH.w / 2 * bulletStats.scale < playerXY.x + playerWH.w / 2 * playerStats.scale &&
+                        bulletXY.x + bulletWH.w / 2 * bulletStats.scale > playerXY.x - playerWH.w / 2 * playerStats.scale &&
+                        bulletXY.y - bulletWH.h / 2 * bulletStats.scale < playerXY.y + playerWH.h / 2 * playerStats.scale &&
+                        bulletXY.y + bulletWH.h / 2 * bulletStats.scale > playerXY.y - playerWH.h / 2 * playerStats.scale){
+                        doBulletImpact(blt, player, player.weapon.getDamage());
                     }
-                else
-                    blt.time--;
+                }
             });
         }
 
-        //Convert
+        function checkAliveness(){
+            if (player.actor.getHealth() <= 0){
+                let xy = player.actor.getPos();
+                doParticles(xy.x, xy.y, 50, 5, 5, 5, {r:200,g:200,b:0}, {r:200,g:200,b:0}, 0, 2 * Math.PI);
+                makeEnemsInCombatLeave();
+                createPlayer();
+                // isGameOver = true;
+                // alert("you ded");
+            }
+
+            enemies.forEach(enem => {
+                if (enem.actor.getHealth() <= 0){
+                    let xy = enem.actor.getPos();
+                    doParticles(xy.x, xy.y, 50, 5, 3, 4, {r:200,g:200,b:0}, {r:200,g:200,b:0}, 0, 2 * Math.PI);
+                    let i = enemies.indexOf(enem);
+                    if (i != -1)
+                        enemies.splice(i, 1);
+                }
+            });
+        }
+
+        //Angles
 
         function radToDeg(ang){
             return ang * (180 / Math.PI);
@@ -586,13 +697,23 @@ function main(){
             
         }
 
-        //
-
         function getRadToTarget(startXY, targetXY){
             let distX = targetXY.x - startXY.x;
             let distY = targetXY.y -  startXY.y;
             let rad = Math.atan2(distY, distX);
             return rad;
+        }
+
+        //Other
+
+        function makeEnemsInCombatLeave(){
+            enemies.forEach(enem => {
+                if (enem.isInCombat){
+                    enem.rad += Math.PI;
+                    enem.isLeaving = true;
+                    enem.isInCombat = false;
+                }
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
