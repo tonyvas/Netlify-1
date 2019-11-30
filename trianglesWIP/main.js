@@ -3,6 +3,7 @@ let context;
 let isDebug = false;
 let isPaused = false;
 let isGameOver = false;
+let isGodMode = false;
 
 function main(){
     try {
@@ -13,8 +14,8 @@ function main(){
 
         const INVULNERABILITY_TIME = 0;
         let mouseXY = {x: 0, x: 0};
-        let keyBinds = {left: "A", right: "D", up: "W", down: "S", sprint: "SHIFT", pause: "ESCAPE", shoot: "0"};
-        let keyStates = {isLeft: false, isRight: false, isUp: false, isDown: false, isSprint: false, isShoot: false, isPause: false};
+        let keyBinds = {left: "A", right: "D", up: "W", down: "S", auto: "SHIFT", pause: "ESCAPE", shoot: "0"};
+        let keyStates = {isLeft: false, isRight: false, isUp: false, isDown: false, isAuto: false, isShoot: false, isPause: false};
         let gameStats = {
             fps: 0, 
             fpsUpdateTime: 10, 
@@ -42,7 +43,8 @@ function main(){
             cargoship: createImg("imgs/cargoship.png", 125, 80),
             enemyship: createImg("imgs/spaceship.png", 100, 100),
             playerbullet: createImg("imgs/bluelaser.png", 100, 30),
-            enemybullet: createImg("imgs/redlaser.png", 100, 30)
+            enemybullet: createImg("imgs/redlaser.png", 100, 30),
+            crosshair: createImg("imgs/crosshair.png", 50, 50)
         };
 
         let playerStats = {
@@ -62,14 +64,17 @@ function main(){
         };
 
         let enemyStats = {
+            chancePerFrame: 0.1,
             amount: 3,
             scale: 0.5,
-            speed: 4,
+            speed: 2,
+            spinSpeed: 3,
             startingHP: 80,
             type: "enemy",
             spawnPerim: 100,
             detectionRange: 150,
             hugDist: 200,
+            aimRadius: 0.2,
             thrusterInfo: {
                 colors: {min: {r:0,g:0,b:0}, max: {r:255,g:0,b:0}},
                 spread: Math.PI / 8,
@@ -81,6 +86,8 @@ function main(){
         };
 
         let cargoStats = {
+            chancePerFrame: 0.01,
+            amount: 2,
             scale: 0.5,
             speed: 3,
             startingHP: 100,
@@ -96,15 +103,23 @@ function main(){
         let playerWeaponStats = {
             type: "playerWeapon",
             damage: 30,
-            range: 400,
-            delay: 10,
+            distance: 400,
+            delay: 15,
+            accuracy: 0.9
+        };
+
+        let playerWeaponAutoStats = {
+            type: "playerWeaponAuto",
+            damage: 15,
+            distance: 300,
+            delay: 30,
             accuracy: 0.9
         };
 
         let enemyWeaponStats = {
             type: "enemyWeapon",
             damage: 20,
-            range: 300,
+            distance: 300,
             delay: 10,
             accuracy: 0.9
         };
@@ -171,17 +186,28 @@ function main(){
                     0, 
                     playerWeaponStats.type, 
                     playerWeaponStats.damage, 
-                    playerWeaponStats.range, 
+                    playerWeaponStats.distance, 
                     playerWeaponStats.delay, 
-                    playerWeaponStats.accuracy
+                    playerWeaponStats.accuracy,
+                    playerWeaponStats.range
+                ),
+                playerWeaponAuto: new Weapon(
+                    1,
+                    playerWeaponAutoStats.type,
+                    playerWeaponAutoStats.damage,
+                    playerWeaponAutoStats.distance,
+                    playerWeaponAutoStats.delay,
+                    playerWeaponAutoStats.accuracy,
+                    playerWeaponAutoStats.range
                 ),
                 enemyWeapon: new Weapon(
-                    1, 
+                    2, 
                     enemyWeaponStats.type, 
                     enemyWeaponStats.damage, 
-                    enemyWeaponStats.range, 
+                    enemyWeaponStats.distance, 
                     enemyWeaponStats.delay, 
-                    enemyWeaponStats.accuracy
+                    enemyWeaponStats.accuracy,
+                    enemyWeaponStats.range
                 )
             };
         }
@@ -197,8 +223,10 @@ function main(){
                 ),
                 currSpeed: {x: 0, y: 0},
                 weapon: weapons.playerWeapon,
-                rad: 0,
+                autoWeapon: weapons.playerWeaponAuto,
+                rad: Math.PI / 2,
                 shootDelay: 0,
+                autoShootDelay: 0,
                 invulTime: 0
             };
             gameStats.playerIndex++;
@@ -206,7 +234,8 @@ function main(){
 
         function createEnemies(){
             if (enemies.length < enemyStats.amount){
-                for (let i = enemies.length; i < enemyStats.amount; i++){
+                if (Math.random() <= enemyStats.chancePerFrame){
+                    let i = enemies.length;
                     enemies[i] = {
                         actor: new Actor(
                             gameStats.enemyIndex,
@@ -272,7 +301,8 @@ function main(){
             let accShiftMin = wpn.getAccuracy();
             let accShiftMax = wpn.getAccuracy() + 2 * (1 - wpn.getAccuracy());
 
-            let rad = getRadToTarget(sXY, tXY);
+            let rad = simplifyRads(getRadToTarget(sXY, tXY));
+
             let speed = {
                 x: iniSpeed.x + bulletStats.speed * makeMoreOrLess(Math.cos(rad), accShiftMin, accShiftMax), 
                 y: iniSpeed.y + bulletStats.speed * makeMoreOrLess(Math.sin(rad), accShiftMin, accShiftMax)
@@ -283,7 +313,7 @@ function main(){
                 currSpeed: speed,
                 rad: rad,
                 isFriend: friendly,
-                time: wpn.getRange(),
+                time: wpn.getDistance(),
                 damage: wpn.getDamage()
             });
             gameStats.bulletIndex++;
@@ -297,6 +327,7 @@ function main(){
             drawBullets();
             drawPlayer();
             drawEnemies();
+            // drawLeadCrosshairs();
         }
 
         function drawPlayer(){
@@ -314,6 +345,19 @@ function main(){
         function drawBullets(){
             bullets.forEach(blt => {
                 drawActor(blt.actor.getPos(), blt.actor.getSize(), blt.rad, blt.actor.getImage(), bulletStats.scale);
+            });
+        }
+
+        function drawLeadCrosshairs(){
+            enemies.forEach(enem => {
+                let leadDist = calculateLeadDist(enem);
+                let enemXY = enem.actor.getPos();
+                let crosshairXY = {
+                    x: enemXY.x + leadDist * Math.cos(enem.rad + Math.PI), 
+                    y: enemXY.y + leadDist * Math.sin(enem.rad + Math.PI)
+                };
+                let crosshairWH = {w: images.crosshair.w, h: images.crosshair.h};
+                drawActor(crosshairXY, crosshairWH, 0, images.crosshair.img, 1);
             });
         }
 
@@ -364,12 +408,10 @@ function main(){
             }
 
             if (keyStates.isLeft != keyStates.isRight){
-                if (keyStates.isLeft){
-                    player.rad -= degToRad(playerStats.spinSpeed);
-                }
-                else if (keyStates.isRight){
-                    player.rad += degToRad(playerStats.spinSpeed);
-                }
+                if (keyStates.isLeft)
+                    rotateActor(player, -degToRad(playerStats.spinSpeed));
+                else if (keyStates.isRight)
+                    rotateActor(player, degToRad(playerStats.spinSpeed));
             }
 
             if (player.currSpeed.x != 0 || player.currSpeed.y != 0){
@@ -400,17 +442,17 @@ function main(){
                 enem.currSpeed = {x: 0, y: 0};
 
                 if (enem.isInCombat)
-                    enem.rad = -getRadsToPlayer(enem);
+                    rotateActor(enem, degToRad(enemyStats.spinSpeed), getRadToTarget(enem.actor.getPos(), player.actor.getPos()));
 
-                if (getDistToPlayer(enem) > enemyStats.hugDist && enem.isInCombat || enem.isInCombat == false){
-                    if (CheckEnemyMovePriority(enem) && enem.isInCombat || enem.isInCombat == false){
+                if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) > enemyStats.hugDist && enem.isInCombat || enem.isInCombat == false){
+                    if (canEnemyMove(enem) && enem.isInCombat || enem.isInCombat == false){
                         enem.currSpeed.x = -enemyStats.speed * Math.cos(enem.rad);
                         enem.currSpeed.y = -enemyStats.speed * Math.sin(enem.rad);
                         enem.actor.moveBy(enem.currSpeed.x, enem.currSpeed.y);
                     }
                 }
 
-                if (getDistToPlayer(enem) <= enemyStats.hugDist && enem.isInCombat)
+                if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) <= enemyStats.hugDist && enem.isInCombat)
                     enem.isInRange = true;
                 
                 enemXY = enem.actor.getPos();
@@ -464,7 +506,7 @@ function main(){
                         rows[i].parentNode.removeChild(rows[i]);
             }
 
-            gameStats.mousePos = mouseXY.x + ", " + mouseXY.y;
+            gameStats.mousePos = Math.floor(mouseXY.x) + ", " + Math.floor(mouseXY.y);
             gameStats.canvasSize = canvas.width + ", " + canvas.height;
             gameStats.particlesExist = particles.length;
             gameStats.enemiesExist = enemies.length;
@@ -482,26 +524,39 @@ function main(){
                 if (enem.isInCombat)
                     gameStats.enemiesInCombat++;
             });
-            gameStats.playerPos = player.actor.getPos().x + ", " + player.actor.getPos().y;
+            gameStats.playerPos = Math.floor(player.actor.getPos().x) + ", " + Math.floor(player.actor.getPos().y);
         }
 
         function doCombat(){
-            if (keyStates.isShoot && player.shootDelay <= 0){
-                if (mouseXY.x >= canvas.offsetLeft && mouseXY.x <= canvas.offsetLeft + canvas.width &&
-                    mouseXY.y >= canvas.offsetTop && mouseXY.y <= canvas.offsetTop + canvas.height){
-                    createBullet(true, player.weapon, player.actor.getPos(), {x: mouseXY.x - canvas.offsetLeft, y: mouseXY.y - canvas.offsetTop}/*, player.currSpeed*/);
-                    player.shootDelay = player.weapon.getDelay();
+            if (player.shootDelay <= 0){
+                if (keyStates.isShoot){
+                    if (mouseXY.x >= canvas.offsetLeft && mouseXY.x <= canvas.offsetLeft + canvas.width &&
+                        mouseXY.y >= canvas.offsetTop && mouseXY.y <= canvas.offsetTop + canvas.height){
+                        createBullet(true, player.weapon, player.actor.getPos(), {x: mouseXY.x - canvas.offsetLeft, y: mouseXY.y - canvas.offsetTop}/*, player.currSpeed*/);
+                        player.shootDelay = player.weapon.getDelay();
+                    }
                 }
+            }
+            if (player.autoShootDelay <= 0){
+                let cEnem = getClosestEnemToPlayerInCombat();
+                    if (cEnem != null){
+                        if (getDistToTarget(cEnem.actor.getPos(), player.actor.getPos()) <= player.autoWeapon.getDistance()){
+                            createBullet(true, player.autoWeapon, player.actor.getPos(), cEnem.actor.getPos());
+                            player.autoShootDelay = player.autoWeapon.getDelay();
+                        }
+                    }
             }
 
             enemies.forEach(enem => {
-                if (getDistToPlayer(enem) <= enemyStats.detectionRange && enem.isInCombat == false && enem.isLeaving == false){
+                if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) <= enemyStats.detectionRange && enem.isInCombat == false && enem.isLeaving == false){
                     enem.isInCombat = true;
                 }
 
-                if (enem.isInCombat && enem.isInRange && getDistToPlayer(enem) <= weapons.enemyWeapon.getRange() && enem.shootDelay <= 0){
-                    createBullet(false, enem.weapon, enem.actor.getPos(), player.actor.getPos()/*, enem.currSpeed*/);
-                    enem.shootDelay = enem.weapon.getDelay();
+                if (enem.isInCombat && enem.isInRange && getDistToTarget(enem.actor.getPos(), player.actor.getPos()) <= weapons.enemyWeapon.getDistance() && enem.shootDelay <= 0){
+                    if (canEnemyShoot(enem.actor.getPos(), player.actor.getPos(), enem.rad, enemyStats.aimRadius * Math.PI)){
+                        createBullet(false, enem.weapon, enem.actor.getPos(), player.actor.getPos()/*, enem.currSpeed*/);
+                        enem.shootDelay = enem.weapon.getDelay();
+                    }
                 }
             });
         }
@@ -575,6 +630,7 @@ function main(){
 
         function doCountDown(){
             player.shootDelay--;
+            player.autoShootDelay--;
             player.invulTime--;
 
             particles.forEach(particle => {
@@ -625,43 +681,43 @@ function main(){
             return Math.random() * (max - min) + min;
         }
 
-        function getDistToPlayer(actor){
-            let actorXY = actor.actor.getPos();
-            let playerXY = player.actor.getPos();
-            let x = Math.abs(actorXY.x - playerXY.x);
-            let y = Math.abs(actorXY.y - playerXY.y);
+        function getDistToTarget(startXY, targetXY){
+            let x = Math.abs(startXY.x - targetXY.x);
+            let y = Math.abs(startXY.y - targetXY.y);
             let dist = Math.sqrt(x ** 2 + y ** 2);
             return dist;
         }
 
-        function getRadsToPlayer(actor){
-            let actorXY = actor.actor.getPos();
-            let playerXY = player.actor.getPos();
-            let diffX = actorXY.x - playerXY.x;
-            let diffY = actorXY.y - playerXY.y;
-            let angle = Math.atan2(diffY, diffX);
-            return -angle;
+        function getRadToTarget(startXY, targetXY){
+            let distX = targetXY.x - startXY.x;
+            let distY = targetXY.y -  startXY.y;
+            let rad = Math.atan2(distY, distX);
+            return rad;
+        }
+
+        function getClosestEnemToPlayerInCombat(){
+            let closestEnem = null;
+
+            enemies.forEach(enem => {
+                if (enem.isInCombat)
+                    if (closestEnem == null)
+                        closestEnem = enem
+                    else if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) < getDistToTarget(enem.actor.getPos(), player.actor.getPos()))
+                        closestEnem = enem;
+            });
+        
+            return closestEnem;
         }
 
         //Check
 
-        function CheckEnemyMovePriority(enem){
-            let currEnemyXY = enem.actor.getPos();
-            let currEnemyWH = enem.actor.getSize();
-            let playerXY = player.actor.getPos();
+        function canEnemyMove(enem){
             let closestEnemy = enem;
         
             enemies.forEach(checkEnem =>{
-                let checkEnemXY = checkEnem.actor.getPos();
-                let checkEnemWH = checkEnem.actor.getSize();
                     if (enem.actor.getId() != checkEnem.actor.getId())
-                        if (currEnemyXY.x - currEnemyWH.w / 2 * enemyStats.scale < checkEnemXY.x + checkEnemWH.w / 2 * enemyStats.scale && 
-                            currEnemyXY.x + currEnemyWH.w / 2 * enemyStats.scale > checkEnemXY.x - checkEnemWH.w / 2 * enemyStats.scale && 
-                            currEnemyXY.y - currEnemyWH.h / 2 * enemyStats.scale < checkEnemXY.y + checkEnemWH.h / 2 * enemyStats.scale && 
-                            currEnemyXY.y + currEnemyWH.h / 2 * enemyStats.scale > checkEnemXY.y - checkEnemWH.h / 2 * enemyStats.scale)
-                            if (
-                                (Math.abs(currEnemyXY.x - playerXY.x) ** 2) + (Math.abs(currEnemyXY.y - playerXY.y) ** 2) > 
-                                (Math.abs(checkEnemXY.x - playerXY.x) ** 2) + (Math.abs(checkEnemXY.y - playerXY.y) ** 2))
+                        if (checkForCollision(enem, enemyStats.scale, checkEnem, enemyStats.scale))
+                            if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) > getDistToTarget(enem.actor.getPos(), player.actor.getPos()))
                                 closestEnemy = checkEnem;
             });
         
@@ -669,6 +725,13 @@ function main(){
                 return true;
             else
                 return false;
+        }
+
+        function canEnemyShoot(startXY, targetXY, shooterRads, radius){
+            let min = shooterRads - radius;
+            let max = shooterRads + radius;
+            let radsToTarget = simplifyRads(getRadToTarget(startXY, targetXY) + Math.PI);
+            return (radsToTarget < max && radsToTarget > min);
         }
 
         function checkBulletCollision(){
@@ -703,7 +766,7 @@ function main(){
         }
 
         function checkAliveness(){
-            if (player.actor.getHealth() <= 0){
+            if (player.actor.getHealth() <= 0 && isGodMode == false){
                 let xy = player.actor.getPos();
                 doParticles(xy.x, xy.y, 50, 5, 5, 5, {r:200,g:200,b:0}, {r:200,g:200,b:0}, 0, 2 * Math.PI);
                 makeEnemsInCombatLeave();
@@ -723,7 +786,21 @@ function main(){
             });
         }
 
-        //Angles
+        function checkForCollision(a, aScale, b, bScale){
+            let aXY = a.actor.getPos();
+            let aWH = a.actor.getSize();
+            let bXY = b.actor.getPos();
+            let bWH = b.actor.getSize();
+
+            if (aXY.x - aWH.w / 2 * aScale <= bXY.x + bWH.w / 2 * bScale)
+                if (aXY.x + aWH.w / 2 * aScale >= bXY.x - bWH.w / 2 * bScale)
+                    if (aXY.y - aWH.h / 2 * aScale <= bXY.y + bWH.h / 2 * bScale)
+                        if (aXY.y + aWH.h / 2 * aScale >= bXY.y - bWH.h / 2 * bScale)
+                            return true;
+            return false;
+        }
+
+        //Math
 
         function radToDeg(ang){
             return ang * (180 / Math.PI);
@@ -734,11 +811,8 @@ function main(){
             
         }
 
-        function getRadToTarget(startXY, targetXY){
-            let distX = targetXY.x - startXY.x;
-            let distY = targetXY.y -  startXY.y;
-            let rad = Math.atan2(distY, distX);
-            return rad;
+        function calculateLeadDist(actor){
+            return 100;
         }
 
         //Other
@@ -758,6 +832,33 @@ function main(){
             return num * val;
         }
 
+        function rotateActor(actor, max, targetRad = null){
+            if (targetRad == null)
+                actor.rad += max;
+            else{
+                let rads = max;
+                let orientation;
+
+                if (Math.sin(actor.rad - targetRad) > 0)
+                    orientation = 1;
+                else if (Math.sin(actor.rad - targetRad) < 0)
+                    orientation = -1;
+                else
+                    rads = 0;
+                actor.rad += (rads * orientation);
+            }
+
+            actor.rad = simplifyRads(actor.rad);
+        }
+
+        function simplifyRads(rad){
+            while (rad > Math.PI)
+                rad -= (2 * Math.PI);
+            while (rad < -Math.PI)
+                rad += (2 * Math.PI);
+
+            return rad;
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //                                              ---//-START OF EVENT STUFF-//---                                              //
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -797,8 +898,8 @@ function main(){
             else if (e.key.toUpperCase() == keyBinds.right) {
                 keyStates.isRight = true;
             }
-            else if (e.key.toUpperCase() == keyBinds.sprint) {
-                keyStates.isSprint = true;
+            else if (e.key.toUpperCase() == keyBinds.auto) {
+                keyStates.isAuto = true;
             }
             else if (e.key.toUpperCase() == keyBinds.pause) {
                 keyStates.isPause = true;
@@ -818,8 +919,8 @@ function main(){
             else if (e.key.toUpperCase() == keyBinds.right) {
                 keyStates.isRight = false;
             }
-            else if (e.key.toUpperCase() == keyBinds.sprint) {
-                keyStates.isSprint = false;
+            else if (e.key.toUpperCase() == keyBinds.auto) {
+                keyStates.isAuto = false;
             }
         }
     } catch (error) {

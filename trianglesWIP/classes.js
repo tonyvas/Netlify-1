@@ -66,16 +66,16 @@ class Weapon{
         id: null,
         type: null,
         damage: null,
-        range: null,
+        distance: null,
         delay: null,
-        accuracy: null
+        accuracy: null,
     };
 
-    constructor(i, tp, dmg, rng, dly, acc) {
+    constructor(i, tp, dmg, dist, dly, acc) {
         this.weapon.id = i;
         this.weapon.type = tp;
         this.weapon.damage = dmg;
-        this.weapon.range = rng;
+        this.weapon.distance = dist;
         this.weapon.delay = dly;
         this.weapon.accuracy = acc;
     }
@@ -92,8 +92,8 @@ class Weapon{
         return this.weapon.damage;
     }
 
-    getRange(){
-        return this.weapon.range;
+    getDistance(){
+        return this.weapon.distance;
     }
 
     getDelay(){
