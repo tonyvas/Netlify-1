@@ -2,14 +2,18 @@
     <head>
         <link rel="stylesheet" href="style.css">
     </head>
-    <!-- <body onload="main();"> -->
-    <body></body>
+    <body>
         <div id="leftMenu">
             <input id="btn_start" class="btn" type="button" value="Start" onclick="main();">
             <input id="btn_pause" class="btn" type="button" value="Pause" onclick="isPaused = !isPaused;">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><input id="btn_tutorial" class="btn" type="button" value="Watch Tutorial"></a>
             <input id="btn_debug" class="btn" type="button" value="Toggle Debug" onclick="isDebug = !isDebug;" disabled>
         </div>
-        <div id="gameScreen" oncontextmenu="return false;"><canvas id="canv"></canvas></div>
+
+        <div id="gameScreen" oncontextmenu="return false;">
+            <canvas id="canv"></canvas>
+        </div>
+
         <div id="rightMenu">
             <table id="game_debug_info_table"></table>
         </div>
