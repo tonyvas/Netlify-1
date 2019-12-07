@@ -7,7 +7,8 @@
             <input id="btn_start" class="btn" type="button" value="Start" onclick="main();">
             <input id="btn_pause" class="btn" type="button" value="Pause" onclick="isPaused = !isPaused;">
             <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0"><input id="btn_tutorial" class="btn" type="button" value="Watch Tutorial"></a>
-            <input id="btn_debug" class="btn" type="button" value="Toggle Debug" onclick="isDebug = !isDebug;" disabled>
+            <input id="btn_debug" class="btn" type="button" value="Toggle Debug" onclick="isDebug = !isDebug;">
+            <table id="player_stats_table"></table>
         </div>
 
         <div id="gameScreen" oncontextmenu="return false;">
@@ -15,10 +16,11 @@
         </div>
 
         <div id="rightMenu">
-            <table id="game_debug_info_table"></table>
+            <table id="game_stats_table"></table>
         </div>
 
 
+        <script src="lets.js"></script>
         <script src="main.js"></script>
         <script src="classes.js"></script>
     </body>

@@ -1,211 +1,16 @@
-﻿let canvas;
-let context;
-
-let isDebug = false;
-let isPaused = false;
-let isLooping = false;
-let isGameOver = false;
-let isGodMode = false;
-
-let INVULNERABILITY_TIME = 0;
-
-let mouseXY = {
-    x: 0,
-    x: 0
-};
-let keyBinds = {
-    left: "A",
-    right: "D",
-    up: "W",
-    down: "S",
-    auto: "SHIFT",
-    pause: "ESCAPE",
-    shoot: "0"
-};
-let keyStates = {
-    isLeft: false,
-    isRight: false,
-    isUp: false,
-    isDown: false,
-    isAuto: false,
-    isShoot: false,
-    isPause: false
-};
-let gameStats = {
-    fps: 0,
-    fpsUpdateTime: 10,
-    fpsUpdateSum: 0,
-    mousePos: "0, 0",
-    playerPos: "0, 0",
-    canvasSize: "0, 0",
-    startTime: 0,
-    currentTime: 0,
-    runTime: 0,
-    lastTime: 0,
-    game: 0,
-    main: 0,
-    playerIndex: 0,
-    enemyIndex: 0,
-    bulletIndex: 0,
-    particleIndex: 0,
-    particlesExist: 0,
-    enemiesExist: 0,
-    enemiesInCombat: 0
-};
-
-let images = {
-    playership: createImg("imgs/enemyship.png", 150, 75),
-    cargoship: createImg("imgs/cargoship.png", 125, 80),
-    enemyship: createImg("imgs/spaceship.png", 100, 100),
-    playerbullet: createImg("imgs/bluelaser.png", 100, 30),
-    enemybullet: createImg("imgs/redlaser.png", 100, 30),
-    crosshair: createImg("imgs/crosshair.png", 50, 50)
-};
-
-function createImg(src, w, h) {
-    let img = new Image();
-    img.src = src;
-    return {
-        img: img,
-        w: w,
-        h: h
-    };
-}
-
-let playerCfg = {
-    general: {
-        scale: 0.5,
-        speed: 5,
-        spinSpeed: 3,
-        startingHP: 150,
-        type: "player"
-    },
-    thrusterInfo: {
-        colors: {
-            min: {
-                r: 0,
-                g: 100,
-                b: 200
-            },
-            max: {
-                r: 0,
-                g: 100,
-                b: 255
-            }
-        },
-        spread: Math.PI / 8,
-        amnt: 50,
-        speed: 6,
-        time: 2,
-        size: 5
-    },
-    weapons: {
-        normal: {
-            type: "playerWeapon",
-            damage: 30,
-            distance: 400,
-            delay: 15,
-            accuracy: 0.9
-        },
-        auto: {
-            type: "playerWeaponAuto",
-            damage: 15,
-            distance: 300,
-            delay: 30,
-            accuracy: 0.9
-        }
-    }
-};
-
-let enemyCfg = {
-    general: {
-        chancePerFrame: 0.1,
-        amount: 3,
-        scale: 0.5,
-        speed: 2,
-        spinSpeed: 3,
-        startingHP: 80,
-        type: "enemy",
-        spawnPerim: 100,
-        detectionRange: 150,
-        hugDist: 200,
-        aimRadius: 0.2
-    },
-    thrusterInfo: {
-        colors: {
-            min: {
-                r: 0,
-                g: 0,
-                b: 0
-            },
-            max: {
-                r: 255,
-                g: 0,
-                b: 0
-            }
-        },
-        spread: Math.PI / 8,
-        amnt: 15,
-        speed: 3,
-        time: 3,
-        size: 3
-    },
-    weapons: {
-        normal: {
-            type: "enemyWeapon",
-            damage: 20,
-            distance: 300,
-            delay: 10,
-            accuracy: 0.9
-        }
-    }
-};
-
-let cargoCfg = {
-    chancePerFrame: 0.01,
-    amount: 2,
-    scale: 0.5,
-    speed: 3,
-    startingHP: 100,
-    type: "cargo",
-    weapons: {}
-};
-
-let bulletCfg = {
-    scale: 0.1,
-    speed: 10,
-    type: "bullet"
-};
-
-let scoreCfg = {
-    start: 1000,
-    enemKill: 200,
-    cargoKill: 1000,
-    playerKill: -100,
-    perSec: 5
-};
-
-let player;
-let weapons;
-let enemies = [];
-let bullets = [];
-let particles = [];
-
-function main() {
+﻿function main() {
     try {
+        //#region Setup
         canvas = document.getElementById('canv');
         canvas.width = document.getElementById('gameScreen').clientWidth;
         canvas.height = document.getElementById('gameScreen').clientHeight;
         context = canvas.getContext('2d');
-
-        //Setup
-
         setupGame();
 
         function setupGame() {
-            gameStats.startTime = Date.now();
-            gameStats.lastTime = gameStats.startTime;
-            document.getElementById('btn_debug').disabled = false;
+            gameStats.startTime.val = Date.now();
+            gameStats.lastTime.val = gameStats.startTime;
+            isGameOver = false;
             resetLets();
             createWeapons();
             createPlayer();
@@ -214,12 +19,12 @@ function main() {
                 gameLoop();
             isLooping = true;
         }
+        //#endregion
 
-        //Game
-
+        //#region Game
         function gameLoop() {
             document.activeElement.blur();
-            doStats();
+            doGameStats();
             if (isGameOver == false) {
                 if (keyStates.isPause) {
                     keyStates.isPause = false;
@@ -227,7 +32,6 @@ function main() {
                 }
 
                 if (isPaused == false) {
-                    gameStats.main++;
                     createEnemies();
                     checkBulletCollision();
                     drawStuff();
@@ -235,16 +39,19 @@ function main() {
                     doCombat();
                     doCountDown();
                     checkAliveness();
+                    doPlayerStats();
+
+                    gameStats.main.val++;
                 }
 
-                gameStats.game++;
+                gameStats.game.val++;
                 requestAnimationFrame(gameLoop);
             } else
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                doGameOver();
         }
+        //#endregion
 
-        //Create
-
+        //#region Create
         function createWeapons() {
             weapons = {
                 playerWeapon: new Weapon(
@@ -276,7 +83,6 @@ function main() {
                 )
             };
         }
-
         function createPlayer() {
             player = {
                 actor: new Actor(
@@ -402,9 +208,9 @@ function main() {
             });
             gameStats.bulletIndex++;
         }
+        //#endregion
 
-        //Draw
-
+        //#region Draw
         function drawStuff() {
             context.clearRect(0, 0, canvas.width, canvas.height);
             drawParticles();
@@ -468,9 +274,9 @@ function main() {
                 context.fillRect(particle.pos.x, particle.pos.y, particle.size, particle.size);
             });
         }
+        //#endregion
 
-        //Move
-
+        //#region Move
         function moveStuff() {
             movePlayer();
             moveEnemies();
@@ -567,55 +373,85 @@ function main() {
                 particle.pos.y += particle.speed * Math.sin(particle.angle);
             });
         }
+        //#endregion
 
-        //Do
+        //#region Do
+        function doPlayerStats(){
+            doTables(playerStats, elementID.playerStatsContainer);
+            doPlayerStatsVals();
+        }
 
-        function doStats() {
-            let statKeys = Object.keys(gameStats);
-            let statVals = Object.values(gameStats);
-            let table = document.getElementById('game_debug_info_table');
-            let cells = document.getElementsByClassName('game_debug_info');
+        function doPlayerStatsVals(){
+            playerStats.timeScore.val = (gameStats.runTime.val / 1000) * scoreCfg.perSec;
 
+            playerStats.totalScore.val = Math.floor(
+                scoreCfg.start + 
+                playerStats.timeScore.val + 
+                playerStats.enemyKillScore.val + 
+                playerStats.cargoKillScore.val + 
+                playerStats.playerDeathScore.val + 
+                playerStats.playerSpendScore.val
+            );
+
+            playerStats.hp.val = player.actor.getHealth() + "/" + playerCfg.general.startingHP;
+            playerStats.mSpeed.val = playerCfg.general.speed;
+            playerStats.bSpeed.val = bulletCfg.speed;
+            playerStats.shSpeed.val = 1 / (player.weapon.getDelay() / 60) + "/s";
+            playerStats.dmg.val = player.weapon.getDamage();
+            playerStats.acc.val = player.weapon.getAccuracy() * 100 + "%";
+            playerStats.range.val = player.weapon.getDistance();
+        }
+
+        function doGameStats() {
             if (isDebug)
-                if (cells.length == 0) {
-                    for (let i = 0; i < statKeys.length; i++) {
-                        let row = document.createElement('tr');
-                        let cell = document.createElement('th');
-                        cell.classList.add('game_debug_info');
-                        cell.innerHTML = statKeys[i] + ": " + statVals[i];
-
-                        row.appendChild(cell);
-                        table.appendChild(row);
-                    }
-                }
+                doTables(gameStats, elementID.gameStatsContainer);
             else
-                for (let i = 0; i < cells.length; i++)
-                    cells[i].innerHTML = statKeys[i] + ": " + statVals[i];
-            else {
-                let rows = table.getElementsByTagName('tr');
-                if (rows.length != 0)
-                    for (let i = 0; i < rows.length; i++)
-                        rows[i].parentNode.removeChild(rows[i]);
+                deleteTable(document.getElementById(elementID.gameStatsContainer));
+            doGameStatsVals();
+        }
+
+        function doGameStatsVals(){
+            gameStats.mousePos.val = Math.floor(mouseXY.x) + ", " + Math.floor(mouseXY.y);
+            gameStats.canvasSize.val = canvas.width + ", " + canvas.height;
+            gameStats.particlesExist.val = particles.length;
+            gameStats.enemiesExist.val = enemies.length;
+            gameStats.currentTime.val = Date.now();
+            gameStats.runTime.val = gameStats.currentTime.val - gameStats.startTime.val;
+            if (gameStats.game.val % gameStats.fpsUpdateTime.val == 0) {
+                gameStats.fps.val = Math.floor(1000 / gameStats.fpsUpdateSum.val * gameStats.fpsUpdateTime.val);
+                gameStats.fpsUpdateSum.val = 0;
+            } else
+                gameStats.fpsUpdateSum.val += (gameStats.currentTime.val - gameStats.lastTime.val);
+                gameStats.lastTime.val = gameStats.currentTime.val;
+                gameStats.enemiesInCombat.val = 0;
+                enemies.forEach(enem => {
+                    if (enem.isInCombat)
+                        gameStats.enemiesInCombat.val++;
+            });
+            gameStats.playerPos.val = Math.floor(player.actor.getPos().x) + ", " + Math.floor(player.actor.getPos().y);
+        }
+
+        function doTables(obj, id){
+            let num = countCellsToDisplay(obj);
+            let table = document.getElementById(id);
+            let rows = table.getElementsByTagName('tr');
+            let keys = Object.keys(obj);
+            let vals = Object.values(obj);
+            let currRow = 0;
+
+            if (rows.length != num){
+                deleteTable(table);
+                createTable(table, obj);
+                table = document.getElementById(id);
+                rows = table.getElementsByTagName('tr');
             }
 
-            gameStats.mousePos = Math.floor(mouseXY.x) + ", " + Math.floor(mouseXY.y);
-            gameStats.canvasSize = canvas.width + ", " + canvas.height;
-            gameStats.particlesExist = particles.length;
-            gameStats.enemiesExist = enemies.length;
-            gameStats.currentTime = Date.now();
-            gameStats.runTime = gameStats.currentTime - gameStats.startTime;
-            if (gameStats.game % gameStats.fpsUpdateTime == 0) {
-                gameStats.fps = Math.floor(1000 / gameStats.fpsUpdateSum * gameStats.fpsUpdateTime);
-                gameStats.fpsUpdateSum = 0;
-            } else
-                gameStats.fpsUpdateSum += gameStats.currentTime - gameStats.lastTime;
-            gameStats.lastTime = gameStats.currentTime;
-            gameStats.enemiesInCombat = 0;
-            enemies.forEach(enem => {
-                if (enem.isInCombat)
-                    gameStats.enemiesInCombat++;
-            });
-            gameStats.playerPos = Math.floor(player.actor.getPos().x) + ", " + Math.floor(player.actor.getPos().y);
+            for(let i = 0; i < keys.length; i++){
+                if (obj[keys[i]].display){
+                    writeToCell(rows[currRow], vals[i].name, vals[i].val);
+                    currRow++;
+                }
+            }
         }
 
         function doCombat() {
@@ -769,9 +605,9 @@ function main() {
                     blt.time -= bulletCfg.speed;
             });
         }
+        //#endregion
 
-        //Get
-
+        //#region Get
         function getRandomBetween(min, max) {
             return Math.random() * (max - min) + min;
         }
@@ -803,9 +639,9 @@ function main() {
 
             return closestEnem;
         }
+        //#endregion
 
-        //Check
-
+        //#region Check
         function canEnemyMove(enem) {
             let closestEnemy = enem;
 
@@ -862,36 +698,24 @@ function main() {
         function checkAliveness() {
             if (player.actor.getHealth() <= 0 && isGodMode == false) {
                 let xy = player.actor.getPos();
-                doParticles(xy.x, xy.y, 50, 5, 5, 5, {
-                    r: 200,
-                    g: 200,
-                    b: 0
-                }, {
-                    r: 200,
-                    g: 200,
-                    b: 0
-                }, 0, 2 * Math.PI);
+                doParticles(xy.x, xy.y, 50, 5, 5, 5, {r: 200, g: 200, b: 0}, {r: 200, g: 200, b: 0}, 0, 2 * Math.PI);
                 makeEnemsInCombatLeave();
-                createPlayer();
-                // isGameOver = true;
-                // alert("you ded");
+                playerStats.playerDeathScore.val += scoreCfg.playerKill;
+                doPlayerStatsVals();
+                if (playerStats.totalScore.val > 0)
+                    createPlayer();
+                else
+                    isGameOver = true;
             }
 
             enemies.forEach(enem => {
                 if (enem.actor.getHealth() <= 0) {
                     let xy = enem.actor.getPos();
-                    doParticles(xy.x, xy.y, 50, 5, 3, 4, {
-                        r: 200,
-                        g: 200,
-                        b: 0
-                    }, {
-                        r: 200,
-                        g: 200,
-                        b: 0
-                    }, 0, 2 * Math.PI);
+                    doParticles(xy.x, xy.y, 50, 5, 3, 4, {r: 200, g: 200, b: 0}, {r: 200,g: 200,b: 0}, 0, 2 * Math.PI);
                     let i = enemies.indexOf(enem);
                     if (i != -1)
                         enemies.splice(i, 1);
+                    playerStats.enemyKillScore.val += scoreCfg.enemKill;
                 }
             });
         }
@@ -909,9 +733,9 @@ function main() {
                             return true;
             return false;
         }
+        //#endregion
 
-        //Math
-
+        //#region Math
         function radToDeg(ang) {
             return ang * (180 / Math.PI);
         }
@@ -924,15 +748,21 @@ function main() {
         function calculateLeadDist(actor) {
             return 100;
         }
+        //#endregion
 
-        //Other
-
+        //#region Other
         function resetLets() {
             player = null;
             weapons = [];
             enemies = [];
             bullets = [];
             particle = [];
+
+            playerStats.timeScore.val = 0;
+            playerStats.enemyKillScore.val = 0;
+            playerStats.cargoKillScore.val = 0;
+            playerStats.playerDeathScore.val = 0;
+            playerStats.playerSpendScore.val = 0;
         }
 
         function makeEnemsInCombatLeave() {
@@ -977,9 +807,44 @@ function main() {
 
             return rad;
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                              ---//-START OF EVENT STUFF-//---                                              //
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        function countCellsToDisplay(obj){
+            let num = 0;
+            let keys = Object.keys(obj);
+            let vals = Object.values(obj);
+            for(let i = 0; i < keys.length; i++)
+                if (vals[i].display)
+                    num++;
+            return num;
+        }
+
+        function deleteTable(t){
+            let r = t.getElementsByTagName('tr');
+            while (r.length > 0)
+                t.removeChild(r[r.length - 1]);
+        }
+
+        function createTable(t, obj){
+            let keys = Object.keys(obj);
+            for (let i = 0; i < keys.length; i++)
+                if (obj[keys[i]].display){
+                    let tr = document.createElement('tr');
+                    let thn = document.createElement('th');
+                    let thv = document.createElement('th');
+                    thn.classList.add("th_l");
+                    tr.appendChild(thn);
+                    tr.appendChild(thv);
+                    t.appendChild(tr);
+                }
+        }
+
+        function writeToCell(r, nm, vl){
+            r.getElementsByTagName('th')[0].innerHTML = nm;
+            r.getElementsByTagName('th')[1].innerHTML = vl
+        }
+        //#endregion
+        
+        //#region Event Listener Stuff
         document.addEventListener("mousemove", MouseMoved);
         document.addEventListener("mousedown", MouseDown);
         document.addEventListener("mouseup", MouseUp);
@@ -1032,8 +897,19 @@ function main() {
                 keyStates.isAuto = false;
             }
         }
+        //#endregion
     } catch (error) {
         alert("error: \n" + error.stack);
         console.log(error);
     }
+}
+
+function doGameOver(){
+    isLooping = false;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = canvas.height / 5 + 'px sans-serif';
+    context.fillStyle = 'red';
+    context.textAlign = 'center';
+    context.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
+    
 }

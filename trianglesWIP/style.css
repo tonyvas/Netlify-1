@@ -37,10 +37,17 @@ canvas{
     grid-area: R;
     border: 2px solid black;
 }
-#game_debug_info_table{
+table{
     width: 100%;
 }
-.game_debug_info{
+tr{
+    display: flex;
+    margin-top: 10px;
+}
+.th_l{
+    text-align: left;
+}
+th{
     width: 100%;
     text-align: right;
     color: lime;
