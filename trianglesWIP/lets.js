@@ -7,7 +7,6 @@ let isLooping = false;
 let isGameOver = false;
 let isGodMode = false;
 
-let INVULNERABILITY_TIME = 0;
 let mouseXY = {x: 0,x: 0};
 let keyBinds = {left: "A",right: "D",up: "W",down: "S",auto: "SHIFT",pause: "ESCAPE",shoot: "0"};
 let keyStates = {isLeft: false,isRight: false,isUp: false,isDown: false,isAuto: false,isShoot: false,isPause: false};
@@ -27,11 +26,13 @@ let gameStats = {
     main: {name: "Main Loop", val: 0, display: true},
     playerIndex: {name: "Player Ind", val: 0, display: false},
     enemyIndex: {name: "Enemy Ind", val: 0, display: false},
+    cargoIndex: {name: "Cargoship Ind", val: 0, display: false},
     bulletIndex: {name: "Bullet Ind", val: 0, display: false},
     particleIndex: {name: "Particle Ind", val: 0, display: false},
     particlesExist: {name: "Particles Existing", val: 0, display: true},
     enemiesExist: {name: "Enemies Existing", val: 0, display: true},
     enemiesInCombat: {name: "Enemies In Combat", val: 0, display: true}
+    //add cargostuff exists in combat
 };
 let playerStats = {
     totalScore: {name: "Score", val: 0, display: true},
@@ -55,6 +56,7 @@ let images = {
     enemyship: createImg("imgs/spaceship.png", 100, 100),
     playerbullet: createImg("imgs/bluelaser.png", 100, 30),
     enemybullet: createImg("imgs/redlaser.png", 100, 30),
+    cargobullet: createImg("imgs/greenlaser.png", 100, 30),
     crosshair: createImg("imgs/crosshair.png", 50, 50)
 };
 
@@ -158,15 +160,23 @@ let cargoCfg = {
         chancePerFrame: 0.01,
         amount: 2,
         scale: 0.5,
-        speed: 3,
-        startingHP: 100,
-        type: "cargo"
+        speed: 1,
+        spinSpeed: 0,
+        startingHP: 200,
+        type: "cargo",
+        spawnPerim: 100
     },
     thrusterInfo: {
 
     },
     weapons: {
-
+        normal: {
+            type: "cargoWeapon",
+            damage: 30,
+            distance: 500,
+            delay: 30,
+            accuracy: 0.9
+        }
     }
 };
 
@@ -180,12 +190,13 @@ let scoreCfg = {
     start: 0,
     enemKill: 100,
     cargoKill: 300,
-    playerKill: -200,
+    playerKill: -300,
     perSec: 5
 };
 
 let player;
 let weapons;
 let enemies = [];
+let cargoships = [];
 let bullets = [];
 let particles = [];
