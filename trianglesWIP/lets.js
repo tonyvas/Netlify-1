@@ -6,6 +6,7 @@ let isPaused = false;
 let isLooping = false;
 let isGameOver = false;
 let isGodMode = false;
+let canPlayerBeTarget = true;
 
 let mouseXY = {x: 0,x: 0};
 let keyBinds = {left: "A",right: "D",up: "W",down: "S",auto: "SHIFT",pause: "ESCAPE",shoot: "0"};
@@ -139,7 +140,7 @@ let enemyCfg = {
             }
         },
         spread: Math.PI / 8,
-        amnt: 15,
+        amnt: 25,
         speed: 3,
         time: 3,
         size: 3
@@ -162,17 +163,33 @@ let cargoCfg = {
         scale: 0.5,
         speed: 1,
         spinSpeed: 0,
-        startingHP: 200,
+        startingHP: 300,
         type: "cargo",
         spawnPerim: 100
     },
     thrusterInfo: {
-
+        colors: {
+            min: {
+                r: 0,
+                g: 0,
+                b: 0
+            },
+            max: {
+                r: 0,
+                g: 255,
+                b: 0
+            }
+        },
+        spread: Math.PI / 8,
+        amnt: 50,
+        speed: 4,
+        time: 4,
+        size: 4
     },
     weapons: {
         normal: {
             type: "cargoWeapon",
-            damage: 30,
+            damage: 40,
             distance: 500,
             delay: 30,
             accuracy: 0.9
