@@ -37,7 +37,8 @@
                     checkBulletCollision();
                     drawStuff();
                     moveStuff();
-                    doCombat();
+                    if (canDoCombat)
+                        doCombat();
                     doCountDown();
                     checkAliveness();
                     doPlayerStats();
@@ -171,7 +172,6 @@
                         target: null,
                         didPlayerDamage: false,
                         isAgroToPlayer: false,
-                        isAgroToEnemies: false,
                         shootDelay: 0
                     }
                     cargoships[i].rad = simplifyRads(getRadToTarget(cargoships[i].actor.getPos(), cargoships[i].passBy));
@@ -578,21 +578,18 @@
                         target = player;
                         distToTarg = getDistToTarget(cargXY, player.actor.getPos());
                     }
-                    if (carg.isAgroToEnemies){
-                        enemies.forEach(enem => {
-                            let dist = getDistToTarget(cargXY, enem.actor.getPos());
-                            if (target == null){
-                                target = enem;
-                                distToTarg = dist;
-                            }
-                            else{
-                                if (dist < distToTarg){
+
+                    enemies.forEach(enem => {
+                        if (enem.target != null){
+                            if (enem.target == carg){
+                                let dist = getDistToTarget(cargXY, enem.actor.getPos());
+                                if (target == null || dist < targetDist){
                                     target = enem;
-                                    distToTarg = dist;
+                                    targetDist = dist;
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
 
                     if (target != null && distToTarg < carg.weapon.getDistance())
                         carg.target = target;
@@ -856,8 +853,6 @@
                                 carg.isAgroToPlayer = true;
                                 carg.didPlayerDamage = true;
                             }
-                            else if (blt.type == enemyCfg.general.type)
-                                carg.isAgroToEnemies = true;
                         }
                 });
             });
