@@ -5,9 +5,9 @@ let isDebug = false;
 let isPaused = false;
 let isLooping = false;
 let isGameOver = false;
-let isGodMode = true;
-let canPlayerBeTarget = false;
-let canDoCombat = false;
+let isGodMode = false;
+let canPlayerBeTarget = true;
+let canDoCombat = true;
 
 let mouseXY = {x: 0,x: 0};
 let keyBinds = {left: "A",right: "D",up: "W",down: "S",auto: "SHIFT",pause: "ESCAPE",shoot: "0"};
