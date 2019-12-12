@@ -15,6 +15,7 @@
             createPlayer();
             createSound(SOUNDS_SRC.music);
 
+            //this mess is used to avoid having the gameLoop be called many time per frame if the user spammed Start
             if (isLooping == false)
                 gameLoop();
             isLooping = true;
@@ -22,6 +23,7 @@
         //#endregion
 
         //#region Game
+        //The main loop of the game, calls draw, move, create, delete and other methods
         function gameLoop() {
             document.activeElement.blur();
             doGameStats();
@@ -185,6 +187,7 @@
 
         function createBullet(tp, wpn, sXY, tXY, iniSpeed = {x: 0,y: 0}) {
             createSound(SOUNDS_SRC.shoot);
+            //choose which img to use based on who shot
             let img;
             if (tp == PLAYER_CFG.general.type)
                 img = IMAGES.playerbullet;
@@ -193,6 +196,7 @@
             else if (tp == CARGO_CFG.general.type)
                  img = IMAGES.cargobullet;
 
+            //used to give randomness and spread to the aim when firing
             let accShiftMin = wpn.getAccuracy();
             let accShiftMax = wpn.getAccuracy() + 2 * (1 - wpn.getAccuracy());
 
@@ -260,22 +264,6 @@
             });
         }
 
-        function drawLeadCrosshairs() {
-            enemies.forEach(enem => {
-                let leadDist = calculateLeadDist(enem);
-                let enemXY = enem.actor.getPos();
-                let crosshairXY = {
-                    x: enemXY.x + leadDist * Math.cos(enem.rad + Math.PI),
-                    y: enemXY.y + leadDist * Math.sin(enem.rad + Math.PI)
-                };
-                let crosshairWH = {
-                    w: IMAGES.crosshair.w,
-                    h: IMAGES.crosshair.h
-                };
-                drawActor(crosshairXY, crosshairWH, 0, IMAGES.crosshair.img, 1);
-            });
-        }
-
         function drawActor(xy, wh, rad, img, scale) {
             context.save();
             context.translate(xy.x, xy.y);
@@ -332,6 +320,7 @@
                     rotateActor(player, degToRad(PLAYER_CFG.general.spinSpeed));
             }
 
+            //Game boundary collision checking
             if (player.currSpeed.x != 0 || player.currSpeed.y != 0) {
                 player.actor.moveBy(player.currSpeed.x, player.currSpeed.y);
 
@@ -353,6 +342,8 @@
             }
         }
 
+        //enemies move in a straight line decided when they spawn, unless theyre in combat
+        //if in combat, they move towards their target
         function moveEnemies() {
             enemies.forEach(enem => {
                 let enemXY = enem.actor.getPos();
@@ -360,6 +351,7 @@
                 let spX = enem.iniSpeed.x;
                 let spY = enem.iniSpeed.y;
 
+                //if enemy is in combat and has a target, rotate and move to target until in range of firing
                 if (enem.isInCombat && enem.target != null){
                     rotateActor(enem, degToRad(ENEMY_CFG.general.spinSpeed), simplifyRads(Math.PI + getRadToTarget(enem.actor.getPos(), enem.target.actor.getPos())));
                     if (getDistToTarget(enemXY, enem.target.actor.getPos()) > ENEMY_CFG.general.hugDist){
@@ -371,6 +363,7 @@
                         spY = 0;
                     }
                 }
+                //else just continue on its merry path
                 else{
                     spX = ENEMY_CFG.general.speed * Math.cos(enem.rad);
                     spY = ENEMY_CFG.general.speed * Math.sin(enem.rad);
@@ -378,6 +371,7 @@
 
                 enem.actor.moveBy(spX, spY);
 
+                //checks if the enemy entered the game screen
                 enemXY = enem.actor.getPos();
                 enemWH = enem.actor.getSize();
                 if (enemXY.x - enemWH.w / 2 < canvas.width && enemXY.x + enemWH.w / 2 > 0 ||
@@ -386,6 +380,7 @@
             });
         }
 
+        //cargoships move in a straight line decided when they spawn, and keep moving in that line
         function moveCargoships(){
             cargoships.forEach(carg => {
                 let cargXY = carg.actor.getPos();
@@ -453,6 +448,9 @@
         }
 
         function doGameStatsVals(){
+            //this is a mess, this was used to debug, 
+            //left it as a souvenir if you feel like checking some stats, 
+            //and bc im too lazy to bother cleaning it up
             GAME_STATS.mousePos.val = Math.floor(MOUSE_XY.x) + ", " + Math.floor(MOUSE_XY.y);
             GAME_STATS.canvasSize.val = canvas.width + ", " + canvas.height;
             GAME_STATS.particlesExist.val = particles.length;
@@ -499,6 +497,8 @@
             }
         }
 
+        //player has 2 weapons, a gun that shoots when the player holds left click
+        //and a gun that shoots towards the nearest hostile target
         function doPlayerCombat(){
             if (player.shootDelay <= 0) {
                 if (KEYSTATES.isShoot) {
@@ -523,6 +523,7 @@
             }
         }
 
+        //enemies shoot at their target but they can only fire in front of them
         function doEnemyCombat(){
             enemies.forEach(enem => {
                 if (enem.isInCombat == false && enem.isLeaving == false){
@@ -580,6 +581,7 @@
             });
         }
 
+        //cargoships fire at whatever aggroed them
         function doCargoshipCombat(){
             cargoships.forEach(carg => {
                 if (carg.shootDelay <= 0){
@@ -623,6 +625,7 @@
         }
 
         function doParticles(x, y, amnt, spd, time, size, clrMin, clrMax, angMin, angMax) {
+            //creates a bunch of particles and sends them in random direction between limits
             for (let i = 0; i < amnt; i++) {
                 let ang = degToRad(getRandomBetween(radToDeg(angMin), radToDeg(angMax)));
                 let r = getRandomBetween(clrMin.r, clrMax.r);
@@ -755,6 +758,7 @@
             let targetDist = null;
             let dist;
 
+            //enems
             enemies.forEach(enem => {
                 if (enem.isInCombat){
                     dist = getDistToTarget(player.actor.getPos(), enem.actor.getPos());
@@ -765,6 +769,7 @@
                 }
             });
 
+            //cargoships
             cargoships.forEach(carg => {
                 if (carg.isAgroToPlayer){
                     dist = getDistToTarget(player.actor.getPos(), carg.actor.getPos());
@@ -815,6 +820,7 @@
         //#endregion
 
         //#region Check
+        //this checks if the enemy is facing its target
         function canEnemyShoot(startXY, targetXY, shooterRads, radius) {
             let min = shooterRads - radius;
             let max = shooterRads + radius;
@@ -855,6 +861,7 @@
             });
         }
 
+        //this checks the health values of all actors, kills them if its <= 0
         function checkAliveness() {
             if (player.actor.getHealth() <= 0 && IS_GOD_MODE == false) {
                 let xy = player.actor.getPos();
@@ -931,10 +938,6 @@
             return Math.PI / 180 * ang;
 
         }
-
-        function calculateLeadDist(actor) {
-            return 100;
-        }
         //#endregion
 
         //#region Other
@@ -952,6 +955,7 @@
             PLAYER_STATS.playerDeathScore.val = 0;
         }
 
+        //makes all enemies that were fighting the player turn around and leave
         function makeEnemsInCombatLeave() {
             enemies.forEach(enem => {
                 if (enem.isInCombat) {
@@ -986,6 +990,7 @@
             actor.rad = simplifyRads(actor.rad);
         }
 
+        //simplifies rads to be between -PI and PI (bc comparing 0 to 2 PI should be the same but it isnt)
         function simplifyRads(rad) {
             while (rad > Math.PI)
                 rad -= (2 * Math.PI);
@@ -1143,6 +1148,7 @@ function doTutorial(){
         startY += fsize;
     });
 
+    //i just had to
     if (didTheMagicHappen == false){
         window.open("https://www.youtube.com/watch?v=oHg5SJYRHA0", "_blank");
         didTheMagicHappen = true;
