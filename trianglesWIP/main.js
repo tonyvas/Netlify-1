@@ -1,19 +1,19 @@
 ﻿function main() {
     try {
         //#region Setup
-        canvas = document.getElementById('canv');
-        canvas.width = document.getElementById('gameScreen').clientWidth;
-        canvas.height = document.getElementById('gameScreen').clientHeight;
-        context = canvas.getContext('2d');
         setupGame();
 
+        //Does setup stuff when users hits Start
         function setupGame() {
-            gameStats.startTime.val = Date.now();
-            gameStats.lastTime.val = gameStats.startTime;
+            GAME_STATS.startTime.val = Date.now();
+            GAME_STATS.lastTime.val = GAME_STATS.startTime;
             isGameOver = false;
+            GAME_STATS.enemyCarryOverSpawnBonus.val++;
             resetLets();
+            resetSfx();
             createWeapons();
             createPlayer();
+            createSound(SOUNDS_SRC.music);
 
             if (isLooping == false)
                 gameLoop();
@@ -26,8 +26,8 @@
             document.activeElement.blur();
             doGameStats();
             if (isGameOver == false) {
-                if (keyStates.isPause) {
-                    keyStates.isPause = false;
+                if (KEYSTATES.isPause) {
+                    KEYSTATES.isPause = false;
                     isPaused = !isPaused;
                 }
 
@@ -37,16 +37,17 @@
                     checkBulletCollision();
                     drawStuff();
                     moveStuff();
-                    if (canDoCombat)
+                    if (CAN_DO_COMBAT)
                         doCombat();
                     doCountDown();
                     checkAliveness();
                     doPlayerStats();
+                    checkSounds();
 
-                    gameStats.main.val++;
+                    GAME_STATS.main.val++;
                 }
 
-                gameStats.game.val++;
+                GAME_STATS.game.val++;
                 requestAnimationFrame(gameLoop);
             } else
                 doGameOver();
@@ -58,39 +59,39 @@
             weapons = {
                 playerWeapon: new Weapon(
                     0,
-                    playerCfg.weapons.normal.type,
-                    playerCfg.weapons.normal.damage,
-                    playerCfg.weapons.normal.distance,
-                    playerCfg.weapons.normal.delay,
-                    playerCfg.weapons.normal.accuracy,
-                    playerCfg.weapons.normal.range
+                    PLAYER_CFG.weapons.normal.type,
+                    PLAYER_CFG.weapons.normal.damage,
+                    PLAYER_CFG.weapons.normal.distance,
+                    PLAYER_CFG.weapons.normal.delay,
+                    PLAYER_CFG.weapons.normal.accuracy,
+                    PLAYER_CFG.weapons.normal.range
                 ),
                 playerWeaponAuto: new Weapon(
                     1,
-                    playerCfg.weapons.auto.type,
-                    playerCfg.weapons.auto.damage,
-                    playerCfg.weapons.auto.distance,
-                    playerCfg.weapons.auto.delay,
-                    playerCfg.weapons.auto.accuracy,
-                    playerCfg.weapons.auto.range
+                    PLAYER_CFG.weapons.auto.type,
+                    PLAYER_CFG.weapons.auto.damage,
+                    PLAYER_CFG.weapons.auto.distance,
+                    PLAYER_CFG.weapons.auto.delay,
+                    PLAYER_CFG.weapons.auto.accuracy,
+                    PLAYER_CFG.weapons.auto.range
                 ),
                 enemyWeapon: new Weapon(
                     2,
-                    enemyCfg.weapons.normal.type,
-                    enemyCfg.weapons.normal.damage,
-                    enemyCfg.weapons.normal.distance,
-                    enemyCfg.weapons.normal.delay,
-                    enemyCfg.weapons.normal.accuracy,
-                    enemyCfg.weapons.normal.range
+                    ENEMY_CFG.weapons.normal.type,
+                    ENEMY_CFG.weapons.normal.damage,
+                    ENEMY_CFG.weapons.normal.distance,
+                    ENEMY_CFG.weapons.normal.delay,
+                    ENEMY_CFG.weapons.normal.accuracy,
+                    ENEMY_CFG.weapons.normal.range
                 ),
                 cargoWeapon: new Weapon(
                     3,
-                    cargoCfg.weapons.normal.type,
-                    cargoCfg.weapons.normal.damage,
-                    cargoCfg.weapons.normal.distance,
-                    cargoCfg.weapons.normal.delay,
-                    cargoCfg.weapons.normal.accuracy,
-                    cargoCfg.weapons.normal.range
+                    CARGO_CFG.weapons.normal.type,
+                    CARGO_CFG.weapons.normal.damage,
+                    CARGO_CFG.weapons.normal.distance,
+                    CARGO_CFG.weapons.normal.delay,
+                    CARGO_CFG.weapons.normal.accuracy,
+                    CARGO_CFG.weapons.normal.range
                 )
             };
         }
@@ -98,13 +99,13 @@
         function createPlayer() {
             player = {
                 actor: new Actor(
-                    gameStats.playerIndex,
-                    playerCfg.general.type,
-                    playerCfg.general.startingHP, {
+                    GAME_STATS.playerIndex,
+                    PLAYER_CFG.general.type,
+                    PLAYER_CFG.general.startingHP, {
                         x: canvas.width / 2,
                         y: canvas.height / 2
                     },
-                    images.playership
+                    IMAGES.playership
                 ),
                 currSpeed: {
                     x: 0,
@@ -116,20 +117,20 @@
                 shootDelay: 0,
                 autoShootDelay: 0
             };
-            gameStats.playerIndex++;
+            GAME_STATS.playerIndex++;
         }
 
         function createEnemies() {
-            if (enemies.length < enemyCfg.general.amount) {
-                if (Math.random() <= enemyCfg.general.chancePerFrame) {
+            if (enemies.length < ENEMY_CFG.general.amount + GAME_STATS.enemyCarryOverSpawnBonus.val) {
+                if (Math.random() <= ENEMY_CFG.general.chancePerFrame) {
                     let i = enemies.length;
                     enemies[i] = {
                         actor: new Actor(
-                            gameStats.enemyIndex,
-                            enemyCfg.general.type,
-                            enemyCfg.general.startingHP,
+                            GAME_STATS.enemyIndex,
+                            ENEMY_CFG.general.type,
+                            ENEMY_CFG.general.startingHP,
                             getRandomSpawnPoint(),
-                            images.enemyship
+                            IMAGES.enemyship
                         ),
                         iniSpeed: {x: null,y: null},
                         weapon: weapons.enemyWeapon,
@@ -145,24 +146,24 @@
                     }
                     enemies[i].iniRad = simplifyRads(getRadToTarget(enemies[i].actor.getPos(), enemies[i].passBy));
                     enemies[i].rad = enemies[i].iniRad;
-                    enemies[i].iniSpeed.x = -enemyCfg.general.speed * Math.cos(enemies[i].rad);
-                    enemies[i].iniSpeed.y = -enemyCfg.general.speed * Math.sin(enemies[i].rad);
-                    gameStats.enemyIndex++;
+                    enemies[i].iniSpeed.x = -ENEMY_CFG.general.speed * Math.cos(enemies[i].rad);
+                    enemies[i].iniSpeed.y = -ENEMY_CFG.general.speed * Math.sin(enemies[i].rad);
+                    GAME_STATS.enemyIndex++;
                 }
             }
         }
 
         function createCargoships(){
-            if (cargoships.length < cargoCfg.general.amount) {
-                if (Math.random() <= cargoCfg.general.chancePerFrame) {
+            if (cargoships.length < CARGO_CFG.general.amount) {
+                if (Math.random() <= CARGO_CFG.general.chancePerFrame) {
                     let i = cargoships.length;
                     cargoships[i] = {
                         actor: new Actor(
-                            gameStats.cargoIndex,
-                            cargoCfg.general.type,
-                            cargoCfg.general.startingHP,
+                            GAME_STATS.cargoIndex,
+                            CARGO_CFG.general.type,
+                            CARGO_CFG.general.startingHP,
                             getRandomSpawnPoint(),
-                            images.cargoship
+                            IMAGES.cargoship
                         ),
                         iniSpeed: {x: null , y: null},
                         weapon: weapons.cargoWeapon,
@@ -175,24 +176,22 @@
                         shootDelay: 0
                     }
                     cargoships[i].rad = simplifyRads(getRadToTarget(cargoships[i].actor.getPos(), cargoships[i].passBy));
-                    cargoships[i].iniSpeed.x = cargoCfg.general.speed * Math.cos(cargoships[i].rad);
-                    cargoships[i].iniSpeed.y = cargoCfg.general.speed * Math.sin(cargoships[i].rad);
-                    gameStats.cargoIndex++;
+                    cargoships[i].iniSpeed.x = CARGO_CFG.general.speed * Math.cos(cargoships[i].rad);
+                    cargoships[i].iniSpeed.y = CARGO_CFG.general.speed * Math.sin(cargoships[i].rad);
+                    GAME_STATS.cargoIndex++;
                 }
             }
         }
 
-        function createBullet(tp, wpn, sXY, tXY, iniSpeed = {
-            x: 0,
-            y: 0
-        }) {
+        function createBullet(tp, wpn, sXY, tXY, iniSpeed = {x: 0,y: 0}) {
+            createSound(SOUNDS_SRC.shoot);
             let img;
-            if (tp == playerCfg.general.type)
-                img = images.playerbullet;
-            else if (tp == enemyCfg.general.type)
-                img = images.enemybullet;
-            else if (tp == cargoCfg.general.type)
-                 img = images.cargobullet;
+            if (tp == PLAYER_CFG.general.type)
+                img = IMAGES.playerbullet;
+            else if (tp == ENEMY_CFG.general.type)
+                img = IMAGES.enemybullet;
+            else if (tp == CARGO_CFG.general.type)
+                 img = IMAGES.cargobullet;
 
             let accShiftMin = wpn.getAccuracy();
             let accShiftMax = wpn.getAccuracy() + 2 * (1 - wpn.getAccuracy());
@@ -200,12 +199,12 @@
             let rad = simplifyRads(getRadToTarget(sXY, tXY));
 
             let speed = {
-                x: iniSpeed.x + bulletCfg.speed * makeMoreOrLess(Math.cos(rad), accShiftMin, accShiftMax),
-                y: iniSpeed.y + bulletCfg.speed * makeMoreOrLess(Math.sin(rad), accShiftMin, accShiftMax)
+                x: iniSpeed.x + BULLET_CFG.speed * makeMoreOrLess(Math.cos(rad), accShiftMin, accShiftMax),
+                y: iniSpeed.y + BULLET_CFG.speed * makeMoreOrLess(Math.sin(rad), accShiftMin, accShiftMax)
             };
 
             bullets.push({
-                actor: new Actor(gameStats.bulletIndex, bulletCfg.type, null, {
+                actor: new Actor(GAME_STATS.bulletIndex, BULLET_CFG.type, null, {
                     x: sXY.x,
                     y: sXY.y
                 }, img, null),
@@ -215,7 +214,14 @@
                 time: wpn.getDistance(),
                 damage: wpn.getDamage()
             });
-            gameStats.bulletIndex++;
+            GAME_STATS.bulletIndex++;
+        }
+
+        function createSound(src){
+            let sound = document.createElement('audio');
+            sound.src = src;
+            sound.autoplay = true;
+            document.body.appendChild(sound);
         }
         //#endregion
 
@@ -227,31 +233,30 @@
             drawPlayer();
             drawEnemies();
             drawCargoships();
-            // drawLeadCrosshairs();
         }
 
         function drawPlayer() {
-            doThrusterParticles(player, playerCfg);
-            drawActor(player.actor.getPos(), player.actor.getSize(), player.rad + Math.PI, player.actor.getImage(), playerCfg.general.scale)
+            doThrusterParticles(player, PLAYER_CFG);
+            drawActor(player.actor.getPos(), player.actor.getSize(), player.rad + Math.PI, player.actor.getImage(), PLAYER_CFG.general.scale)
         }
 
         function drawEnemies() {
             enemies.forEach(enem => {
-                doThrusterParticles(enem, enemyCfg);
-                drawActor(enem.actor.getPos(), enem.actor.getSize(), enem.rad + Math.PI, enem.actor.getImage(), enemyCfg.general.scale);
+                doThrusterParticles(enem, ENEMY_CFG);
+                drawActor(enem.actor.getPos(), enem.actor.getSize(), enem.rad + Math.PI, enem.actor.getImage(), ENEMY_CFG.general.scale);
             });
         }
 
         function drawCargoships(){
             cargoships.forEach(carg => {
-                doThrusterParticles(carg, cargoCfg);
-                drawActor(carg.actor.getPos(), carg.actor.getSize(), carg.rad + Math.PI, carg.actor.getImage(), cargoCfg.general.scale);
+                doThrusterParticles(carg, CARGO_CFG);
+                drawActor(carg.actor.getPos(), carg.actor.getSize(), carg.rad + Math.PI, carg.actor.getImage(), CARGO_CFG.general.scale);
             });
         }
 
         function drawBullets() {
             bullets.forEach(blt => {
-                drawActor(blt.actor.getPos(), blt.actor.getSize(), blt.rad, blt.actor.getImage(), bulletCfg.scale);
+                drawActor(blt.actor.getPos(), blt.actor.getSize(), blt.rad, blt.actor.getImage(), BULLET_CFG.scale);
             });
         }
 
@@ -264,10 +269,10 @@
                     y: enemXY.y + leadDist * Math.sin(enem.rad + Math.PI)
                 };
                 let crosshairWH = {
-                    w: images.crosshair.w,
-                    h: images.crosshair.h
+                    w: IMAGES.crosshair.w,
+                    h: IMAGES.crosshair.h
                 };
-                drawActor(crosshairXY, crosshairWH, 0, images.crosshair.img, 1);
+                drawActor(crosshairXY, crosshairWH, 0, IMAGES.crosshair.img, 1);
             });
         }
 
@@ -310,21 +315,21 @@
                 y: 0
             };
 
-            if (keyStates.isUp != keyStates.isDown) {
-                if (keyStates.isUp) {
-                    player.currSpeed.x = playerCfg.general.speed * Math.cos(player.rad);
-                    player.currSpeed.y = playerCfg.general.speed * Math.sin(player.rad);
-                } else if (keyStates.isDown) {
-                    player.currSpeed.x = -playerCfg.general.speed * Math.cos(player.rad);
-                    player.currSpeed.y = -playerCfg.general.speed * Math.sin(player.rad);
+            if (KEYSTATES.isUp != KEYSTATES.isDown) {
+                if (KEYSTATES.isUp) {
+                    player.currSpeed.x = PLAYER_CFG.general.speed * Math.cos(player.rad);
+                    player.currSpeed.y = PLAYER_CFG.general.speed * Math.sin(player.rad);
+                } else if (KEYSTATES.isDown) {
+                    player.currSpeed.x = -PLAYER_CFG.general.speed * Math.cos(player.rad);
+                    player.currSpeed.y = -PLAYER_CFG.general.speed * Math.sin(player.rad);
                 }
             }
 
-            if (keyStates.isLeft != keyStates.isRight) {
-                if (keyStates.isLeft)
-                    rotateActor(player, -degToRad(playerCfg.general.spinSpeed));
-                else if (keyStates.isRight)
-                    rotateActor(player, degToRad(playerCfg.general.spinSpeed));
+            if (KEYSTATES.isLeft != KEYSTATES.isRight) {
+                if (KEYSTATES.isLeft)
+                    rotateActor(player, -degToRad(PLAYER_CFG.general.spinSpeed));
+                else if (KEYSTATES.isRight)
+                    rotateActor(player, degToRad(PLAYER_CFG.general.spinSpeed));
             }
 
             if (player.currSpeed.x != 0 || player.currSpeed.y != 0) {
@@ -335,14 +340,14 @@
 
                 x = playerXY.x;
                 y = playerXY.y;
-                if (playerXY.x - playerWH.w / 2 * playerCfg.general.scale <= 0)
-                    x = playerWH.w / 2 * playerCfg.general.scale;
-                if (playerXY.x + playerWH.w / 2 * playerCfg.general.scale >= canvas.width)
-                    x = canvas.width - playerWH.w / 2 * playerCfg.general.scale;
-                if (playerXY.y - playerWH.h / 2 * playerCfg.general.scale <= 0)
-                    y = playerWH.h / 2 * playerCfg.general.scale;
-                if (playerXY.y + playerWH.h / 2 * playerCfg.general.scale >= canvas.height)
-                    y = canvas.height - playerWH.h / 2 * playerCfg.general.scale;
+                if (playerXY.x - playerWH.w / 2 * PLAYER_CFG.general.scale <= 0)
+                    x = playerWH.w / 2 * PLAYER_CFG.general.scale;
+                if (playerXY.x + playerWH.w / 2 * PLAYER_CFG.general.scale >= canvas.width)
+                    x = canvas.width - playerWH.w / 2 * PLAYER_CFG.general.scale;
+                if (playerXY.y - playerWH.h / 2 * PLAYER_CFG.general.scale <= 0)
+                    y = playerWH.h / 2 * PLAYER_CFG.general.scale;
+                if (playerXY.y + playerWH.h / 2 * PLAYER_CFG.general.scale >= canvas.height)
+                    y = canvas.height - playerWH.h / 2 * PLAYER_CFG.general.scale;
 
                 player.actor.moveTo(x, y);
             }
@@ -356,10 +361,10 @@
                 let spY = enem.iniSpeed.y;
 
                 if (enem.isInCombat && enem.target != null){
-                    rotateActor(enem, degToRad(enemyCfg.general.spinSpeed), simplifyRads(Math.PI + getRadToTarget(enem.actor.getPos(), enem.target.actor.getPos())));
-                    if (getDistToTarget(enemXY, enem.target.actor.getPos()) > enemyCfg.general.hugDist){
-                        spX = enemyCfg.general.speed * Math.cos(enem.rad);
-                        spY = enemyCfg.general.speed * Math.sin(enem.rad);
+                    rotateActor(enem, degToRad(ENEMY_CFG.general.spinSpeed), simplifyRads(Math.PI + getRadToTarget(enem.actor.getPos(), enem.target.actor.getPos())));
+                    if (getDistToTarget(enemXY, enem.target.actor.getPos()) > ENEMY_CFG.general.hugDist){
+                        spX = ENEMY_CFG.general.speed * Math.cos(enem.rad);
+                        spY = ENEMY_CFG.general.speed * Math.sin(enem.rad);
                     }
                     else{
                         spX = 0;
@@ -367,8 +372,8 @@
                     }
                 }
                 else{
-                    spX = enemyCfg.general.speed * Math.cos(enem.rad);
-                    spY = enemyCfg.general.speed * Math.sin(enem.rad);
+                    spX = ENEMY_CFG.general.speed * Math.cos(enem.rad);
+                    spY = ENEMY_CFG.general.speed * Math.sin(enem.rad);
                 }
 
                 enem.actor.moveBy(spX, spY);
@@ -409,59 +414,66 @@
         //#endregion
 
         //#region Do
+        function doGameOver(){
+            resetSfx();
+            createSound(SOUNDS_SRC.gameover);
+            isLooping = false;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.font = canvas.height / 5 + 'px sans-serif';
+            context.fillStyle = 'red';
+            context.textAlign = 'center';
+            context.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
+        }
+
         function doPlayerStats(){
-            doTables(playerStats, elementID.playerStatsContainer);
+            doTables(PLAYER_STATS, ELEMENT_ID.playerStatsContainer);
             doPlayerStatsVals();
         }
 
         function doPlayerStatsVals(){
-            playerStats.timeScore.val = (gameStats.runTime.val / 1000) * scoreCfg.perSec;
+            PLAYER_STATS.timeScore.val = (GAME_STATS.runTime.val / 1000) * SCORE_CFG.perSec;
 
-            playerStats.totalScore.val = Math.floor(
-                scoreCfg.start + 
-                playerStats.timeScore.val + 
-                playerStats.enemyKillScore.val + 
-                playerStats.cargoKillScore.val + 
-                playerStats.playerDeathScore.val + 
-                playerStats.playerSpendScore.val
+            PLAYER_STATS.totalScore.val = Math.floor(
+                SCORE_CFG.start + 
+                PLAYER_STATS.timeScore.val + 
+                PLAYER_STATS.enemyKillScore.val + 
+                PLAYER_STATS.cargoKillScore.val + 
+                PLAYER_STATS.playerDeathScore.val
             );
 
-            playerStats.hp.val = player.actor.getHealth() + "/" + playerCfg.general.startingHP;
-            playerStats.mSpeed.val = playerCfg.general.speed;
-            playerStats.bSpeed.val = bulletCfg.speed;
-            playerStats.shSpeed.val = 1 / (player.weapon.getDelay() / 60) + "/s";
-            playerStats.dmg.val = player.weapon.getDamage();
-            playerStats.acc.val = player.weapon.getAccuracy() * 100 + "%";
-            playerStats.range.val = player.weapon.getDistance();
+            PLAYER_STATS.hp.val = player.actor.getHealth() + "/" + PLAYER_CFG.general.startingHP;
         }
 
         function doGameStats() {
             if (isDebug)
-                doTables(gameStats, elementID.gameStatsContainer);
+                doTables(GAME_STATS, ELEMENT_ID.gameStatsContainer);
             else
-                deleteTable(document.getElementById(elementID.gameStatsContainer));
+                deleteTable(document.getElementById(ELEMENT_ID.gameStatsContainer));
             doGameStatsVals();
         }
 
         function doGameStatsVals(){
-            gameStats.mousePos.val = Math.floor(mouseXY.x) + ", " + Math.floor(mouseXY.y);
-            gameStats.canvasSize.val = canvas.width + ", " + canvas.height;
-            gameStats.particlesExist.val = particles.length;
-            gameStats.enemiesExist.val = enemies.length;
-            gameStats.currentTime.val = Date.now();
-            gameStats.runTime.val = gameStats.currentTime.val - gameStats.startTime.val;
-            if (gameStats.game.val % gameStats.fpsUpdateTime.val == 0) {
-                gameStats.fps.val = Math.floor(1000 / gameStats.fpsUpdateSum.val * gameStats.fpsUpdateTime.val);
-                gameStats.fpsUpdateSum.val = 0;
+            GAME_STATS.mousePos.val = Math.floor(MOUSE_XY.x) + ", " + Math.floor(MOUSE_XY.y);
+            GAME_STATS.canvasSize.val = canvas.width + ", " + canvas.height;
+            GAME_STATS.particlesExist.val = particles.length;
+            GAME_STATS.enemiesExist.val = enemies.length;
+            GAME_STATS.currentTime.val = Date.now();
+            GAME_STATS.runTime.val = GAME_STATS.currentTime.val - GAME_STATS.startTime.val;
+            if (GAME_STATS.game.val % GAME_STATS.fpsUpdateTime.val == 0) {
+                GAME_STATS.fps.val = Math.floor(1000 / GAME_STATS.fpsUpdateSum.val * GAME_STATS.fpsUpdateTime.val);
+                GAME_STATS.fpsUpdateSum.val = 0;
             } else
-                gameStats.fpsUpdateSum.val += (gameStats.currentTime.val - gameStats.lastTime.val);
-                gameStats.lastTime.val = gameStats.currentTime.val;
-                gameStats.enemiesInCombat.val = 0;
+                GAME_STATS.fpsUpdateSum.val += (GAME_STATS.currentTime.val - GAME_STATS.lastTime.val);
+                GAME_STATS.lastTime.val = GAME_STATS.currentTime.val;
+                GAME_STATS.enemiesInCombat.val = 0;
                 enemies.forEach(enem => {
                     if (enem.isInCombat)
-                        gameStats.enemiesInCombat.val++;
+                        GAME_STATS.enemiesInCombat.val++;
             });
-            gameStats.playerPos.val = Math.floor(player.actor.getPos().x) + ", " + Math.floor(player.actor.getPos().y);
+            GAME_STATS.playerPos.val = Math.floor(player.actor.getPos().x) + ", " + Math.floor(player.actor.getPos().y);
+            GAME_STATS.isGodMode.val = IS_GOD_MODE;
+            GAME_STATS.canPlayerBeTarget.val = CAN_PLAYER_BE_TARGET;
+            GAME_STATS.canDoCombat.val = CAN_DO_COMBAT;
         }
 
         function doTables(obj, id){
@@ -489,13 +501,13 @@
 
         function doPlayerCombat(){
             if (player.shootDelay <= 0) {
-                if (keyStates.isShoot) {
-                    if (mouseXY.x >= canvas.offsetLeft && mouseXY.x <= canvas.offsetLeft + canvas.width &&
-                        mouseXY.y >= canvas.offsetTop && mouseXY.y <= canvas.offsetTop + canvas.height) {
-                        createBullet(playerCfg.general.type, player.weapon, player.actor.getPos(), {
-                            x: mouseXY.x - canvas.offsetLeft,
-                            y: mouseXY.y - canvas.offsetTop
-                        } /*, player.currSpeed*/ );
+                if (KEYSTATES.isShoot) {
+                    if (MOUSE_XY.x >= canvas.offsetLeft && MOUSE_XY.x <= canvas.offsetLeft + canvas.width &&
+                        MOUSE_XY.y >= canvas.offsetTop && MOUSE_XY.y <= canvas.offsetTop + canvas.height) {
+                        createBullet(PLAYER_CFG.general.type, player.weapon, player.actor.getPos(), {
+                            x: MOUSE_XY.x - canvas.offsetLeft,
+                            y: MOUSE_XY.y - canvas.offsetTop
+                        });
                         player.shootDelay = player.weapon.getDelay();
                     }
                 }
@@ -504,7 +516,7 @@
                 let target = getClosestTargetToPlayerInCombat();
                 if (target != null) {
                     if (getDistToTarget(target.actor.getPos(), player.actor.getPos()) <= player.autoWeapon.getDistance()) {
-                        createBullet(playerCfg.general.type, player.autoWeapon, player.actor.getPos(), target.actor.getPos());
+                        createBullet(PLAYER_CFG.general.type, player.autoWeapon, player.actor.getPos(), target.actor.getPos());
                         player.autoShootDelay = player.autoWeapon.getDelay();
                     }
                 }
@@ -514,13 +526,13 @@
         function doEnemyCombat(){
             enemies.forEach(enem => {
                 if (enem.isInCombat == false && enem.isLeaving == false){
-                    if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) <= enemyCfg.general.detectionRange) {
-                        if (canPlayerBeTarget)
+                    if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) <= ENEMY_CFG.general.detectionRange) {
+                        if (CAN_PLAYER_BE_TARGET)
                             enem.isInCombat = true;
                     }
                     else{
                         cargoships.forEach(carg => {
-                            if (getDistToTarget(enem.actor.getPos(), carg.actor.getPos()) <= enemyCfg.general.detectionRange)
+                            if (getDistToTarget(enem.actor.getPos(), carg.actor.getPos()) <= ENEMY_CFG.general.detectionRange)
                                 enem.isInCombat = true;
                         });
                     }
@@ -530,7 +542,7 @@
                     let enemXY = enem.actor.getPos();
                     let target = null;
                     let distToTarg = null;
-                    if (canPlayerBeTarget){
+                    if (CAN_PLAYER_BE_TARGET){
                         target = player;
                         distToTarg = getDistToTarget(enemXY, target.actor.getPos());
                     }
@@ -559,8 +571,8 @@
                         enem.target = null;
 
                     if (enem.target != null){
-                        if (canEnemyShoot(enem.actor.getPos(), enem.target.actor.getPos(), simplifyRads(enem.rad + Math.PI), enemyCfg.general.aimRadius * Math.PI)) {
-                            createBullet(enemyCfg.general.type, enem.weapon, enem.actor.getPos(), enem.target.actor.getPos() /*, enem.currSpeed*/ );
+                        if (canEnemyShoot(enem.actor.getPos(), enem.target.actor.getPos(), simplifyRads(enem.rad + Math.PI), ENEMY_CFG.general.aimRadius * Math.PI)) {
+                            createBullet(ENEMY_CFG.general.type, enem.weapon, enem.actor.getPos(), enem.target.actor.getPos() /*, enem.currSpeed*/ );
                             enem.shootDelay = enem.weapon.getDelay();
                         }
                     }
@@ -574,7 +586,7 @@
                     let cargXY = carg.actor.getPos();
                     let target = null;
                     let distToTarg = null;
-                    if (carg.isAgroToPlayer && canPlayerBeTarget){
+                    if (carg.isAgroToPlayer && CAN_PLAYER_BE_TARGET){
                         target = player;
                         distToTarg = getDistToTarget(cargXY, player.actor.getPos());
                     }
@@ -597,7 +609,7 @@
                         carg.target = null;
 
                     if (carg.target != null){
-                        createBullet(cargoCfg.general.type, carg.weapon, cargXY, carg.target.actor.getPos());
+                        createBullet(CARGO_CFG.general.type, carg.weapon, cargXY, carg.target.actor.getPos());
                         carg.shootDelay = carg.weapon.getDelay();
                     }
                 }
@@ -618,7 +630,7 @@
                 let b = getRandomBetween(clrMin.b, clrMax.b);
                 let clr = "rgb(" + r + "," + g + "," + b + ")"
                 particles.push({
-                    id: gameStats.particleIndex,
+                    id: GAME_STATS.particleIndex,
                     pos: {
                         x: x,
                         y: y
@@ -629,7 +641,7 @@
                     color: clr,
                     size: size
                 });
-                gameStats.particleIndex++;
+                GAME_STATS.particleIndex++;
             }
         }
 
@@ -654,6 +666,7 @@
             if (i != -1)
                 bullets.splice(i, 1);
 
+            createSound(SOUNDS_SRC.impact);
             actor.actor.addHealth(-bullet.damage);
         }
 
@@ -713,7 +726,7 @@
                     if (i != -1)
                         bullets.splice(i, 1);
                 } else
-                    blt.time -= bulletCfg.speed;
+                    blt.time -= BULLET_CFG.speed;
             });
         }
         //#endregion
@@ -773,16 +786,16 @@
                 x = getRandomBetween(0, canvas.width);
 
                 if (area <= 1) //top
-                    y = getRandomBetween(-enemyCfg.general.spawnPerim, 0);
+                    y = getRandomBetween(-ENEMY_CFG.general.spawnPerim, 0);
                 else //bottom
-                    y = getRandomBetween(canvas.height, canvas.height + enemyCfg.general.spawnPerim);
+                    y = getRandomBetween(canvas.height, canvas.height + ENEMY_CFG.general.spawnPerim);
             } else {
                 y = getRandomBetween(0, canvas.height);
 
                 if (area <= 3) //left
-                    x = getRandomBetween(-enemyCfg.general.spawnPerim, 0);
+                    x = getRandomBetween(-ENEMY_CFG.general.spawnPerim, 0);
                 else //right
-                    x = getRandomBetween(canvas.width, canvas.width + enemyCfg.general.spawnPerim);
+                    x = getRandomBetween(canvas.width, canvas.width + ENEMY_CFG.general.spawnPerim);
             }
 
             return {
@@ -802,22 +815,6 @@
         //#endregion
 
         //#region Check
-        function canEnemyMove(enem) {
-            let closestEnemy = enem;
-
-            enemies.forEach(checkEnem => {
-                if (enem.actor.getId() != checkEnem.actor.getId())
-                    if (checkForCollision(enem, enemyCfg.general.scale, checkEnem, enemyCfg.general.scale))
-                        if (getDistToTarget(enem.actor.getPos(), player.actor.getPos()) > getDistToTarget(enem.actor.getPos(), player.actor.getPos()))
-                            closestEnemy = checkEnem;
-            });
-
-            if (closestEnemy == enem)
-                return true;
-            else
-                return false;
-        }
-
         function canEnemyShoot(startXY, targetXY, shooterRads, radius) {
             let min = shooterRads - radius;
             let max = shooterRads + radius;
@@ -828,28 +825,28 @@
         function checkBulletCollision() {
             bullets.forEach(blt => {
                 //player
-                if (checkForCollision(blt, bulletCfg.scale, player, playerCfg.general.scale)) {
-                    if (blt.type != playerCfg.general.type)
+                if (checkForCollision(blt, BULLET_CFG.scale, player, PLAYER_CFG.general.scale)) {
+                    if (blt.type != PLAYER_CFG.general.type)
                         doBulletImpact(blt, player);
                 }
                 //enemies
                 enemies.forEach(enem => {
-                    if (checkForCollision(blt, bulletCfg.scale, enem, enemyCfg.general.scale)) {
-                        if (blt.type != enemyCfg.general.type){
+                    if (checkForCollision(blt, BULLET_CFG.scale, enem, ENEMY_CFG.general.scale)) {
+                        if (blt.type != ENEMY_CFG.general.type){
                             doBulletImpact(blt, enem);
                             enem.isInCombat = true;
                             enem.isLeaving = false;
-                            if (blt.type == playerCfg.general.type)
+                            if (blt.type == PLAYER_CFG.general.type)
                                 enem.didPlayerDamage = true;
                         }
                     }
                 });
                 //cargo
                 cargoships.forEach(carg => {
-                    if (checkForCollision(blt, bulletCfg.scale, carg, cargoCfg.general.scale))
-                        if (blt.type != cargoCfg.general.type){
+                    if (checkForCollision(blt, BULLET_CFG.scale, carg, CARGO_CFG.general.scale))
+                        if (blt.type != CARGO_CFG.general.type){
                             doBulletImpact(blt, carg);
-                            if (blt.type == playerCfg.general.type){
+                            if (blt.type == PLAYER_CFG.general.type){
                                 carg.isAgroToPlayer = true;
                                 carg.didPlayerDamage = true;
                             }
@@ -859,17 +856,18 @@
         }
 
         function checkAliveness() {
-            if (player.actor.getHealth() <= 0 && isGodMode == false) {
+            if (player.actor.getHealth() <= 0 && IS_GOD_MODE == false) {
                 let xy = player.actor.getPos();
                 doParticles(xy.x, xy.y, 50, 5, 5, 5, {r: 200, g: 200, b: 0}, {r: 200, g: 200, b: 0}, 0, 2 * Math.PI);
+                createSound(SOUNDS_SRC.explosion);
                 makeEnemsInCombatLeave();
-                playerStats.playerDeathScore.val += scoreCfg.playerKill;
+                PLAYER_STATS.playerDeathScore.val += SCORE_CFG.playerKill;
                 doPlayerStatsVals();
                 cargoships.forEach(carg => {
                     if (carg.isAgroToPlayer)
                         carg.isAgroToPlayer = false;
                 });
-                if (playerStats.totalScore.val > 0)
+                if (PLAYER_STATS.totalScore.val > 0)
                     createPlayer();
                 else
                     isGameOver = true;
@@ -879,11 +877,12 @@
                 if (enem.actor.getHealth() <= 0) {
                     let xy = enem.actor.getPos();
                     doParticles(xy.x, xy.y, 50, 5, 3, 4, {r: 200, g: 200, b: 0}, {r: 200,g: 200,b: 0}, 0, 2 * Math.PI);
+                    createSound(SOUNDS_SRC.explosion);
                     let i = enemies.indexOf(enem);
                     if (i != -1)
                         enemies.splice(i, 1);
                     if (enem.didPlayerDamage)
-                        playerStats.enemyKillScore.val += scoreCfg.enemKill;
+                        PLAYER_STATS.enemyKillScore.val += SCORE_CFG.enemKill;
                 }
             });
 
@@ -891,11 +890,12 @@
                 if (carg.actor.getHealth() <= 0){
                     let xy = carg.actor.getPos();
                     doParticles(xy.x, xy.y, 50, 5, 3, 4, {r: 200, g: 200, b: 0}, {r: 200,g: 200,b: 0}, 0, 2 * Math.PI);
+                    createSound(SOUNDS_SRC.explosion);
                     let i = cargoships.indexOf(carg);
                     if (i != -1)
                         cargoships.splice(i, 1);
                     if (carg.didPlayerDamage)
-                        playerStats.cargoKillScore.val += scoreCfg.cargoKill;
+                        PLAYER_STATS.cargoKillScore.val += SCORE_CFG.cargoKill;
                 }
             });
         }
@@ -912,6 +912,13 @@
                         if (aXY.y + aWH.h / 2 * aScale >= bXY.y - bWH.h / 2 * bScale)
                             return true;
             return false;
+        }
+
+        function checkSounds(){
+            let sounds = document.getElementsByTagName('audio');
+            for (let i = 0; i < sounds.length; i++)
+                if (sounds[i].ended)
+                    deleteSound(sounds[i]);
         }
         //#endregion
 
@@ -939,11 +946,10 @@
             bullets = [];
             particle = [];
 
-            playerStats.timeScore.val = 0;
-            playerStats.enemyKillScore.val = 0;
-            playerStats.cargoKillScore.val = 0;
-            playerStats.playerDeathScore.val = 0;
-            playerStats.playerSpendScore.val = 0;
+            PLAYER_STATS.timeScore.val = 0;
+            PLAYER_STATS.enemyKillScore.val = 0;
+            PLAYER_STATS.cargoKillScore.val = 0;
+            PLAYER_STATS.playerDeathScore.val = 0;
         }
 
         function makeEnemsInCombatLeave() {
@@ -1023,6 +1029,16 @@
             r.getElementsByTagName('th')[0].innerHTML = nm;
             r.getElementsByTagName('th')[1].innerHTML = vl
         }
+
+        function deleteSound(elem){
+            elem.parentNode.removeChild(elem);
+        }
+
+        function resetSfx(){
+            let sounds = document.getElementsByTagName('audio');
+            for (let i = 0; i < sounds.length; i++)
+                deleteSound(sounds[i]);
+        }
         //#endregion
         
         //#region Event Listener Stuff
@@ -1033,49 +1049,49 @@
         document.addEventListener("keyup", KeyUp);
 
         function MouseMoved(e) {
-            mouseXY.x = e.clientX;
-            mouseXY.y = e.clientY;
+            MOUSE_XY.x = e.clientX;
+            MOUSE_XY.y = e.clientY;
         }
 
         function MouseDown(e) {
-            if (e.button == keyBinds.shoot) {
-                keyStates.isShoot = true;
+            if (e.button == KEYBINDS.shoot) {
+                KEYSTATES.isShoot = true;
             }
         }
 
         function MouseUp(e) {
-            if (e.button == keyBinds.shoot) {
-                keyStates.isShoot = false;
+            if (e.button == KEYBINDS.shoot) {
+                KEYSTATES.isShoot = false;
             }
         }
 
         function KeyDown(e) {
-            if (e.key.toUpperCase() == keyBinds.up) {
-                keyStates.isUp = true;
-            } else if (e.key.toUpperCase() == keyBinds.down) {
-                keyStates.isDown = true;
-            } else if (e.key.toUpperCase() == keyBinds.left) {
-                keyStates.isLeft = true;
-            } else if (e.key.toUpperCase() == keyBinds.right) {
-                keyStates.isRight = true;
-            } else if (e.key.toUpperCase() == keyBinds.auto) {
-                keyStates.isAuto = true;
-            } else if (e.key.toUpperCase() == keyBinds.pause) {
-                keyStates.isPause = true;
+            if (e.key.toUpperCase() == KEYBINDS.up) {
+                KEYSTATES.isUp = true;
+            } else if (e.key.toUpperCase() == KEYBINDS.down) {
+                KEYSTATES.isDown = true;
+            } else if (e.key.toUpperCase() == KEYBINDS.left) {
+                KEYSTATES.isLeft = true;
+            } else if (e.key.toUpperCase() == KEYBINDS.right) {
+                KEYSTATES.isRight = true;
+            } else if (e.key.toUpperCase() == KEYBINDS.auto) {
+                KEYSTATES.isAuto = true;
+            } else if (e.key.toUpperCase() == KEYBINDS.pause) {
+                KEYSTATES.isPause = true;
             }
         }
 
         function KeyUp(e) {
-            if (e.key.toUpperCase() == keyBinds.up) {
-                keyStates.isUp = false;
-            } else if (e.key.toUpperCase() == keyBinds.down) {
-                keyStates.isDown = false;
-            } else if (e.key.toUpperCase() == keyBinds.left) {
-                keyStates.isLeft = false;
-            } else if (e.key.toUpperCase() == keyBinds.right) {
-                keyStates.isRight = false;
-            } else if (e.key.toUpperCase() == keyBinds.auto) {
-                keyStates.isAuto = false;
+            if (e.key.toUpperCase() == KEYBINDS.up) {
+                KEYSTATES.isUp = false;
+            } else if (e.key.toUpperCase() == KEYBINDS.down) {
+                KEYSTATES.isDown = false;
+            } else if (e.key.toUpperCase() == KEYBINDS.left) {
+                KEYSTATES.isLeft = false;
+            } else if (e.key.toUpperCase() == KEYBINDS.right) {
+                KEYSTATES.isRight = false;
+            } else if (e.key.toUpperCase() == KEYBINDS.auto) {
+                KEYSTATES.isAuto = false;
             }
         }
         //#endregion
@@ -1085,12 +1101,50 @@
     }
 }
 
-function doGameOver(){
-    isLooping = false;
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = canvas.height / 5 + 'px sans-serif';
-    context.fillStyle = 'red';
+function doTutorial(){
+    let str = [
+        "",
+        "Game Thing, Yes I Am Bad With Titles",
+        "",
+        "To Play:",
+        KEYBINDS.up + " / " + KEYBINDS.down + " to move forward/backward",
+        KEYBINDS.left + " / " + KEYBINDS.right + " to rotate left/right",
+        "small white ships are hostile to all but themselves and will attack",
+        "large brown ships are neutral and will only attack when provoked",
+        "left mouse buttom to shoot",
+        "",
+        "Score:",
+        "you gain score by being alive, at " + SCORE_CFG.perSec + " points per second",
+        "killing an enemy gives " + SCORE_CFG.enemKill + " points",
+        "killing a cargoship gives " + SCORE_CFG.cargoKill + " points",
+        "dying costs you " + -SCORE_CFG.playerKill + " points",
+        "",
+        "also you cannot right-click to bring the menu here",
+        "do so on the sidebars on either side",
+        ""
+    ];
+
+    if (isLooping){
+        isPaused = true;
+        str.push("press " + KEYBINDS.pause + " to return");
+    }
+    else
+        str.push("press Start to start");
+
+    let fsize = canvas.height / (str.length + 2);
+    let startY = fsize;
+
+    context.font = fsize + 'px sans-serif';
+    context.fillStyle = 'lime';
     context.textAlign = 'center';
-    context.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
-    
+
+    str.forEach(s => {
+        context.fillText(s, canvas.width / 2, startY); 
+        startY += fsize;
+    });
+
+    if (didTheMagicHappen == false){
+        window.open("https://www.youtube.com/watch?v=oHg5SJYRHA0", "_blank");
+        didTheMagicHappen = true;
+    }
 }

@@ -1,19 +1,22 @@
-let canvas;
-let context;
+const canvas = document.getElementById('canv');
+canvas.width = document.getElementById('gameScreen').clientWidth;
+canvas.height = document.getElementById('gameScreen').clientHeight;
+const context = canvas.getContext('2d');
 
 let isDebug = false;
 let isPaused = false;
 let isLooping = false;
 let isGameOver = false;
-let isGodMode = false;
-let canPlayerBeTarget = true;
-let canDoCombat = true;
+let didTheMagicHappen = false;
+const IS_GOD_MODE = false;
+const CAN_PLAYER_BE_TARGET = true;
+const CAN_DO_COMBAT = true;
 
-let mouseXY = {x: 0,x: 0};
-let keyBinds = {left: "A",right: "D",up: "W",down: "S",auto: "SHIFT",pause: "ESCAPE",shoot: "0"};
-let keyStates = {isLeft: false,isRight: false,isUp: false,isDown: false,isAuto: false,isShoot: false,isPause: false};
-let elementID = {gameStatsContainer: "game_stats_table",playerStatsContainer: "player_stats_table"};
-let gameStats = {
+const MOUSE_XY = {x: 0,x: 0};
+const KEYBINDS = {left: "A",right: "D",up: "W",down: "S",auto: "SHIFT",pause: "ESCAPE",shoot: "0"};
+const KEYSTATES = {isLeft: false,isRight: false,isUp: false,isDown: false,isAuto: false,isShoot: false,isPause: false};
+const ELEMENT_ID = {gameStatsContainer: "game_stats_table",playerStatsContainer: "player_stats_table"};
+const GAME_STATS = {
     fps: {name: "FPS", val: 0, display: true},
     fpsUpdateTime: {name: "FPS Update Interv", val: 10, display: false},
     fpsUpdateSum: {name: "FPS Update Sum", val: 0, display: false},
@@ -33,26 +36,22 @@ let gameStats = {
     particleIndex: {name: "Particle Ind", val: 0, display: false},
     particlesExist: {name: "Particles Existing", val: 0, display: true},
     enemiesExist: {name: "Enemies Existing", val: 0, display: true},
-    enemiesInCombat: {name: "Enemies In Combat", val: 0, display: true}
-    //add cargostuff exists in combat
+    enemiesInCombat: {name: "Enemies In Combat", val: 0, display: true},
+    enemyCarryOverSpawnBonus: {name: "Enemy Spawn Amount Bonus", val: 0, display: false},
+    isGodMode: {name: "God Mode", val: IS_GOD_MODE, display: true},
+    canPlayerBeTarget: {name: "Can Player Be Target", val: CAN_PLAYER_BE_TARGET, display: true},
+    canDoCombat: {name: "Can Do Combat", val: CAN_DO_COMBAT, display: true}
 };
-let playerStats = {
+const PLAYER_STATS = {
     totalScore: {name: "Score", val: 0, display: true},
     timeScore: {name: "", val: 0, display: false},
     enemyKillScore: {name: "", val: 0, display: false},
     cargoKillScore: {name: "", val: 0, display: false},
     playerDeathScore: {name: "", val: 0, display: false},
-    playerSpendScore: {name: "", val: 0, display: false},
     hp: {name: "Health", val: 0, display: true},
-    mSpeed: {name: "Movement Speed", val: 0, display: true},
-    bSpeed: {name: "Bullet Speed", val: 0, display: true},
-    shSpeed: {name: "Shoot Speed", val: 0, display: true},
-    dmg: {name: "Damage", val: 0, display: true},
-    acc: {name: "Accuracy", val: 0, display: true},
-    range: {name: "Range", val: 0, display: true}
 }
 
-let images = {
+const IMAGES = {
     playership: createImg("imgs/enemyship.png", 150, 75),
     cargoship: createImg("imgs/cargoship.png", 125, 80),
     enemyship: createImg("imgs/spaceship.png", 100, 100),
@@ -61,6 +60,13 @@ let images = {
     cargobullet: createImg("imgs/greenlaser.png", 100, 30),
     crosshair: createImg("imgs/crosshair.png", 50, 50)
 };
+const SOUNDS_SRC = {
+    music: "sounds/Terraria Overhaul Music - Boss 4 - Theme of the Queen Bee.mp3", //Yoinked this from Terraria Overhaul mod soundtrack, great game and mod
+    explosion: "sounds/explosion.wav", //Used sfxr
+    shoot: "sounds/shoot.wav",
+    impact: "sounds/impact.wav",
+    gameover: "sounds/GTA V WastedBusted Sound Effect.mp3" //Yoinked from https://www.soundboard.com/sb/sound/890778
+};
 
 function createImg(src, w, h) {
     let img = new Image();
@@ -68,7 +74,7 @@ function createImg(src, w, h) {
     return {img: img,w: w,h: h};
 }
 
-let playerCfg = {
+const PLAYER_CFG = {
     general: {
         scale: 0.5,
         speed: 5,
@@ -113,7 +119,7 @@ let playerCfg = {
     }
 };
 
-let enemyCfg = {
+const ENEMY_CFG = {
     general: {
         chancePerFrame: 0.1,
         amount: 3,
@@ -157,7 +163,7 @@ let enemyCfg = {
     }
 };
 
-let cargoCfg = {
+const CARGO_CFG = {
     general: {
         chancePerFrame: 0.01,
         amount: 2,
@@ -191,20 +197,20 @@ let cargoCfg = {
         normal: {
             type: "cargoWeapon",
             damage: 40,
-            distance: 500,
+            distance: 800,
             delay: 30,
             accuracy: 0.9
         }
     }
 };
 
-let bulletCfg = {
+const BULLET_CFG = {
     scale: 0.1,
     speed: 10,
     type: "bullet"
 };
 
-let scoreCfg = {
+const SCORE_CFG = {
     start: 0,
     enemKill: 100,
     cargoKill: 300,

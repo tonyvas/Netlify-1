@@ -37,6 +37,9 @@ canvas{
     grid-area: R;
     border: 2px solid black;
 }
+#player_stats_table{
+    font-size: larger;
+}
 table{
     width: 100%;
 }
@@ -55,4 +58,7 @@ th{
 .btn{
     width: 100%;
     font-size: large;
+}
+audio{
+    display: none;
 }
