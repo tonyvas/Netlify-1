@@ -1,0 +1,63 @@
+{
+    "prayer": [
+        {
+            "cat_name": "Ensouled Heads",
+            "cat_boosts": [],
+            "cat_vals": {
+                "Ensouled Goblin Head": 130,
+                "Ensouled Monkey Head": 182,
+                "Ensouled Imp Head": 286,
+                "Ensouled Minotaur Head": 364,
+                "Ensouled Scorpion Head": 454,
+                "Ensouled Bear Head": 480,
+                "Ensouled Unicorn Head": 494,
+                "Ensouled Dog Head": 520,
+                "Ensouled Chaos Druid Head": 584,
+                "Ensouled Giant Head": 650,
+                "Ensouled Ogre Head": 716,
+                "Ensouled Elf Head": 754,
+                "Ensouled Troll Head": 780,
+                "Ensouled Horror Head": 832,
+                "Ensouled Kalphite Head": 884,
+                "Ensouled Dagannoth Head": 936,
+                "Ensouled Bloodveld Head": 1040,
+                "Ensouled Tzhaar Head": 1104,
+                "Ensouled Demon Head": 1170,
+                "Ensouled Aviansie Head": 1234,
+                "Ensouled Abyssal Head": 1300,
+                "Ensouled Dragon Head": 1560
+            }
+        },
+        {
+            "cat_name": "Bones",
+            "cat_boosts": [
+                { "name": "Lit Guilded Altar", "mult": 3.5 },
+                { "name": "Ectofunctus", "mult": 4 },
+                { "name": "Chaos Altar", "mult": 7 }
+            ],
+            "cat_vals": {
+                "Bones": 4.5,
+                "Wolf Bones": 4.5,
+                "Burnt Bones": 4.5,
+                "Monkey Bones": 5,
+                "Bat Bones": 5.3,
+                "Jogre Bones": 15,
+                "Big Bones": 15,
+                "Zogre Bones": 22.5,
+                "Shaikahan Bones": 25,
+                "Babydragon Bones": 30,
+                "Wyrm Bones": 50,
+                "Wyrvern Bones": 72,
+                "Dragon Bones": 72,
+                "Drake Bones": 80,
+                "Fayrg Bones": 84,
+                "Lava Dragon Bones": 85,
+                "Raurg Bones": 96,
+                "Hydra Bones": 110,
+                "Dagannoth Bones": 125,
+                "Ourg Bones": 140,
+                "Superior Dragon Bones": 150
+            }
+        }
+    ]
+}

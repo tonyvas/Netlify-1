@@ -1,0 +1,24 @@
+body{
+    background-color: #333;
+    color: lime;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 25vw 50vw 25vw;
+    grid-template-rows: 25vh 50vh 25vh;
+    grid-template-areas: ". . ." ". a ." ". . .";
+}
+
+h1{
+    text-align: center;
+}
+
+#skill_selection{
+    grid-area: a;
+    border: 2px solid red;
+}
+
+#skill_content{
+    grid-area: a;
+    border: 2px solid lime;
+}

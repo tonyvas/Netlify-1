@@ -1,0 +1,17 @@
+body, html{
+    background: #333;
+    color: lime;
+    margin: 0;
+    padding: 0;
+}
+
+#canvas_container{
+    width: 100vw;
+    height: 90vh;
+}
+
+.canvas_zoom_button{
+    font-size: xx-large;
+    width: 50px;
+    height: 50px;
+}

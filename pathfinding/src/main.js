@@ -3,6 +3,7 @@ import Collision from './collision.js';
 import Player from './player.js';
 import Enemy from './enemy.js';
 import Map from './map.js';
+import Move from './move.js';
 
 const LOOP_INTERVAL = 1000 / 60;
 const CELL_AMOUNT_ROWS = 50;
@@ -18,7 +19,6 @@ const PLAYER_COLOR = 'red';
 const ENEMY_SIZE = 20;
 const ENEMY_AMOUNT = 10;
 const ENEMY_COLOR = 'blue';
-
 
 const keysDown = { up: false, down: false, left: false, right: false };
 const display = new Display('canvas', CELL_AMOUNT_COLS * CELL_SIZE, CELL_AMOUNT_ROWS * CELL_SIZE);
@@ -80,15 +80,9 @@ function movePlayer() {
 
 function moveEnemies() {
     for (let i = 0; i < enemies.length; i++) {
-        let pHB = player.getHitbox();
-        let eHB = enemies[i].getHitbox();
+        
 
-        let distX = eHB.x - pHB.x;
-        let distY = eHB.y - pHB.y;
-        let angle = Math.atan2(distY, distX);
-
-        enemies[i].x += 3 * Math.cos(angle) * -1;
-        enemies[i].y += 3 * Math.sin(angle) * -1;
+        enemies[i].moveNext();
     }
 }
 
@@ -157,6 +151,33 @@ document.body.onload = () => {
     display.updateSize(window.innerWidth, window.innerHeight);
     createEnemies();
     setInterval(loop, LOOP_INTERVAL);
+
+    // let tempMoves = [];
+    // for (let i = 0; i < 1000; i++) {
+    //     let randDir = Math.floor(Math.random() * 4);
+    //     let randDist = Math.floor(Math.random() * 20);
+
+    //     switch (randDir) {
+    //         case 0:
+    //             randDir = 'up';
+    //             break;
+    //         case 1:
+    //             randDir = 'down';
+    //             break;
+    //         case 2:
+    //             randDir = 'left';
+    //             break;
+    //         case 3:
+    //             randDir = 'right';
+    //             break;
+    //     }
+
+    //     let move = new Move(randDir, randDist);
+    //     tempMoves.push(move);
+    // }
+    // for (let i = 0; i < enemies.length; i++) {
+    //     enemies[i].setMoves(tempMoves);
+    // }
 };
 document.body.onresize = () => {
     display.updateSize(window.innerWidth, window.innerHeight);

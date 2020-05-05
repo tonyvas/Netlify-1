@@ -12,7 +12,7 @@ export default class Move {
         return this.distance;
     }
 
-    subtrace(amnt){
+    subtract(amnt){
         this.distance -= amnt;
         if (this.distance < 0){
             alert('Negative Distance!');
