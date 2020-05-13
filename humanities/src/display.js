@@ -1,4 +1,4 @@
-export default class Display {
+class Display {
     constructor(canvasID, innerWidth, innerHeight) {
         this.canvas = document.getElementById(canvasID);
         this.context = this.canvas.getContext('2d');
@@ -57,19 +57,19 @@ export default class Display {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    outlineRect({ x, y, w, h }, color, width = 3) {
+    outlineRect(x, y, w, h, color, width = 3) {
         this.context.strokeStyle = color;
         this.context.lineWidth = width;
         this.context.strokeRect(x, y, w, h);
     }
 
-    fillRect({ x, y, w, h }, color) {
+    fillRect(x, y, w, h, color) {
         this.context.fillStyle = color;
         this.context.fillRect(x, y, w, h);
         this.context.closePath();
     }
 
-    outlineCircle({ x, y }, radius, color, width = 3) {
+    outlineCircle(x, y, radius, color, width = 3) {
         this.context.strokeStyle = color;
         this.context.lineWidth = width;
         this.context.beginPath();
@@ -78,7 +78,7 @@ export default class Display {
         this.context.closePath();
     }
 
-    fillCircle({ x, y }, radius, color) {
+    fillCircle(x, y, radius, color) {
         this.context.fillStyle = color;
         this.context.beginPath();
         this.context.arc(x, y, radius, 0, 360);

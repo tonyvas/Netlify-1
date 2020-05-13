@@ -1,6 +1,6 @@
 import Display from './display.js';
 import Obstacle from './obstacle.js';
-import Character from './character.js';
+import Character from './player.js';
 import { collisionSide, isCollision } from './Collision.js';
 
 const CANVAS_WIDTH = 2000;
@@ -25,22 +25,43 @@ const PLAYER_SPEED = 2;
 
 const GAME_WIDTH = 3000;
 const GAME_HEIGHT = 3000;
-const CENTER_X = display.canvas.width / 2;
-const CENTER_Y = display.canvas.height / 2;
-const MIN_X = CENTER_X - GAME_WIDTH / 2;
-const MIN_Y = CENTER_Y - GAME_HEIGHT / 2;
-const MAX_X = CENTER_X + GAME_WIDTH / 2;
-const MAX_Y = CENTER_Y + GAME_HEIGHT / 2;
+const CENTER_CANVAS_X = display.canvas.width / 2;
+const CENTER_CANVAS_Y = display.canvas.height / 2;
+const MIN_GAME_X = CENTER_CANVAS_X - GAME_WIDTH / 2;
+const MIN_GAME_Y = CENTER_CANVAS_Y - GAME_HEIGHT / 2;
+const MAX_GAME_X = CENTER_CANVAS_X + GAME_WIDTH / 2;
+const MAX_GAME_Y = CENTER_CANVAS_Y + GAME_HEIGHT / 2;
 
 const SPAWN_AREA_RATIO = 0.2;
 const SPAWN_AREA_WIDTH = GAME_WIDTH * SPAWN_AREA_RATIO;
 const SPAWN_AREA_HEIGHT = GAME_HEIGHT * SPAWN_AREA_RATIO;
 const SPAWN_AREA = {
-    x: CENTER_X - SPAWN_AREA_WIDTH / 2,
-    y: CENTER_Y - SPAWN_AREA_HEIGHT / 2,
+    x: CENTER_CANVAS_X - SPAWN_AREA_WIDTH / 2,
+    y: CENTER_CANVAS_Y - SPAWN_AREA_HEIGHT / 2,
     w: SPAWN_AREA_WIDTH,
     h: SPAWN_AREA_HEIGHT
 };
+
+const PERF_FONT_SIZE = 30;
+const PERF_FONT_COLOR = 'red';
+const PER_FONT_ALIGN = 'left';
+const PERF_OUTPUT_DELAY = 100;
+
+const FPS_ITER_AMOUNT = 100;
+const FPS_ITER_ARRAY = [];
+const FPS_TEXT_X = 10;
+const FPS_TEXT_Y = 40;
+const FPS_TEXT_PRE = 'FPS: ';
+
+const IDLE_TEXT_X = 10;
+const IDLE_TEXT_Y = 70;
+const IDLE_TEXT_PRE = 'IDLE: ';
+const IDLE_TEXT_POST = '%';
+
+let prevLoopEntryDate = null;
+let loopcount = 0;
+let prevFPS = null;
+let prevIdle = null;
 
 const W = 87;
 const A = 65;
@@ -63,36 +84,16 @@ const kbBtns = {
 
 const obstacles = [];
 const player = new Character(
-    CENTER_X - PLAYER_SIZE / 2,
-    CENTER_Y - PLAYER_SIZE / 2,
+    CENTER_CANVAS_X - PLAYER_SIZE / 2,
+    CENTER_CANVAS_Y - PLAYER_SIZE / 2,
     PLAYER_SIZE,
     PLAYER_SIZE,
     PLAYER_COLOR,
     PLAYER_TYPE
 );
 
-let prevLoopEntryDate = null;
-const FPS_ITER_AMOUNT = 100;
-const FPS_ITER_ARRAY = [];
-const FPS_FONT_SIZE = 80;
-const FPS_TEXT_X = 80;
-const FPS_TEXT_Y = 80;
-const FPS_TEXT_COLOR = 'red';
-
 setupEventListeners();
 function setupEventListeners() {
-    // document.getElementById('canvas_zoom_in').onclick = () => {
-    //     display.canvas.width *= 1.1;
-    //     display.canvas.height *= 1.1;
-    // };
-    // document.getElementById('canvas_zoom_out').onclick = () => {
-    //     display.canvas.width /= 1.1;
-    //     display.canvas.height /= 1.1;
-    // };
-    // document.getElementById('canvas_zoom_reset').onclick = () => {
-    //     display.canvas.width = CANVAS_WIDTH;
-    //     display.canvas.height = CANVAS_HEIGHT;
-    // }
     document.body.onload = () => {
         createObstacles();
         loop();
@@ -129,10 +130,10 @@ function createObstacles() {
     createRandomObstacles();
 
     function createBoundWalls() {
-        obstacles.push(new Obstacle(MIN_X, MIN_Y, GAME_WIDTH, OBSTACLE_WIDTH, OBSTACLE_BOUND_COLOR));
-        obstacles.push(new Obstacle(MIN_X, MAX_Y - OBSTACLE_WIDTH, GAME_WIDTH, OBSTACLE_WIDTH, OBSTACLE_BOUND_COLOR));
-        obstacles.push(new Obstacle(MIN_X, MIN_Y, OBSTACLE_WIDTH, GAME_HEIGHT, OBSTACLE_BOUND_COLOR));
-        obstacles.push(new Obstacle(MAX_X - OBSTACLE_WIDTH, MIN_Y, OBSTACLE_WIDTH, GAME_HEIGHT, OBSTACLE_BOUND_COLOR));
+        obstacles.push(new Obstacle(MIN_GAME_X, MIN_GAME_Y, GAME_WIDTH, OBSTACLE_WIDTH, OBSTACLE_BOUND_COLOR));
+        obstacles.push(new Obstacle(MIN_GAME_X, MAX_GAME_Y - OBSTACLE_WIDTH, GAME_WIDTH, OBSTACLE_WIDTH, OBSTACLE_BOUND_COLOR));
+        obstacles.push(new Obstacle(MIN_GAME_X, MIN_GAME_Y, OBSTACLE_WIDTH, GAME_HEIGHT, OBSTACLE_BOUND_COLOR));
+        obstacles.push(new Obstacle(MAX_GAME_X - OBSTACLE_WIDTH, MIN_GAME_Y, OBSTACLE_WIDTH, GAME_HEIGHT, OBSTACLE_BOUND_COLOR));
     }
 
     function createRandomObstacles() {
@@ -141,8 +142,8 @@ function createObstacles() {
             attempt++;
             if (attempt > MAX_OBSTACLE_ATTEMPTS) return;
 
-            let x = randomBetween(MIN_X, MAX_X);
-            let y = randomBetween(MIN_Y, MAX_Y);
+            let x = randomBetween(MIN_GAME_X, MAX_GAME_X);
+            let y = randomBetween(MIN_GAME_Y, MAX_GAME_Y);
 
             let obstacle;
             switch (Math.floor(Math.random() * 2)) {
@@ -166,31 +167,77 @@ function createObstacles() {
 
         function isObstacleWithinGameArea(obst) {
             return (
-                obst.x > MIN_X + OBSTACLE_WIDTH &&
-                obst.y > MIN_Y + OBSTACLE_WIDTH &&
-                obst.x + obst.w < MAX_X - OBSTACLE_WIDTH &&
-                obst.y + obst.h < MAX_Y - OBSTACLE_WIDTH
+                obst.x > MIN_GAME_X + OBSTACLE_WIDTH &&
+                obst.y > MIN_GAME_Y + OBSTACLE_WIDTH &&
+                obst.x + obst.w < MAX_GAME_X - OBSTACLE_WIDTH &&
+                obst.y + obst.h < MAX_GAME_Y - OBSTACLE_WIDTH
             );
         }
     }
 }
 
 function loop() {
+    console.log(player.relativeX + 'x' + player.relativeY);
+
+    let loopStart = Date.now();
+    loopcount++;
     draw();
     move();
-    doFPS();
+
+    let prevTotalLoopTime = calculatePrevTotalLoopTime();
+    doFPS(prevTotalLoopTime);
+    doIdle(Date.now() - loopStart, prevTotalLoopTime);
 
     requestAnimationFrame(loop);
 
-    function doFPS() {
-        let diff = calculateDiff();
+    function doIdle(activeTime, totalTime) {
+        let idlePercent = Math.round(99 - activeTime / totalTime * 100);
+
+        if (loopcount % PERF_OUTPUT_DELAY == 0) {
+            outputIdleTime(idlePercent);
+            prevIdle = idlePercent;
+        } else outputIdleTime(prevIdle);
+
+        function outputIdleTime() {
+            display.fillText(
+                IDLE_TEXT_PRE + idlePercent + IDLE_TEXT_POST,
+                IDLE_TEXT_X,
+                IDLE_TEXT_Y,
+                PERF_FONT_SIZE,
+                PERF_FONT_COLOR,
+                PER_FONT_ALIGN
+            );
+        }
+    }
+
+    function calculatePrevTotalLoopTime() {
+        let diff = null;
+        let now = Date.now();
+        if (prevLoopEntryDate != null) diff = now - prevLoopEntryDate;
+        prevLoopEntryDate = now;
+        return diff;
+    }
+
+    function doFPS(diff) {
         if (diff == null) return;
         FPS_ITER_ARRAY.push(diff);
         if (FPS_ITER_ARRAY.length > FPS_ITER_AMOUNT) FPS_ITER_ARRAY.splice(0, 1);
-        outputFPS(Math.round(calculateFPS()));
+        let fps = Math.round(calculateFPS());
+
+        if (loopcount % PERF_OUTPUT_DELAY == 0) {
+            outputFPS(fps);
+            prevFPS = fps;
+        } else outputFPS(prevFPS);
 
         function outputFPS(num) {
-            display.fillText(num, FPS_TEXT_X, FPS_TEXT_Y, FPS_FONT_SIZE, FPS_TEXT_COLOR);
+            display.fillText(
+                FPS_TEXT_PRE + num,
+                FPS_TEXT_X,
+                FPS_TEXT_Y,
+                PERF_FONT_SIZE,
+                PERF_FONT_COLOR,
+                PER_FONT_ALIGN
+            );
         }
 
         function calculateFPS() {
@@ -198,14 +245,6 @@ function loop() {
             for (let i = 0; i < FPS_ITER_ARRAY.length; i++) sum += FPS_ITER_ARRAY[i];
             let avg = sum / FPS_ITER_ARRAY.length;
             return 1000 / avg;
-        }
-
-        function calculateDiff() {
-            let diff = null;
-            let now = Date.now();
-            if (prevLoopEntryDate != null) diff = now - prevLoopEntryDate;
-            prevLoopEntryDate = now;
-            return diff;
         }
     }
 
@@ -219,6 +258,7 @@ function loop() {
                     obstacles[i].x += speed.x;
                 }
                 SPAWN_AREA.x += speed.x;
+                player.relativeX -= speed.x;
             }
 
             if (canmove.y || NOCLIP) {
@@ -226,6 +266,7 @@ function loop() {
                     obstacles[i].y += speed.y;
                 }
                 SPAWN_AREA.y += speed.y;
+                player.relativeY -= speed.y;
             }
         }
 
