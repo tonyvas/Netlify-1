@@ -6,7 +6,41 @@
     <title>Humanities Creative Project</title>
 </head>
 <body>
-    <div id="canvas_container"><canvas id="canvas"></canvas></div>
+    <div id="tutorial_div">
+        <div id="text_container">
+            <div class="tutorial_text_div"><h1 class="tutorial_text_h">Name</h1></div>
+            <br>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Lost in Translation: Japan</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Creative Project</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Made by Antony Vasiliev 1820554</p></div>
+            <br>
+            <div class="tutorial_text_div"><h2 class="tutorial_text_h">How to Play</h2></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Move with 'w', 's', 'a', 'd' to move 'up', 'down', 'left', 'right'</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Collect food (yellow) scattered around the area and bring it to your village before the day ends (bar on top)</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">If you do not bring enough food back within the time limit the village starves</p></div>
+            <br>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">New food appears every 5 days meaning you have to venture further and further as days pass until new food appears</p></div>
+            <br>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">There are soldiers (green) roaming around the area and will chase you if they see you outside the village</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">If they catch you you are sent back to the village and all the food you were carrying on you is taken away</p></div>
+            <br>
+            <div class="tutorial_text_div"><input class="tutorial_button" onclick="onStartButtonClick();" type="button" value="Start Game"></div>
+            <br>
+            <br>
+            <div class="tutorial_text_div"><h2 class="tutorial_text_h">Note</h2></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Walls are randomly generated, if they generate weirdly, refresh the page</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Depending on your display resolution, some parts may not draw properly</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Designed for 1920x1080 displays, and the use of a keyboard and mouse</p></div>
+            <div class="tutorial_text_div"><p class="tutorial_text_p">Should work in most cases however</p></div>
+        </div>
+    </div>
+    <div id="canvas_container">
+        <div id="canvas_container_h">
+            <div id="canvas_container_v">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+    </div>
     
     <script src="./src/display.js"></script>
     <script src="./src/collision.js"></script>

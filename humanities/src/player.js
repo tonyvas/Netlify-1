@@ -6,6 +6,7 @@ class Player {
         this.h = h;
         this.color = color;
         this.maxSpeed = maxSpeed;
+        this.carriedFood = 0;
     }
 
     getArea() {

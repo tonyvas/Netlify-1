@@ -1,9 +1,13 @@
 //#region consts
+const TUTORIAL_CONTAINER_ID = 'tutorial_div';
+const CANVAS_CONTAINER_ID = 'canvas_container';
+
 const CONFIG = {
     game: {
         width: 5000,
         height: 5000,
-        move_interval: 10
+        logic_interval: 10,
+        day_duration_sec: 120
     },
     canvas: {
         id: 'canvas',
@@ -11,35 +15,47 @@ const CONFIG = {
         height: 1000,
         block_context_menu: true
     },
-    base: { width: 500, height: 500, color: 'green', entrance_cut: 50 },
+    base: { width: 500, height: 500, color: 'green', entrance_cut: 50, food_to_survive: 20 },
     player: {
         width: 20,
         height: 20,
         color: 'red',
-        max_speed: 1,
-        max_food: null
+        max_speed: 2,
+        max_food: 10
     },
     enemy: {
         width: 20,
         height: 20,
         color: 'darkgreen',
         max_speed: 1.5,
-        view_range: 100,
+        view_range: 300,
         amount: 100,
-        chance_to_move: 0.003,
-        max_move_dist: 200
+        chance_to_move: 0.01,
+        max_move_dist: 300
     },
     food: { amount: 200, width: 10, height: 10, color: 'yellow', weight: 10 },
     wall: {
         short: 40,
         long: 200,
         amount: 200,
-        random_color: 'blue',
-        base_color: 'purple',
+        random_color: 'rgb(130,50,40)',
+        base_color: 'rgb(100,90,77)',
         bound_color: 'gray',
         random_type: 'random',
         base_type: 'base',
         bound_type: 'bound'
+    },
+    output: {
+        timebarColorBG: 'black',
+        timebarColorFG: 'red',
+        timebarStartX: 0,
+        timebarCanvasWidthRatio: 1,
+        timebarHeight: 60,
+        timebarStartY: 0,
+        textColor: 'red',
+        textStartX: 10,
+        textSize: 40,
+        textAlign: 'left'
     }
 };
 
@@ -54,26 +70,102 @@ const inputs = {
 const display = new Display(CONFIG.canvas.id, CONFIG.canvas.width, CONFIG.canvas.height);
 //#endregion
 
-//#region entities
+//#region lets
 let base = null;
 let player = null;
 let enemies = [];
 let walls = [];
 let foods = [];
+let logicLoopIntervalId = null;
+let dayNum = null;
+let logicLoopIter = null;
+let drawBool = null;
+let totalFood = null;
+let foodTaken = null;
 //#endregion
+
+function onStartButtonClick() {
+    document.getElementById(TUTORIAL_CONTAINER_ID).style.display = 'none';
+    document.getElementById(CANVAS_CONTAINER_ID).style.display = 'block';
+    display.updateCanvasSize();
+    setup();
+}
+
+function doGameOver() {
+    clearInterval(logicLoopIntervalId);
+    drawBool = false;
+    display.clear();
+    let x = CONFIG.canvas.width / 2;
+    let y = CONFIG.canvas.height / 3;
+    let size = 40;
+    let color = 'red';
+
+    display.fillText('Game Over!', x, y, size, color, 'center');
+    y += size;
+    display.fillText(`Days Survived: ${dayNum}`, x, y, size, color, 'center');
+    y += size;
+    display.fillText(`Food Collected: ${totalFood}`, x, y, size, color, 'center');
+    y += size;
+    display.fillText(`Food Taken Away: ${foodTaken}`, x, y, size, color, 'center');
+}
+
+function logicLoop() {
+    logicLoopIter++;
+    console.log('here');
+
+    movePlayer();
+    moveEnemies();
+    checkPlayerFoodCollision();
+    checkPlayerEnemyCollision();
+    if (isCollision(player.getArea(), base.getArea())) {
+        base.food += player.carriedFood;
+        player.carriedFood = 0;
+
+        if (base.food >= CONFIG.base.food_to_survive){
+            resetup();
+        }
+    }
+
+    if (getTimePassed() > CONFIG.game.day_duration_sec) {
+        if (base.food >= CONFIG.base.food_to_survive) {
+            resetup();
+        } else {
+            doGameOver();
+        }
+    }
+}
 
 //#region setup
 function setup() {
+    dayNum = 0;
+    logicLoopIter = 0;
+    totalFood = 0;
+    foodTaken = 0;
     spawnBase();
-    spawnPlayer();
     spawnWalls();
+    spawnPlayer();
     spawnEnemies();
     spawnFood();
 
+    drawBool = true;
     draw();
-    setInterval(() => {
-        move();
-    }, CONFIG.game.move_interval);
+    logicLoopIntervalId = setInterval(() => {
+        logicLoop();
+    }, CONFIG.game.logic_interval);
+}
+
+function resetup() {
+    dayNum++;
+    logicLoopIter = 0;
+    base.food = 0;
+    enemies = [];
+    spawnPlayer();
+    spawnEnemies();
+
+    if (dayNum % 5 == 0) {
+        foods = [];
+        spawnFood();
+    }
 }
 
 function spawnBase() {
@@ -85,9 +177,23 @@ function randomBetween(min, max) {
 }
 
 function spawnPlayer() {
-    let x = randomBetween(CONFIG.wall.short, CONFIG.wall.short + base.w - CONFIG.player.width);
-    let y = randomBetween(CONFIG.wall.short, CONFIG.wall.short + base.h - CONFIG.player.height);
-    player = new Player(x, y, CONFIG.player.width, CONFIG.player.height, CONFIG.player.max_speed, CONFIG.player.color);
+    if (player) if (player.carriedFood != 0) foodTaken += player.carriedFood;
+
+    while (true) {
+        let x = randomBetween(CONFIG.wall.short, CONFIG.wall.short + base.w - CONFIG.player.width);
+        let y = randomBetween(CONFIG.wall.short, CONFIG.wall.short + base.h - CONFIG.player.height);
+        player = new Player(
+            x,
+            y,
+            CONFIG.player.width,
+            CONFIG.player.height,
+            CONFIG.player.max_speed,
+            CONFIG.player.color
+        );
+        if (!checkIfWallCollision(player)) {
+            return;
+        }
+    }
 }
 
 function spawnWalls() {
@@ -308,6 +414,8 @@ function spawnFood() {
 
 //#region draw
 function draw() {
+    if (!drawBool) return;
+
     requestAnimationFrame(draw);
 
     display.clear();
@@ -318,7 +426,54 @@ function draw() {
     drawEnemies();
     drawFood();
 
+    drawTimeBar();
+    drawText();
+
     display.outlineRect(0, 0, CONFIG.canvas.width, CONFIG.canvas.height, 'red', 3);
+}
+
+function getTimePassed() {
+    return logicLoopIter * CONFIG.game.logic_interval / 1000;
+}
+
+function drawTimeBar() {
+    let ratio = getTimePassed() / CONFIG.game.day_duration_sec;
+
+    let width = CONFIG.output.timebarCanvasWidthRatio * CONFIG.canvas.width;
+
+    display.fillRect(
+        CONFIG.output.timebarStartX,
+        CONFIG.output.timebarStartY,
+        width,
+        CONFIG.output.timebarHeight,
+        CONFIG.output.timebarColorBG
+    );
+    display.fillRect(
+        CONFIG.output.timebarStartX,
+        CONFIG.output.timebarStartY,
+        width * ratio,
+        CONFIG.output.timebarHeight,
+        CONFIG.output.timebarColorFG
+    );
+}
+
+function drawText() {
+    let day = `Days Survived: ${dayNum}`;
+    let strP = `Carried Food: ${player.carriedFood}/${CONFIG.player.max_food}`;
+    let strB = `Food at Camp: ${base.food}/${CONFIG.base.food_to_survive}`;
+
+    let y = CONFIG.output.timebarStartY + CONFIG.output.timebarHeight + CONFIG.output.textSize;
+    for (let str of [ day, strP, strB ]) {
+        display.fillText(
+            str,
+            CONFIG.output.textStartX,
+            y,
+            CONFIG.output.textSize,
+            CONFIG.output.textColor,
+            CONFIG.output.textAlign
+        );
+        y += CONFIG.output.textSize;
+    }
 }
 
 function getOffset(entity) {
@@ -373,11 +528,6 @@ function drawFood() {
 //#endregion
 
 //#region move
-function move() {
-    movePlayer();
-    moveEnemies();
-}
-
 function movePlayer() {
     let x = 0;
     let y = 0;
@@ -397,49 +547,137 @@ function movePlayer() {
         }
     }
 
-    player.x += x;
-    if (checkIfWallCollision(player.getArea())) {
-        player.x -= x;
+    moveActor(player, { x: x, y: y });
+}
+
+function checkPlayerFoodCollision() {
+    if (player.carriedFood >= CONFIG.player.max_food) return;
+
+    for (let i = 0; i < foods.length; i++) {
+        if (isCollision(foods[i].getArea(), player.getArea())) {
+            player.carriedFood++;
+            totalFood++;
+            foods.splice(i, 1);
+        }
+    }
+}
+
+function checkPlayerEnemyCollision() {
+    let p = player.getArea();
+    for (let i = 0; i < enemies.length; i++) {
+        let e = enemies[i].getArea();
+        if (isCollision(p, e) && !isCollision(p, base.getArea())) {
+            spawnPlayer();
+            return;
+        }
+    }
+}
+
+function isEnemyCloseToPlayer(enemy) {
+    let distX = Math.abs(enemy.x - player.x);
+    let distY = Math.abs(enemy.y - player.y);
+
+    let dist = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+    return dist <= CONFIG.enemy.view_range;
+}
+
+function doesEnemyHaveLineOfSightToPlayer(enemy) {
+    let sx = enemy.x + enemy.w / 2;
+    let sy = enemy.y + enemy.h / 2;
+    let ex = player.x + player.w / 2;
+    let ey = player.y + player.h / 2;
+
+    for (let i = 0; i < walls.length; i++) {
+        let rx = walls[i].x;
+        let ry = walls[i].y;
+        let rw = walls[i].w;
+        let rh = walls[i].h;
+
+        if (lineRect(sx, sy, ex, ey, rx, ry, rw, rh)) {
+            return false;
+        }
+    }
+    return true;
+
+    // http://www.jeffreythompson.org/collision-detection/line-rect.php
+    function lineRect(x1, y1, x2, y2, rx, ry, rw, rh) {
+        let left = lineLine(x1, y1, x2, y2, rx, ry, rx, ry + rh);
+        let right = lineLine(x1, y1, x2, y2, rx + rw, ry, rx + rw, ry + rh);
+        let top = lineLine(x1, y1, x2, y2, rx, ry, rx + rw, ry);
+        let bottom = lineLine(x1, y1, x2, y2, rx, ry + rh, rx + rw, ry + rh);
+
+        return left || right || top || bottom;
     }
 
-    player.y += y;
-    if (checkIfWallCollision(player.getArea())) {
-        player.y -= y;
+    function lineLine(x1, y1, x2, y2, x3, y3, x4, y4) {
+        let uA = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+        let uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+
+        return uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1;
     }
 }
 
 function moveEnemies() {
     for (let i = 0; i < enemies.length; i++) {
         let enemy = enemies[i];
-        if (enemy.hasMove()) {
-            let move = enemy.getMove();
-
-            enemy.x += move.x;
-            if (checkIfWallCollision(enemy.getArea())) {
-                enemy.x -= move.x;
-            }
-
-            enemy.y += move.y;
-            if (checkIfWallCollision(enemy.getArea())) {
-                enemy.y -= move.y;
-            }
+        if (
+            !isCollision(player.getArea(), base.getArea()) &&
+            isEnemyCloseToPlayer(enemy) &&
+            doesEnemyHaveLineOfSightToPlayer(enemy)
+        ) {
+            moveEnemyToPlayer(enemy);
         } else {
-            if (Math.random() < CONFIG.enemy.chance_to_move) {
-                let x = randomBetween(0, CONFIG.enemy.max_move_dist);
-                let y = randomBetween(0, CONFIG.enemy.max_move_dist);
-                let speedX = randomBetween(CONFIG.enemy.max_speed / 2, CONFIG.enemy.max_speed);
-                let speedY = randomBetween(CONFIG.enemy.max_speed / 2, CONFIG.enemy.max_speed);
+            moveEnemyRandomly(enemy);
+        }
+    }
+}
 
-                if (Math.random() < 0.5) {
-                    speedX = -speedX;
-                }
+function getRadBetweenTwoPoints(start, end) {
+    let distX = end.x - start.x;
+    let distY = end.y - start.y;
+    return Math.atan2(distY, distX);
+}
 
-                if (Math.random() < 0.5) {
-                    speedY = -speedY;
-                }
+function moveEnemyToPlayer(enemy) {
+    let rad = getRadBetweenTwoPoints(
+        { x: enemy.x + enemy.w / 2, y: enemy.y + enemy.h / 2 },
+        { x: player.x + player.w / 2, y: player.y + player.h / 2 }
+    );
+    let speed = { x: Math.cos(rad) * enemy.maxSpeed, y: Math.sin(rad) * enemy.maxSpeed };
+    moveActor(enemy, speed);
+}
 
-                enemy.setMove(x, y, speedX, speedY);
+function moveActor(actor, speed) {
+    actor.x += speed.x;
+    if (checkIfWallCollision(actor.getArea())) {
+        actor.x -= speed.x;
+    }
+
+    actor.y += speed.y;
+    if (checkIfWallCollision(actor.getArea())) {
+        actor.y -= speed.y;
+    }
+}
+
+function moveEnemyRandomly(enemy) {
+    if (enemy.hasMove()) {
+        moveActor(enemy, enemy.getMove());
+    } else {
+        if (Math.random() < CONFIG.enemy.chance_to_move) {
+            let x = randomBetween(0, CONFIG.enemy.max_move_dist);
+            let y = randomBetween(0, CONFIG.enemy.max_move_dist);
+            let speedX = randomBetween(CONFIG.enemy.max_speed / 2, CONFIG.enemy.max_speed);
+            let speedY = randomBetween(CONFIG.enemy.max_speed / 2, CONFIG.enemy.max_speed);
+
+            if (Math.random() < 0.5) {
+                speedX = -speedX;
             }
+
+            if (Math.random() < 0.5) {
+                speedY = -speedY;
+            }
+
+            enemy.setMove(x, y, speedX, speedY);
         }
     }
 }
@@ -478,10 +716,6 @@ function setInput(e) {
         }
     }
 }
-
-document.body.onload = () => {
-    setup();
-};
 document.body.onresize = (e) => {
     display.updateCanvasSize();
 };

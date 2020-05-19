@@ -5,6 +5,7 @@ class Base {
         this.w = w;
         this.h = h;
         this.color = color;
+        this.food = 0;
     }
 
     getArea() {
