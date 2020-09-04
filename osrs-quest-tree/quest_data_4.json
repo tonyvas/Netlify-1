@@ -1,0 +1,2365 @@
+{
+	"Cook's Assistant": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "300" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Demon Slayer": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": { "quest_points": "3", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"The Restless Ghost": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Prayer": "1125" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Romeo & Juliet": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "5", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Sheep Shearer": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "150" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Shield of Arrav": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Ernest the Chicken": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "4", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Vampyre Slayer": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Attack": "4825" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Imp Catcher": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "1", "set_experience": { "Magic": "875" }, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Prince Ali Rescue": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "3", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Doric's Quest": {
+		"general": { "length": "Very short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Mining": "1300" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Black Knights' Fortress": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "3", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 12, "quests": [], "stats": {}, "items": {} }
+	},
+	"Witch's Potion": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "1", "set_experience": { "Magic": "325" }, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"The Knight's Sword": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Smithing": "12725" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Mining": { "level": 10, "boost": false } },
+			"items": {}
+		}
+	},
+	"Goblin Diplomacy": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "5",
+			"set_experience": { "Crafting": "200" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Pirate's Treasure": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "2", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Dragon Slayer": {
+		"general": { "length": "Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Defence": "18650", "Strength": "18650" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 32, "quests": [], "stats": {}, "items": {} }
+	},
+	"Rune Mysteries": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Misthalin Mystery": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "600" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"The Corsair Curse": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "2", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"X Marks the Spot": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": {},
+			"choice_experience": [ { "skills": [], "min_level": 0, "experience": 300, "uses": 1 } ],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Druidic Ritual": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "4",
+			"set_experience": { "Herblore": "250" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Lost City": {
+		"general": { "length": "Short", "difficulty": "Experienced" },
+		"rewards": { "quest_points": "3", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Crafting": { "level": 31, "boost": true }, "Woodcutting": { "level": 36, "boost": false } },
+			"items": {}
+		}
+	},
+	"Witch's House": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "4",
+			"set_experience": { "Hitpoints": "6325" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Merlin's Crystal": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": { "quest_points": "6", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Heroes' Quest": {
+		"general": { "length": "Medium - Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": {
+				"Attack": "3075",
+				"Cooking": "2825",
+				"Defence": "3075",
+				"Firemaking": "1575",
+				"Fishing": "2725",
+				"Herblore": "1325",
+				"Hitpoints": "3075",
+				"Mining": "2575",
+				"Ranged": "2075",
+				"Smithing": "2257",
+				"Strength": "3075",
+				"Woodcutting": "1575"
+			},
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 55,
+			"quests": [ "Shield of Arrav", "Lost City", "Merlin's Crystal", "Dragon Slayer" ],
+			"stats": {
+				"Cooking": { "level": 53, "boost": true },
+				"Fishing": { "level": 53, "boost": true },
+				"Herblore": { "level": 25, "boost": true },
+				"Mining": { "level": 50, "boost": true }
+			},
+			"items": {}
+		}
+	},
+	"Scorpion Catcher": {
+		"general": { "length": "Short - Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Strength": "6625" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Prayer": { "level": 31, "boost": false } },
+			"items": {}
+		}
+	},
+	"Family Crest": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 40, "boost": false },
+				"Magic": { "level": 59, "boost": true },
+				"Mining": { "level": 40, "boost": false },
+				"Smithing": { "level": 40, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Tribal Totem": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Thieving": "1775" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Thieving": { "level": 21, "boost": false } },
+			"items": {}
+		}
+	},
+	"Fishing Contest": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Fishing": "2437" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Fishing": { "level": 10, "boost": false } },
+			"items": {}
+		}
+	},
+	"Monk's Friend": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Woodcutting": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Temple of Ikov": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Fletching": "8000", "Ranged": "10500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Ranged": { "level": 40, "boost": false }, "Thieving": { "level": 42, "boost": false } },
+			"items": {}
+		}
+	},
+	"Clock Tower": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Holy Grail": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Defence": "15300", "Prayer": "11000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Merlin's Crystal" ],
+			"stats": { "Attack": { "level": 20, "boost": false } },
+			"items": {}
+		}
+	},
+	"Tree Gnome Village": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Attack": "11450" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Fight Arena": {
+		"general": { "length": "Short", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Attack": "12175", "Thieving": "2175" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Hazeel Cult": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Thieving": "1500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Sheep Herder": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": { "quest_points": "4", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Plague City": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Mining": "2425" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Sea Slug": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Fishing": "7175" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Firemaking": { "level": 30, "boost": false } },
+			"items": {}
+		}
+	},
+	"Waterfall Quest": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Attack": "13750", "Strength": "13750" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Biohazard": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Thieving": "1250" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Plague City" ], "stats": {}, "items": {} }
+	},
+	"Jungle Potion": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Herblore": "775" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Druidic Ritual" ],
+			"stats": { "Herblore": { "level": 3, "boost": false } },
+			"items": {}
+		}
+	},
+	"The Grand Tree": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "5",
+			"set_experience": { "Agility": "7900", "Attack": "18400", "Magic": "2150" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Agility": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Shilo Village": {
+		"general": { "length": "Medium - Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Crafting": "3875" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Jungle Potion" ],
+			"stats": { "Agility": { "level": 32, "boost": true }, "Crafting": { "level": 20, "boost": false } },
+			"items": {}
+		}
+	},
+	"Underground Pass": {
+		"general": { "length": "Long - Very long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "5",
+			"set_experience": { "Agility": "3000", "Attack": "3000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Biohazard" ],
+			"stats": { "Ranged": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Observatory Quest": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Crafting": "2250" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Crafting": { "level": 10, "boost": false } },
+			"items": {}
+		}
+	},
+	"The Tourist Trap": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": {},
+			"choice_experience": [
+				{
+					"skills": [ "Agility", "Fletching", "Smithing", "Thieving" ],
+					"min_level": 0,
+					"experience": 4650,
+					"uses": 2
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Fletching": { "level": 10, "boost": false }, "Smithing": { "level": 20, "boost": false } },
+			"items": {}
+		}
+	},
+	"Watchtower": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "4",
+			"set_experience": { "Magic": "15250" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Agility": { "level": 25, "boost": false },
+				"Herblore": { "level": 14, "boost": false },
+				"Magic": { "level": 15, "boost": false },
+				"Mining": { "level": 40, "boost": true },
+				"Thieving": { "level": 15, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Dwarf Cannon": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "750" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Murder Mystery": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Crafting": "1406" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"The Dig Site": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Herblore": "2000", "Mining": "15300" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Agility": { "level": 10, "boost": false },
+				"Herblore": { "level": 10, "boost": false },
+				"Thieving": { "level": 25, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Gertrude's Cat": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "1525" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Legends' Quest": {
+		"general": { "length": "Very long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "4",
+			"set_experience": {},
+			"choice_experience": [
+				{
+					"skills": [
+						"Attack",
+						"Strength",
+						"Defence",
+						"Magic",
+						"Hitpoints",
+						"Prayer",
+						"Woodcutting",
+						"Crafting",
+						"Smithing",
+						"Herblore",
+						"Agility",
+						"Thieving"
+					],
+					"min_level": 0,
+					"experience": 7650,
+					"uses": 4
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 107,
+			"quests": [ "Family Crest", "Heroes' Quest", "Shilo Village", "Underground Pass", "Waterfall Quest" ],
+			"stats": {
+				"Agility": { "level": 50, "boost": true },
+				"Crafting": { "level": 50, "boost": false },
+				"Herblore": { "level": 45, "boost": false },
+				"Magic": { "level": 56, "boost": false },
+				"Mining": { "level": 52, "boost": true },
+				"Prayer": { "level": 42, "boost": false },
+				"Smithing": { "level": 50, "boost": false },
+				"Strength": { "level": 50, "boost": false },
+				"Thieving": { "level": 50, "boost": false },
+				"Woodcutting": { "level": 50, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Big Chompy Bird Hunting": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Cooking": "1470", "Fletching": "262", "Ranged": "735" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Cooking": { "level": 30, "boost": false },
+				"Fletching": { "level": 5, "boost": false },
+				"Ranged": { "level": 30, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Elemental Workshop I": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "5000", "Smithing": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 20, "boost": false },
+				"Mining": { "level": 20, "boost": false },
+				"Smithing": { "level": 20, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Priest in Peril": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Prayer": "1406" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Nature Spirit": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Crafting": "3000", "Defence": "2000", "Hitpoints": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Priest in Peril", "The Restless Ghost" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Death Plateau": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Attack": "3000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Troll Stronghold": {
+		"general": { "length": "Short - Medium", "difficulty": "Experienced" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Death Plateau" ],
+			"stats": { "Agility": { "level": 15, "boost": true } },
+			"items": {}
+		}
+	},
+	"Tai Bwo Wannai Trio": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Attack": "2500", "Cooking": "5000", "Fishing": "5000", "Strength": "2500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Jungle Potion" ],
+			"stats": {
+				"Agility": { "level": 15, "boost": false },
+				"Cooking": { "level": 30, "boost": false },
+				"Fishing": { "level": 5, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Regicide": {
+		"general": { "length": "Long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Agility": "13750" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Underground Pass" ],
+			"stats": { "Agility": { "level": 56, "boost": true } },
+			"items": {}
+		}
+	},
+	"Eadgar's Ruse": {
+		"general": { "length": "Medium - Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Herblore": "11000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Druidic Ritual", "Troll Stronghold" ],
+			"stats": { "Herblore": { "level": 31, "boost": false } },
+			"items": {}
+		}
+	},
+	"Shades of Mort'ton": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Crafting": "2000", "Herblore": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Priest in Peril" ],
+			"stats": {
+				"Crafting": { "level": 20, "boost": false },
+				"Firemaking": { "level": 5, "boost": false },
+				"Herblore": { "level": 15, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Fremennik Trials": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": {
+				"Agility": "2812",
+				"Attack": "2812",
+				"Crafting": "2812",
+				"Defence": "2812",
+				"Fishing": "2812",
+				"Fletching": "2812",
+				"Hitpoints": "2812",
+				"Strength": "2812",
+				"Thieving": "2812",
+				"Woodcutting": "2812"
+			},
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 40, "boost": true },
+				"Fletching": { "level": 25, "boost": true },
+				"Woodcutting": { "level": 40, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Horror from the Deep": {
+		"general": { "length": "Short", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Magic": "4662", "Ranged": "4662", "Strength": "4662" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Agility": { "level": 35, "boost": true } },
+			"items": {}
+		}
+	},
+	"Throne of Miscellania": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Heroes' Quest", "The Fremennik Trials" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Monkey Madness I": {
+		"general": { "length": "Long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": {},
+			"choice_experience": [
+				[
+					{ "skills": [ [ "Attack", "Defence" ] ], "min_level": 0, "experience": 35000, "uses": 1 },
+					{ "skills": [ [ "Strength", "Hitpoints" ] ], "min_level": 0, "experience": 20000, "uses": 1 }
+				],
+				[
+					{ "skills": [ [ "Attack", "Defence" ] ], "min_level": 0, "experience": 20000, "uses": 1 },
+					{ "skills": [ [ "Strength", "Hitpoints" ] ], "min_level": 0, "experience": 35000, "uses": 1 }
+				]
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Grand Tree", "Tree Gnome Village" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Haunted Mine": {
+		"general": { "length": "Medium - Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Strength": "22000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Priest in Peril" ],
+			"stats": { "Agility": { "level": 15, "boost": false }, "Crafting": { "level": 35, "boost": false } },
+			"items": {}
+		}
+	},
+	"Troll Romance": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Agility": "8000", "Strength": "4000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Troll Stronghold" ],
+			"stats": { "Agility": { "level": 28, "boost": false } },
+			"items": {}
+		}
+	},
+	"In Search of the Myreque": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": {
+				"Attack": "600",
+				"Crafting": "600",
+				"Defence": "600",
+				"Hitpoints": "600",
+				"Strength": "600"
+			},
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Nature Spirit" ],
+			"stats": { "Agility": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Creature of Fenkenstrain": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Thieving": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Priest in Peril", "The Restless Ghost" ],
+			"stats": { "Crafting": { "level": 20, "boost": false }, "Thieving": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Roving Elves": {
+		"general": { "length": "Short - Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Strength": "10000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Regicide", "Waterfall Quest" ], "stats": {}, "items": {} }
+	},
+	"Ghosts Ahoy": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Prayer": "2400" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Priest in Peril", "The Restless Ghost" ],
+			"stats": { "Agility": { "level": 25, "boost": false }, "Cooking": { "level": 20, "boost": false } },
+			"items": {}
+		}
+	},
+	"One Small Favour": {
+		"general": { "length": "Very long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": {},
+			"choice_experience": [ { "skills": [], "min_level": 30, "experience": 10000, "uses": 2 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Rune Mysteries", "Druidic Ritual", "Shilo Village" ],
+			"stats": {
+				"Agility": { "level": 36, "boost": true },
+				"Crafting": { "level": 25, "boost": false },
+				"Herblore": { "level": 18, "boost": false },
+				"Smithing": { "level": 30, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Mountain Daughter": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Attack": "1000", "Prayer": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Agility": { "level": 20, "boost": false } },
+			"items": {}
+		}
+	},
+	"Between a Rock...": {
+		"general": { "length": "Medium - Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Defence": "5000", "Mining": "5000", "Smithing": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Dwarf Cannon", "Fishing Contest" ],
+			"stats": {
+				"Defence": { "level": 30, "boost": false },
+				"Mining": { "level": 40, "boost": true },
+				"Smithing": { "level": 50, "boost": true }
+			},
+			"items": {}
+		}
+	},
+	"The Feud": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Thieving": "15000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Thieving": { "level": 30, "boost": false } },
+			"items": {}
+		}
+	},
+	"The Golem": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "1000", "Thieving": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Crafting": { "level": 20, "boost": false }, "Thieving": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Desert Treasure": {
+		"general": { "length": "Very long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Magic": "20000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [
+				"The Dig Site",
+				"Temple of Ikov",
+				"The Tourist Trap",
+				"Troll Stronghold",
+				"Priest in Peril",
+				"Waterfall Quest"
+			],
+			"stats": {
+				"Firemaking": { "level": 50, "boost": false },
+				"Magic": { "level": 50, "boost": false },
+				"Slayer": { "level": 10, "boost": false },
+				"Thieving": { "level": 53, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Icthlarin's Little Helper": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Agility": "4000", "Thieving": "4500", "Woodcutting": "4000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Gertrude's Cat" ], "stats": {}, "items": {} }
+	},
+	"Tears of Guthix": {
+		"general": { "length": "Short", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 43,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 20, "boost": false },
+				"Firemaking": { "level": 49, "boost": false },
+				"Mining": { "level": 20, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Zogre Flesh Eaters": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Fletching": "2000", "Herblore": "2000", "Ranged": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Big Chompy Bird Hunting", "Jungle Potion" ],
+			"stats": {
+				"Fletching": { "level": 30, "boost": false },
+				"Herblore": { "level": 8, "boost": false },
+				"Ranged": { "level": 30, "boost": false },
+				"Smithing": { "level": 4, "boost": false },
+				"Strength": { "level": 20, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Lost Tribe": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Mining": "3000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Goblin Diplomacy", "Rune Mysteries" ],
+			"stats": {
+				"Agility": { "level": 13, "boost": false },
+				"Mining": { "level": 17, "boost": false },
+				"Thieving": { "level": 13, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Giant Dwarf": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": {
+				"Crafting": "2500",
+				"Firemaking": "1500",
+				"Magic": "1500",
+				"Mining": "2500",
+				"Smithing": "2500",
+				"Thieving": "1500"
+			},
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 12, "boost": false },
+				"Firemaking": { "level": 16, "boost": false },
+				"Magic": { "level": 33, "boost": false },
+				"Thieving": { "level": 14, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Recruitment Drive": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Agility": "1000", "Herblore": "1000", "Prayer": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Black Knights' Fortress", "Druidic Ritual" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Mourning's End Part I": {
+		"general": { "length": "Long - Very long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Hitpoints": "25000", "Thieving": "25000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Roving Elves", "Big Chompy Bird Hunting", "Sheep Herder" ],
+			"stats": { "Ranged": { "level": 60, "boost": false }, "Thieving": { "level": 50, "boost": false } },
+			"items": {}
+		}
+	},
+	"Forgettable Tale...": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Cooking": "5000", "Farming": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Giant Dwarf", "Fishing Contest" ],
+			"stats": { "Cooking": { "level": 22, "boost": false }, "Farming": { "level": 17, "boost": false } },
+			"items": {}
+		}
+	},
+	"Garden of Tranquillity": {
+		"general": { "length": "Very long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Farming": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Creature of Fenkenstrain" ],
+			"stats": { "Farming": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"A Tail of Two Cats": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": {},
+			"choice_experience": [ { "skills": [], "min_level": 30, "experience": 2500, "uses": 2 } ],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Icthlarin's Little Helper" ], "stats": {}, "items": {} }
+	},
+	"Wanted!": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Slayer": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 32,
+			"quests": [ "Recruitment Drive", "The Lost Tribe", "Priest in Peril" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Mourning's End Part II": {
+		"general": { "length": "Medium - Long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Agility": "20000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Mourning's End Part I" ], "stats": {}, "items": {} }
+	},
+	"Rum Deal": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Farming": "7000", "Fishing": "7000", "Prayer": "7000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Zogre Flesh Eaters", "Priest in Peril" ],
+			"stats": {
+				"Crafting": { "level": 42, "boost": false },
+				"Farming": { "level": 40, "boost": true },
+				"Fishing": { "level": 50, "boost": true },
+				"Prayer": { "level": 47, "boost": true },
+				"Slayer": { "level": 42, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Shadow of the Storm": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": {},
+			"choice_experience": [
+				{
+					"skills": [ "Attack", "Strength", "Defence", "Magic", "Ranged", "Hitpoints" ],
+					"min_level": 0,
+					"experience": 10000,
+					"uses": 1
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Golem", "Demon Slayer" ],
+			"stats": { "Crafting": { "level": 30, "boost": false } },
+			"items": {}
+		}
+	},
+	"Making History": {
+		"general": { "length": "Short - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "3",
+			"set_experience": { "Crafting": "1000", "Prayer": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Priest in Peril", "The Restless Ghost" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Ratcatchers": {
+		"general": { "length": "Long - Very long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Thieving": "4500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Icthlarin's Little Helper", "The Giant Dwarf" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Spirits of the Elid": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Magic": "1000", "Prayer": "8000", "Thieving": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Magic": { "level": 33, "boost": true },
+				"Mining": { "level": 37, "boost": false },
+				"Ranged": { "level": 37, "boost": true },
+				"Thieving": { "level": 37, "boost": true }
+			},
+			"items": {}
+		}
+	},
+	"Devious Minds": {
+		"general": { "length": "Short", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Fletching": "5000", "Runecraft": "5000", "Smithing": "6500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Wanted!", "Troll Stronghold", "Doric's Quest" ],
+			"stats": {
+				"Fletching": { "level": 50, "boost": false },
+				"Runecraft": { "level": 50, "boost": false },
+				"Smithing": { "level": 65, "boost": true }
+			},
+			"items": {}
+		}
+	},
+	"The Hand in the Sand": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "9000", "Thieving": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Crafting": { "level": 49, "boost": false }, "Thieving": { "level": 17, "boost": false } },
+			"items": {}
+		}
+	},
+	"Enakhra's Lament": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Crafting": "7000", "Firemaking": "7000", "Magic": "7000", "Mining": "7000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 50, "boost": false },
+				"Firemaking": { "level": 45, "boost": false },
+				"Magic": { "level": 39, "boost": false },
+				"Prayer": { "level": 43, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Cabin Fever": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Agility": "7000", "Crafting": "7000", "Smithing": "7000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Pirate's Treasure", "Rum Deal", "Priest in Peril" ],
+			"stats": {
+				"Agility": { "level": 42, "boost": false },
+				"Crafting": { "level": 45, "boost": false },
+				"Ranged": { "level": 40, "boost": false },
+				"Smithing": { "level": 50, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Fairytale I - Growing Pains": {
+		"general": { "length": "Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Attack": "2000", "Farming": "3500", "Magic": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Lost City", "Nature Spirit" ], "stats": {}, "items": {} }
+	},
+	"Recipe for Disaster": {
+		"general": { "length": "Very long", "difficulty": "Special" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Defeating the Culinaromancer" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Defeating the Culinaromancer": {
+		"general": { "length": "Short", "difficulty": "Special" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 175,
+			"quests": [
+				"Desert Treasure",
+				"Horror from the Deep",
+				"Recipe for Disaster/Freeing the Goblin generals",
+				"Recipe for Disaster/Freeing the Mountain Dwarf",
+				"Recipe for Disaster/Freeing Evil Dave",
+				"Recipe for Disaster/Freeing the Lumbridge Guide",
+				"Recipe for Disaster/Freeing Pirate Pete",
+				"Recipe for Disaster/Freeing Skrach Uglogwee",
+				"Recipe for Disaster/Freeing Sir Amik Varze",
+				"Recipe for Disaster/Freeing King Awowogei"
+			],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing the Mountain Dwarf": {
+		"general": { "length": "Short", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "1000", "Slayer": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest", "Fishing Contest" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing the Goblin generals": {
+		"general": { "length": "Short", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "1000", "Crafting": "1000", "Farming": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest", "Goblin Diplomacy" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing Pirate Pete": {
+		"general": { "length": "Medium", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "1000", "Crafting": "1000", "Fishing": "1000", "Smithing": "1000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest" ],
+			"stats": { "Cooking": { "level": 31, "boost": false } },
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing the Lumbridge Guide": {
+		"general": { "length": "Short", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "2500", "Magic": "2500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [
+				"Recipe for Disaster/Another Cook's Quest",
+				"Big Chompy Bird Hunting",
+				"Biohazard",
+				"Demon Slayer",
+				"Murder Mystery",
+				"Nature Spirit",
+				"Witch's House"
+			],
+			"stats": { "Cooking": { "level": 40, "boost": false } },
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing Evil Dave": {
+		"general": { "length": "Medium", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "7000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest", "Gertrude's Cat", "Shadow of the Storm" ],
+			"stats": { "Cooking": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing King Awowogei": {
+		"general": { "length": "Medium - Long", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Agility": "10000", "Cooking": "10000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest", "Monkey Madness I" ],
+			"stats": { "Agility": { "level": 48, "boost": false }, "Cooking": { "level": 70, "boost": true } },
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing Sir Amik Varze": {
+		"general": { "length": "Medium", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "4000", "Hitpoints": "4000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest", "Legends' Quest" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Freeing Skrach Uglogwee": {
+		"general": { "length": "Medium", "difficulty": "Special" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "1500", "Crafting": "1500", "Ranged": "1500", "Woodcutting": "1500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Recipe for Disaster/Another Cook's Quest", "Big Chompy Bird Hunting" ],
+			"stats": { "Cooking": { "level": 41, "boost": false }, "Firemaking": { "level": 20, "boost": false } },
+			"items": {}
+		}
+	},
+	"Recipe for Disaster/Another Cook's Quest": {
+		"general": { "length": "Short", "difficulty": "Special" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Cook's Assistant" ],
+			"stats": { "Cooking": { "level": 10, "boost": false } },
+			"items": {}
+		}
+	},
+	"In Aid of the Myreque": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Attack": "2000", "Crafting": "2000", "Defence": "2000", "Strength": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "In Search of the Myreque" ],
+			"stats": {
+				"Crafting": { "level": 25, "boost": false },
+				"Magic": { "level": 7, "boost": false },
+				"Mining": { "level": 15, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"A Soul's Bane": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Defence": "500", "Hitpoints": "500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Rag and Bone Man": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Cooking": "500", "Prayer": "500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Rag and Bone Man II": {
+		"general": { "length": "Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Prayer": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Rag and Bone Man", "Creature of Fenkenstrain", "Zogre Flesh Eaters", "Waterfall Quest" ],
+			"stats": { "Defence": { "level": 20, "boost": false }, "Slayer": { "level": 40, "boost": false } },
+			"items": {}
+		}
+	},
+	"Swan Song": {
+		"general": { "length": "Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Fishing": "10000", "Magic": "15000", "Prayer": "10000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 100,
+			"quests": [ "One Small Favour", "Garden of Tranquillity" ],
+			"stats": {
+				"Cooking": { "level": 62, "boost": false },
+				"Crafting": { "level": 40, "boost": false },
+				"Firemaking": { "level": 42, "boost": false },
+				"Fishing": { "level": 62, "boost": true },
+				"Magic": { "level": 66, "boost": true },
+				"Smithing": { "level": 45, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Royal Trouble": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Agility": "5000", "Hitpoints": "5000", "Slayer": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Throne of Miscellania" ],
+			"stats": { "Agility": { "level": 40, "boost": true }, "Slayer": { "level": 40, "boost": false } },
+			"items": {}
+		}
+	},
+	"Death to the Dorgeshuun": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Ranged": "2000", "Thieving": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Lost Tribe" ],
+			"stats": { "Agility": { "level": 23, "boost": true }, "Thieving": { "level": 23, "boost": false } },
+			"items": {}
+		}
+	},
+	"Fairytale II - Cure a Queen": {
+		"general": { "length": "Short - Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Herblore": "3500", "Thieving": "2500" },
+			"choice_experience": [ { "skills": [], "min_level": 30, "experience": 2500, "uses": 1 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Fairytale I - Growing Pains" ],
+			"stats": {
+				"Farming": { "level": 49, "boost": true },
+				"Herblore": { "level": 57, "boost": true },
+				"Thieving": { "level": 40, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Lunar Diplomacy": {
+		"general": { "length": "Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Magic": "5000", "Runecraft": "5000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Fremennik Trials", "Lost City", "Rune Mysteries", "Shilo Village" ],
+			"stats": {
+				"Crafting": { "level": 61, "boost": false },
+				"Defence": { "level": 40, "boost": false },
+				"Firemaking": { "level": 49, "boost": false },
+				"Herblore": { "level": 5, "boost": false },
+				"Magic": { "level": 65, "boost": false },
+				"Mining": { "level": 60, "boost": false },
+				"Woodcutting": { "level": 55, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Eyes of Glouphrie": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Construction": "250", "Magic": "12000", "Runecraft": "6000", "Woodcutting": "2500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Grand Tree" ],
+			"stats": {
+				"Construction": { "level": 5, "boost": false },
+				"Magic": { "level": 46, "boost": false },
+				"Runecraft": { "level": 13, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Darkness of Hallowvale": {
+		"general": { "length": "Very long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Agility": "7000", "Construction": "2000", "Thieving": "6000" },
+			"choice_experience": [ { "skills": [], "min_level": 30, "experience": 2000, "uses": 3 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "In Aid of the Myreque" ],
+			"stats": {
+				"Agility": { "level": 26, "boost": false },
+				"Construction": { "level": 5, "boost": false },
+				"Crafting": { "level": 32, "boost": false },
+				"Magic": { "level": 33, "boost": false },
+				"Mining": { "level": 20, "boost": false },
+				"Strength": { "level": 40, "boost": false },
+				"Thieving": { "level": 22, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Slug Menace": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "3500", "Runecraft": "3500", "Thieving": "3500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Wanted!", "Sea Slug" ],
+			"stats": {
+				"Crafting": { "level": 30, "boost": false },
+				"Runecraft": { "level": 30, "boost": false },
+				"Slayer": { "level": 30, "boost": false },
+				"Thieving": { "level": 30, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Elemental Workshop II": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "7500", "Smithing": "7500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Elemental Workshop I" ],
+			"stats": { "Magic": { "level": 20, "boost": false }, "Smithing": { "level": 30, "boost": false } },
+			"items": {}
+		}
+	},
+	"My Arm's Big Adventure": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Farming": "5000", "Herblore": "10000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Eadgar's Ruse", "The Feud", "Jungle Potion" ],
+			"stats": { "Farming": { "level": 29, "boost": false }, "Woodcutting": { "level": 10, "boost": false } },
+			"items": {}
+		}
+	},
+	"Enlightened Journey": {
+		"general": { "length": "Short - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "2000", "Farming": "3000", "Firemaking": "4000", "Woodcutting": "1500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 20,
+			"quests": [],
+			"stats": {
+				"Crafting": { "level": 36, "boost": false },
+				"Farming": { "level": 30, "boost": false },
+				"Firemaking": { "level": 20, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Eagles' Peak": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Hunter": "2500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Hunter": { "level": 27, "boost": false } },
+			"items": {}
+		}
+	},
+	"Animal Magnetism": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Crafting": "1000", "Fletching": "1000", "Slayer": "1000", "Woodcutting": "2500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Restless Ghost", "Ernest the Chicken", "Priest in Peril" ],
+			"stats": {
+				"Crafting": { "level": 19, "boost": false },
+				"Ranged": { "level": 30, "boost": false },
+				"Slayer": { "level": 18, "boost": false },
+				"Woodcutting": { "level": 35, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Contact!": {
+		"general": { "length": "Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Thieving": "7000" },
+			"choice_experience": [
+				{
+					"skills": [ "Attack", "Strength", "Defence", "Magic", "Ranged", "Hitpoints" ],
+					"min_level": 0,
+					"experience": 7000,
+					"uses": 2
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Prince Ali Rescue", "Icthlarin's Little Helper" ],
+			"stats": {},
+			"items": {}
+		}
+	},
+	"Cold War": {
+		"general": { "length": "Medium - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Agility": "5000", "Construction": "1500", "Crafting": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": {
+				"Agility": { "level": 30, "boost": false },
+				"Construction": { "level": 34, "boost": true },
+				"Crafting": { "level": 30, "boost": false },
+				"Hunter": { "level": 10, "boost": false },
+				"Thieving": { "level": 15, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Fremennik Isles": {
+		"general": { "length": "Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Construction": "5000", "Crafting": "5000", "Woodcutting": "10000" },
+			"choice_experience": [
+				{
+					"skills": [ "Attack", "Strength", "Defence", "Hitpoints" ],
+					"min_level": 0,
+					"experience": 10000,
+					"uses": 2
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Fremennik Trials" ],
+			"stats": {
+				"Agility": { "level": 40, "boost": true },
+				"Construction": { "level": 20, "boost": false },
+				"Crafting": { "level": 46, "boost": false },
+				"Woodcutting": { "level": 56, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Tower of Life": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Construction": "1000", "Crafting": "500", "Thieving": "500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [],
+			"stats": { "Construction": { "level": 10, "boost": false } },
+			"items": {}
+		}
+	},
+	"The Great Brain Robbery": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Construction": "2000", "Crafting": "3000", "Prayer": "6000" },
+			"choice_experience": [ { "skills": [], "min_level": 30, "experience": 5000, "uses": 1 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Creature of Fenkenstrain", "Cabin Fever", "Recipe for Disaster/Freeing Pirate Pete" ],
+			"stats": {
+				"Construction": { "level": 30, "boost": false },
+				"Crafting": { "level": 16, "boost": false },
+				"Prayer": { "level": 50, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"What Lies Below": {
+		"general": { "length": "Short - Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Defence": "2000", "Runecraft": "8000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Rune Mysteries" ],
+			"stats": { "Runecraft": { "level": 35, "boost": false } },
+			"items": {}
+		}
+	},
+	"Olaf's Quest": {
+		"general": { "length": "Short - Long", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Defence": "12000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Fremennik Trials" ],
+			"stats": { "Firemaking": { "level": 40, "boost": false }, "Woodcutting": { "level": 50, "boost": false } },
+			"items": {}
+		}
+	},
+	"Another Slice of H.A.M.": {
+		"general": { "length": "Medium", "difficulty": "Intermediate" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Mining": "3000", "Prayer": "3000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Death to the Dorgeshuun", "The Giant Dwarf", "The Dig Site" ],
+			"stats": { "Attack": { "level": 15, "boost": false }, "Prayer": { "level": 25, "boost": false } },
+			"items": {}
+		}
+	},
+	"Dream Mentor": {
+		"general": { "length": "Short - Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Hitpoints": "15000", "Magic": "10000" },
+			"choice_experience": [
+				{
+					"skills": [ "Strength", "Defence", "Magic", "Ranged", "Hitpoints" ],
+					"min_level": 0,
+					"experience": 15000,
+					"uses": 1
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Lunar Diplomacy", "Eadgar's Ruse" ],
+			"stats": { "Combat level": { "level": 85, "boost": false } },
+			"items": {}
+		}
+	},
+	"Grim Tales": {
+		"general": { "length": "Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": {
+				"Agility": "6000",
+				"Farming": "4000",
+				"Herblore": "5000",
+				"Hitpoints": "5000",
+				"Thieving": "6000",
+				"Woodcutting": "14000"
+			},
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Witch's House" ],
+			"stats": {
+				"Agility": { "level": 59, "boost": true },
+				"Farming": { "level": 45, "boost": true },
+				"Herblore": { "level": 52, "boost": true },
+				"Thieving": { "level": 58, "boost": true },
+				"Woodcutting": { "level": 71, "boost": true }
+			},
+			"items": {}
+		}
+	},
+	"King's Ransom": {
+		"general": { "length": "Medium", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Defence": "33000", "Magic": "5000" },
+			"choice_experience": [ { "skills": [], "min_level": 50, "experience": 5000, "uses": 1 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Black Knights' Fortress", "Holy Grail", "Murder Mystery", "One Small Favour" ],
+			"stats": { "Defence": { "level": 65, "boost": false }, "Magic": { "level": 45, "boost": false } },
+			"items": {}
+		}
+	},
+	"Monkey Madness II": {
+		"general": { "length": "Very long", "difficulty": "Grandmaster" },
+		"rewards": {
+			"quest_points": "4",
+			"set_experience": { "Agility": "20000", "Hunter": "15000", "Slayer": "25000", "Thieving": "15000" },
+			"choice_experience": [
+				{
+					"skills": [ "Attack", "Strength", "Defence", "Magic", "Ranged", "Hitpoints" ],
+					"min_level": 0,
+					"experience": 50000,
+					"uses": 2
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [
+				"Enlightened Journey",
+				"The Eyes of Glouphrie",
+				"Recipe for Disaster/Freeing King Awowogei",
+				"Troll Stronghold",
+				"Watchtower"
+			],
+			"stats": {
+				"Agility": { "level": 55, "boost": false },
+				"Crafting": { "level": 70, "boost": false },
+				"Firemaking": { "level": 60, "boost": true },
+				"Hunter": { "level": 60, "boost": false },
+				"Slayer": { "level": 69, "boost": false },
+				"Thieving": { "level": 55, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Client of Kourend": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": {},
+			"choice_experience": [ { "skills": [], "min_level": 0, "experience": 500, "uses": 2 } ],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [], "stats": {}, "items": {} }
+	},
+	"Bone Voyage": {
+		"general": { "length": "Short - Medium", "difficulty": "Intermediate" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [ "The Dig Site" ], "stats": {}, "items": {} }
+	},
+	"The Queen of Thieves": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Thieving": "2000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Client of Kourend" ], "stats": {}, "items": {} }
+	},
+	"The Depths of Despair": {
+		"general": { "length": "Short", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Agility": "1500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Client of Kourend" ],
+			"stats": { "Agility": { "level": 18, "boost": false } },
+			"items": {}
+		}
+	},
+	"Dragon Slayer II": {
+		"general": { "length": "Very long", "difficulty": "Grandmaster" },
+		"rewards": {
+			"quest_points": "5",
+			"set_experience": { "Agility": "15000", "Mining": "18000", "Smithing": "25000", "Thieving": "15000" },
+			"choice_experience": [
+				{
+					"skills": [ "Attack", "Strength", "Defence", "Magic", "Ranged", "Hitpoints" ],
+					"min_level": 0,
+					"experience": 25000,
+					"uses": 4
+				}
+			],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 200,
+			"quests": [
+				"Legends' Quest",
+				"Dream Mentor",
+				"A Tail of Two Cats",
+				"Animal Magnetism",
+				"Ghosts Ahoy",
+				"Bone Voyage",
+				"Client of Kourend"
+			],
+			"stats": {
+				"Agility": { "level": 60, "boost": false },
+				"Construction": { "level": 50, "boost": false },
+				"Crafting": { "level": 62, "boost": false },
+				"Hitpoints": { "level": 50, "boost": false },
+				"Magic": { "level": 75, "boost": false },
+				"Mining": { "level": 68, "boost": false },
+				"Smithing": { "level": 70, "boost": false },
+				"Thieving": { "level": 60, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Tale of the Righteous": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": { "quest_points": "1", "set_experience": {}, "choice_experience": [], "items": {} },
+		"requirements": { "quest_points": 0, "quests": [ "Client of Kourend" ], "stats": {}, "items": {} }
+	},
+	"A Taste of Hope": {
+		"general": { "length": "Long", "difficulty": "Experienced" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": {},
+			"choice_experience": [ { "skills": [], "min_level": 35, "experience": 2500, "uses": 3 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Darkness of Hallowvale" ],
+			"stats": {
+				"Attack": { "level": 40, "boost": false },
+				"Crafting": { "level": 48, "boost": false },
+				"Slayer": { "level": 38, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Making Friends with My Arm": {
+		"general": { "length": "Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Agility": "10000", "Construction": "2000", "Firemaking": "5000", "Mining": "10000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "My Arm's Big Adventure", "Swan Song", "Cold War", "Romeo & Juliet" ],
+			"stats": {
+				"Agility": { "level": 68, "boost": true },
+				"Construction": { "level": 35, "boost": false },
+				"Firemaking": { "level": 66, "boost": false },
+				"Mining": { "level": 72, "boost": true }
+			},
+			"items": {}
+		}
+	},
+	"The Forsaken Tower": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Mining": "500", "Smithing": "500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": { "quest_points": 0, "quests": [ "Client of Kourend" ], "stats": {}, "items": {} }
+	},
+	"The Ascent of Arceuus": {
+		"general": { "length": "Medium", "difficulty": "Novice" },
+		"rewards": {
+			"quest_points": "1",
+			"set_experience": { "Hunter": "1500", "Runecraft": "500" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Client of Kourend" ],
+			"stats": { "Hunter": { "level": 12, "boost": false } },
+			"items": {}
+		}
+	},
+	"Song of the Elves": {
+		"general": { "length": "Very long", "difficulty": "Grandmaster" },
+		"rewards": {
+			"quest_points": "4",
+			"set_experience": {
+				"Agility": "20000",
+				"Construction": "20000",
+				"Farming": "20000",
+				"Herblore": "20000",
+				"Hunter": "20000",
+				"Mining": "20000",
+				"Smithing": "20000",
+				"Woodcutting": "20000"
+			},
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Mourning's End Part II", "Making History" ],
+			"stats": {
+				"Agility": { "level": 70, "boost": false },
+				"Construction": { "level": 70, "boost": false },
+				"Farming": { "level": 70, "boost": false },
+				"Herblore": { "level": 70, "boost": false },
+				"Hunter": { "level": 70, "boost": false },
+				"Mining": { "level": 70, "boost": false },
+				"Smithing": { "level": 70, "boost": false },
+				"Woodcutting": { "level": 70, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"The Fremennik Exiles": {
+		"general": { "length": "Medium", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": { "Crafting": "15000", "Runecraft": "5000", "Slayer": "15000" },
+			"choice_experience": [],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "The Fremennik Isles", "Lunar Diplomacy", "Mountain Daughter", "Heroes' Quest" ],
+			"stats": {
+				"Crafting": { "level": 65, "boost": false },
+				"Fishing": { "level": 60, "boost": false },
+				"Runecraft": { "level": 55, "boost": false },
+				"Slayer": { "level": 60, "boost": false },
+				"Smithing": { "level": 60, "boost": false }
+			},
+			"items": {}
+		}
+	},
+	"Sins of the Father": {
+		"general": { "length": "Long", "difficulty": "Master" },
+		"rewards": {
+			"quest_points": "2",
+			"set_experience": {},
+			"choice_experience": [ { "skills": [], "min_level": 60, "experience": 15000, "uses": 3 } ],
+			"items": {}
+		},
+		"requirements": {
+			"quest_points": 0,
+			"quests": [ "Vampyre Slayer", "A Taste of Hope" ],
+			"stats": {
+				"Agility": { "level": 52, "boost": true },
+				"Attack": { "level": 50, "boost": true },
+				"Crafting": { "level": 56, "boost": true },
+				"Fletching": { "level": 60, "boost": true },
+				"Magic": { "level": 49, "boost": true },
+				"Slayer": { "level": 50, "boost": true },
+				"Woodcutting": { "level": 62, "boost": true }
+			},
+			"items": {}
+		}
+	}
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Old School Runescape interactive quest trees with prequests for each quest - rsn: aMiniSlab">
+    <meta name="author" content="aMiniSlab">
+    <meta name="keywords" content="OSRS osrs old school runescape quest quests prequests tree">
+    <link rel="stylesheet" href="style.css">
+    <title>Old School Runescape Quest Tree</title>
+</head>
+<body>
+    
+    <div id="content_div">
+        <div id="controls_div">
+            <input type="button" onclick="reset();" value="Reset" class="control_item_short">
+            <div id="search_div" class="control_item_long">
+                <input type="text" id="search_text_input" class="control_item_inner_long">
+                <input type="button" value="Search" onclick="search()" class="control_item_inner_short">
+            </div>
+            <input type="button" id="instructions"  class="control_item_short" value="Show Instructions" onclick="showInstructions();">
+        </div>
+        <div id="trees_div">
+        
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
